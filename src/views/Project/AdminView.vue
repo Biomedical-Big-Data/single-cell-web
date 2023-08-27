@@ -54,7 +54,9 @@
             {{ getPrivateState(text) }}
           </template>
           <template v-if="dataIndex === 'tags'">
-            <a-tag v-for="item in (text || '').split(',').filter((a) => !!a)">{{ item }}</a-tag>
+            <a-tag v-for="item in (text || '').split(',').filter((a) => !!a)" :key="item">
+              {{ item }}
+            </a-tag>
           </template>
           <template v-if="dataIndex === 'operation'">
             <a-button type="primary" size="small" @click="handleToAdminProject(record)">

@@ -1,17 +1,17 @@
 <template>
   <a-table
-    :columns='columns'
-    :data-source='list'
-    :pagination='pagination'
-    :loading='loading'
-    size='middle'
-    @change='handleTableChange'
+    :columns="columns"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    size="middle"
+    @change="handleTableChange"
   >
     <template #title>
-      <div class='flex items-center justify-between'>
-        <div class='flex items-center'>
-          <span class='mr-4'>Project: {{ count.project }}</span>
-          <span class='mr-4'>Samples: {{ count.sample }}</span>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="mr-4">Project: {{ count.project }}</span>
+          <span class="mr-4">Samples: {{ count.sample }}</span>
           <span>Cells: {{ count.cell }}</span>
         </div>
         <div>
@@ -21,7 +21,7 @@
             </template>
             Column Setting
           </a-button>
-          <a-button class='ml-4'>
+          <a-button class="ml-4">
             <template #icon>
               <DownloadOutlined />
             </template>
@@ -30,34 +30,33 @@
         </div>
       </div>
     </template>
-    <template #bodyCell='{ column, record }'>
+    <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'projects'">
         <a-button
-          shape='circle'
-          :icon='h(OrderedListOutlined)'
-          @click='handleProjectsModalOpen(record)'
+          shape="circle"
+          :icon="h(OrderedListOutlined)"
+          @click="handleProjectsModalOpen(record)"
         />
       </template>
     </template>
   </a-table>
   <a-modal
-    v-model:open='open'
-    title='Relative Projects'
-    width='100%'
-    wrap-class-name='full-modal'
-    :footer='null'
+    v-model:open="open"
+    title="Relative Projects"
+    width="100%"
+    wrap-class-name="full-modal"
+    :footer="null"
   >
-    <div class='py-5'>
-      <a-table :columns='projectColumns' :data-source='projects' :pagination='false'>
-        <template #bodyCell='{ column, text, record }'>
+    <div class="py-5">
+      <a-table :columns="projectColumns" :data-source="projects" :pagination="false">
+        <template #bodyCell="{ column, text, record }">
           <template v-if="column.title === 'Tags'">
-            <a-tag v-for="item in text.split(',').filter((item) => !!item)" :key='item'>{{
-                item
-              }}
+            <a-tag v-for="item in text.split(',').filter((item) => !!item)" :key="item"
+              >{{ item }}
             </a-tag>
           </template>
           <template v-if="column.dataIndex === 'action'">
-            <a-button shape='circle' :icon='h(EyeOutlined)' @click='handleToProject(record)' />
+            <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
           </template>
         </template>
       </a-table>
@@ -205,7 +204,6 @@ const handleToProject = (record) => {
     }
   })
   window.open(routeData.href, '_blank')
-
 }
 
 defineExpose({
@@ -213,4 +211,4 @@ defineExpose({
 })
 </script>
 
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>

@@ -1,34 +1,34 @@
 <template>
   <a-table
-    :columns='columns'
-    :data-source='list'
-    :pagination='pagination'
-    :loading='loading'
-    size='middle'
-    @change='handleTableChange'
+    :columns="columns"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    size="middle"
+    @change="handleTableChange"
   >
     <template #title>
-      <div class='flex items-center justify-between'>
-        <div class='flex items-center'>
-          <span class='mr-4'>Project: {{ count.project }}</span>
-          <span class='mr-4'>Samples: {{ count.sample }}</span>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="mr-4">Project: {{ count.project }}</span>
+          <span class="mr-4">Samples: {{ count.sample }}</span>
           <span>Cells: {{ count.cell }}</span>
         </div>
         <div>
           <div>
-            <a-button @click='handleChartModalOpen'>
+            <a-button @click="handleChartModalOpen">
               <template #icon>
                 <DotChartOutlined />
               </template>
               Chart
             </a-button>
-            <a-button class='ml-4'>
+            <a-button class="ml-4">
               <template #icon>
                 <SettingOutlined />
               </template>
               Column Setting
             </a-button>
-            <a-button class='ml-4'>
+            <a-button class="ml-4">
               <template #icon>
                 <DownloadOutlined />
               </template>
@@ -38,19 +38,19 @@
         </div>
       </div>
     </template>
-    <template #bodyCell='{column,record}'>
+    <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'action'">
-        <a-button shape='circle' :icon='h(EyeOutlined)' @click='handleToProject(record)' />
+        <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
       </template>
     </template>
   </a-table>
 
-  <a-modal v-model:open='open' width='100%' wrap-class-name='full-modal' :footer='null'>
-    <a-tabs v-model:activeKey='geneChartType'>
-      <a-tab-pane key='percent' tab='Cell Number Percentage'>
+  <a-modal v-model:open="open" width="100%" wrap-class-name="full-modal" :footer="null">
+    <a-tabs v-model:activeKey="geneChartType">
+      <a-tab-pane key="percent" tab="Cell Number Percentage">
         <CellPercentageChart></CellPercentageChart>
       </a-tab-pane>
-      <a-tab-pane key='expression' tab='Gene Expression Level'>
+      <a-tab-pane key="expression" tab="Gene Expression Level">
         <GeneExpressionLevelChart></GeneExpressionLevelChart>
       </a-tab-pane>
     </a-tabs>
@@ -61,7 +61,12 @@
 import { usePagination } from 'vue-request'
 import { getGeneProjectList } from '@/api/project.js'
 import { computed, h, reactive, ref } from 'vue'
-import { DownloadOutlined, SettingOutlined, DotChartOutlined, EyeOutlined } from '@ant-design/icons-vue'
+import {
+  DownloadOutlined,
+  SettingOutlined,
+  DotChartOutlined,
+  EyeOutlined
+} from '@ant-design/icons-vue'
 import CellPercentageChart from '@/components/charts/CellPercentageChart.vue'
 import GeneExpressionLevelChart from '@/components/charts/GeneExpressionLevelChart.vue'
 import { useRouter } from 'vue-router'
@@ -87,20 +92,47 @@ const columns = [
   },
   {
     title: 'Project',
-    dataIndex: ['gene_expression_proportion_meta', 'cell_proportion_analysis_meta', 'analysis_project_meta', 'title'],
+    dataIndex: [
+      'gene_expression_proportion_meta',
+      'cell_proportion_analysis_meta',
+      'analysis_project_meta',
+      'title'
+    ],
     width: 200
   },
   {
     title: 'Disease',
-    dataIndex: ['gene_expression_proportion_meta', 'cell_proportion_analysis_meta', 'analysis_biosample_analysis_meta', '0', 'biosample_analysis_biosample_meta', 'disease']
+    dataIndex: [
+      'gene_expression_proportion_meta',
+      'cell_proportion_analysis_meta',
+      'analysis_biosample_analysis_meta',
+      '0',
+      'biosample_analysis_biosample_meta',
+      'disease'
+    ]
   },
   {
     title: 'Organ',
-    dataIndex: ['gene_expression_proportion_meta', 'cell_proportion_analysis_meta', 'analysis_biosample_analysis_meta', '0', 'biosample_analysis_biosample_meta', 'organ']
+    dataIndex: [
+      'gene_expression_proportion_meta',
+      'cell_proportion_analysis_meta',
+      'analysis_biosample_analysis_meta',
+      '0',
+      'biosample_analysis_biosample_meta',
+      'organ'
+    ]
   },
   {
     title: 'Sex',
-    dataIndex: ['gene_expression_proportion_meta', 'cell_proportion_analysis_meta', 'analysis_biosample_analysis_meta', '0', 'biosample_analysis_biosample_meta', 'biosample_donor_meta', 'sex']
+    dataIndex: [
+      'gene_expression_proportion_meta',
+      'cell_proportion_analysis_meta',
+      'analysis_biosample_analysis_meta',
+      '0',
+      'biosample_analysis_biosample_meta',
+      'biosample_donor_meta',
+      'sex'
+    ]
   },
   {
     title: '',
@@ -187,4 +219,4 @@ defineExpose({
 })
 </script>
 
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>

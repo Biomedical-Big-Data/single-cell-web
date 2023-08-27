@@ -1,17 +1,17 @@
 <template>
   <a-table
-    :columns='columns'
-    :data-source='list'
-    :pagination='pagination'
-    :loading='loading'
-    size='middle'
-    @change='handleTableChange'
+    :columns="columns"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    size="middle"
+    @change="handleTableChange"
   >
     <template #title>
-      <div class='flex items-center justify-between'>
-        <div class='flex items-center'>
-          <span class='mr-4'>Project: {{ count.project }}</span>
-          <span class='mr-4'>Samples: {{ count.sample }}</span>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="mr-4">Project: {{ count.project }}</span>
+          <span class="mr-4">Samples: {{ count.sample }}</span>
           <span>Cells: {{ count.cell }}</span>
         </div>
         <div>
@@ -22,7 +22,7 @@
               </template>
               Column Setting
             </a-button>
-            <a-button class='ml-4'>
+            <a-button class="ml-4">
               <template #icon>
                 <DownloadOutlined />
               </template>
@@ -32,18 +32,29 @@
         </div>
       </div>
     </template>
-    <template #bodyCell='{column, record }'>
+    <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'action'">
-        <a-button shape='circle' :icon='h(EyeOutlined)' @click='handleToProject(record)' />
+        <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
       </template>
       <template v-if="column.dataIndex === 'disease'">
-        {{ record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0]['biosample_analysis_biosample_meta']['disease'] }}
+        {{
+          record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0][
+            'biosample_analysis_biosample_meta'
+          ]['disease']
+        }}
       </template>
       <template v-if="column.dataIndex === 'organ'">
-        {{ record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0]['biosample_analysis_biosample_meta']['organ'] }}
+        {{
+          record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0][
+            'biosample_analysis_biosample_meta'
+          ]['organ']
+        }}
       </template>
       <template v-if="column.dataIndex === 'sex'">
-        {{ record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0]['biosample_analysis_biosample_meta']['biosample_donor_meta']['sex']
+        {{
+          record['cell_proportion_analysis_meta']['analysis_biosample_analysis_meta'][0][
+            'biosample_analysis_biosample_meta'
+          ]['biosample_donor_meta']['sex']
         }}
       </template>
     </template>
@@ -168,7 +179,6 @@ const handleToProject = (record) => {
   })
   // console.log(routeData)
   window.open(routeData.href, '_blank')
-
 }
 
 defineExpose({
@@ -176,4 +186,4 @@ defineExpose({
 })
 </script>
 
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>
