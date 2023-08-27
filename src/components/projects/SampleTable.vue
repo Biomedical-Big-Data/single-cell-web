@@ -1,17 +1,17 @@
 <template>
   <a-table
-    :columns="columns"
-    :data-source="list"
-    :pagination="pagination"
-    :loading="loading"
-    size="middle"
-    @change="handleTableChange"
+    :columns='columns'
+    :data-source='list'
+    :pagination='pagination'
+    :loading='loading'
+    size='middle'
+    @change='handleTableChange'
   >
     <template #title>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <span class="mr-4">Project: {{ count.project }}</span>
-          <span class="mr-4">Samples: {{ count.sample }}</span>
+      <div class='flex items-center justify-between'>
+        <div class='flex items-center'>
+          <span class='mr-4'>Project: {{ count.project }}</span>
+          <span class='mr-4'>Samples: {{ count.sample }}</span>
           <span>Cells: {{ count.cell }}</span>
         </div>
         <div>
@@ -21,7 +21,7 @@
             </template>
             Column Setting
           </a-button>
-          <a-button class="ml-4">
+          <a-button class='ml-4'>
             <template #icon>
               <DownloadOutlined />
             </template>
@@ -30,36 +30,69 @@
         </div>
       </div>
     </template>
-    <template #expandedRowRender="{ record }">
-      <div
-        v-for="item in record.biosample_project_biosample_meta"
-        :key="item.id"
-        class="flex items-center justify-between px-4"
-      >
-        <div>{{ item.project_biosample_project_meta.title }}</div>
-        <div>
-          <a-button size="small">查看</a-button>
-        </div>
-      </div>
+    <template #bodyCell='{ column, record }'>
+      <template v-if="column.dataIndex === 'projects'">
+        <a-button
+          shape='circle'
+          :icon='h(OrderedListOutlined)'
+          @click='handleProjectsModalOpen(record)'
+        />
+      </template>
     </template>
-    <template #expandColumnTitle> </template>
   </a-table>
+  <a-modal
+    v-model:open='open'
+    title='Relative Projects'
+    width='100%'
+    wrap-class-name='full-modal'
+    :footer='null'
+  >
+    <div class='py-5'>
+      <a-table :columns='projectColumns' :data-source='projects' :pagination='false'>
+        <template #bodyCell='{ column, text, record }'>
+          <template v-if="column.title === 'Tags'">
+            <a-tag v-for="item in text.split(',').filter((item) => !!item)" :key='item'>{{
+                item
+              }}
+            </a-tag>
+          </template>
+          <template v-if="column.dataIndex === 'action'">
+            <a-button shape='circle' :icon='h(EyeOutlined)' @click='handleToProject(record)' />
+          </template>
+        </template>
+      </a-table>
+    </div>
+  </a-modal>
 </template>
 
 <script setup>
 import { usePagination } from 'vue-request'
 import { getSampleProjectList } from '@/api/project.js'
-import { computed, reactive, ref } from 'vue'
-import { SettingOutlined, DownloadOutlined } from '@ant-design/icons-vue'
+import { computed, reactive, ref, h } from 'vue'
+import {
+  SettingOutlined,
+  DownloadOutlined,
+  OrderedListOutlined,
+  EyeOutlined
+} from '@ant-design/icons-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const condition = ref({})
-
+const open = ref(false)
 const columns = [
   {
     title: 'Result',
     dataIndex: 'id',
     align: 'center',
     width: '20px'
+  },
+  {
+    title: 'Projects',
+    dataIndex: 'projects',
+    width: 80,
+    align: 'center'
   },
   {
     title: 'Disease',
@@ -83,13 +116,34 @@ const columns = [
     dataIndex: ['biosample_donor_meta', 'sex']
   }
 ]
-
+const projectColumns = [
+  {
+    title: 'Title',
+    dataIndex: ['project_biosample_project_meta', 'title'],
+    width: 200
+  },
+  {
+    title: 'Description',
+    dataIndex: ['project_biosample_project_meta', 'description']
+  },
+  {
+    title: 'Tags',
+    dataIndex: ['project_biosample_project_meta', 'tags'],
+    width: 300
+  },
+  {
+    title: '',
+    dataIndex: 'action',
+    align: 'center',
+    width: 100
+  }
+]
 const count = reactive({
   project: 0,
   sample: 0,
   cell: 0
 })
-
+const projects = ref([])
 const {
   data: dataSource,
   run,
@@ -110,7 +164,8 @@ const list = computed(() => {
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
-  pageSize: pageSize.value
+  pageSize: pageSize.value,
+  size: 'small'
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
@@ -137,9 +192,25 @@ const handleSearch = (condition) => {
   })
 }
 
+const handleProjectsModalOpen = (records) => {
+  projects.value = records.biosample_project_biosample_meta
+  open.value = true
+}
+
+const handleToProject = (record) => {
+  const routeData = router.resolve({
+    name: 'project_detail',
+    params: {
+      id: record.project_id
+    }
+  })
+  window.open(routeData.href, '_blank')
+
+}
+
 defineExpose({
   handleSearch
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang='scss'></style>

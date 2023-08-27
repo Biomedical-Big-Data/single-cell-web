@@ -1,13 +1,9 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-<div>
-  <img class="w-full" src="../../assets/dev/cell_percent.png" alt="">
-</div>
+  <div>
+    <img class="w-full" src="../../assets/dev/cell_percent.png" alt="" />
+  </div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

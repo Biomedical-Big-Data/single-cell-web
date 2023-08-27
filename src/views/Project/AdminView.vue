@@ -5,11 +5,20 @@
         <a-form-item label="项目名称" name="user_name">
           <a-input class="w-28" v-model:value="conditions.title" placeholder="项目名称"></a-input>
         </a-form-item>
-        <a-form-item label="状态" name="state">
+        <a-form-item label="状态" name="is_publish">
           <a-select
-            v-model:value="conditions.status"
-            :options="PROJECT_STATUS"
+            v-model:value="conditions.is_publish"
+            :options="PROJECT_STATUS_DESC"
             placeholder="项目状态"
+            class="w-28"
+            allow-clear
+          ></a-select>
+        </a-form-item>
+        <a-form-item label="是否公开" name="is_private">
+          <a-select
+            v-model:value="conditions.is_private"
+            :options="IS_PRIVATE_DESC"
+            placeholder="是否公开"
             class="w-28"
             allow-clear
           ></a-select>
@@ -38,10 +47,13 @@
           <template v-if="dataIndex === 'create_at' || dataIndex === 'update_at'">
             {{ dayjs(text).format('YYYY-MM-DD') }}
           </template>
-          <template v-if="dataIndex === 'status'">
-            {{ getStateName(text) }}
+          <template v-if="dataIndex === 'is_publish'">
+            {{ getPublishState(text) }}
           </template>
-          <template v-if="dataIndex === 'tag'">
+          <template v-if="dataIndex === 'is_private'">
+            {{ getPrivateState(text) }}
+          </template>
+          <template v-if="dataIndex === 'tags'">
             <a-tag v-for="item in (text || '').split(',').filter((a) => !!a)">{{ item }}</a-tag>
           </template>
           <template v-if="dataIndex === 'operation'">
@@ -65,38 +77,20 @@ import { usePagination } from 'vue-request'
 import dayjs from 'dayjs'
 import { getAdminProjectList } from '@/api/project'
 import { useRouter } from 'vue-router'
+import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from '@/constants/common.js'
 
 const router = useRouter()
 const conditions = ref({
   title: '',
-  status: undefined
+  is_publish: undefined,
+  is_private: undefined
 })
 
-const PROJECT_STATUS = [
-  {
-    label: '下线',
-    value: -1
-  },
-  {
-    label: 'Draft',
-    value: 0
-  },
-  {
-    label: '私有',
-    value: 1
-  },
-  {
-    label: '审批中',
-    value: 2
-  },
-  {
-    label: '公开',
-    value: 3
-  }
-]
-
-const getStateName = function (state) {
-  return PROJECT_STATUS.find((item) => item.value === state)?.label
+const getPublishState = function (state) {
+  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
+}
+const getPrivateState = function (state) {
+  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label
 }
 
 const columns = [
@@ -109,26 +103,29 @@ const columns = [
     dataIndex: 'cell_number'
   },
   {
-    title: '贡献人',
-    dataIndex: 'contributors'
-  },
-  {
     title: '外部继承',
     dataIndex: 'external_project_accesstion'
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    width: 100
+    title: '是否私有',
+    dataIndex: 'is_private',
+    width: 100,
+    align: 'center'
+  },
+  {
+    title: '是否发布',
+    dataIndex: 'is_publish',
+    width: 100,
+    align: 'center'
   },
   {
     title: '标签',
-    dataIndex: 'tag',
-    width: 100
+    dataIndex: 'tags',
+    width: 200
   },
   {
     title: '所属人',
-    dataIndex: 'owner',
+    dataIndex: ['project_user_meta', 'user_name'],
     width: 120
   },
   {
@@ -174,14 +171,18 @@ const list = computed(() => {
 
 const getConditions = function () {
   const result = {}
-  const { status, title } = conditions.value
+  const { is_publish, is_private, title } = conditions.value
 
   if (title) {
     result.title = title
   }
 
-  if (!isNaN(status)) {
-    result.status = status
+  if (!isNaN(is_publish)) {
+    result.status = is_publish
+  }
+
+  if (!isNaN(is_private)) {
+    result.status = is_private
   }
 
   return result
@@ -190,7 +191,8 @@ const getConditions = function () {
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
-  pageSize: pageSize.value
+  pageSize: pageSize.value,
+  size: 'small'
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
@@ -214,7 +216,7 @@ const handleSearch = () => {
 
 const handleToAdminProject = (record) => {
   router.push({
-    name: 'project_detail_update',
+    name: 'project_admin_detail_update',
     params: {
       id: record.id
     }
@@ -229,5 +231,9 @@ const handleToAdminProject = (record) => {
 
 .condition-item-lg {
   width: 130px !important;
+}
+
+:deep(.w-28) {
+  width: 7rem !important;
 }
 </style>

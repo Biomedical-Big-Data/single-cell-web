@@ -209,6 +209,7 @@ const handleOrganSearch = async (keywords) => {
 
 const handleGeneSymbolSearch = async (keywords) => {
   try {
+    console.log(keywords)
     state.value.geneSymbolFetching = true
     options.value.organ = []
   } finally {

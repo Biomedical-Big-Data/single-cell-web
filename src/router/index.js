@@ -62,6 +62,12 @@ export const constantRoutes = [
     name: 'project_detail',
     props: true,
     component: () => import('../views/Project/DetailView.vue')
+  },
+  {
+    path: '/projects/update/:id',
+    name: 'project_detail_update',
+    props: true,
+    component: () => import('../views/Project/UpdateView.vue')
   }
 ]
 
@@ -95,14 +101,14 @@ export const asyncRoutes = [
     component: () => import('../views/Project/AdminView.vue')
   },
   {
-    path: '/projects/update/:id',
-    name: 'project_detail_update',
+    path: '/projects/admin/update/:id',
+    name: 'project_admin_detail_update',
     meta: {
       title: '公开项目更新',
       roles: ['admin']
     },
     props: true,
-    component: () => import('../views/Project/UpdateView.vue')
+    component: () => import('../views/Project/AdminUpdateView.vue')
   },
   {
     path: '/process/admin',

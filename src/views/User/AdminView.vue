@@ -225,7 +225,8 @@ const getConditions = function () {
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
-  pageSize: pageSize.value
+  pageSize: pageSize.value,
+  size: 'small'
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
@@ -300,11 +301,7 @@ const handleUpdateUserState = (record, nextState) => {
 </script>
 
 <style scoped lang="scss">
-.condition-item {
-  width: 100px !important;
-}
-
-.condition-item-lg {
-  width: 130px !important;
+:deep(.w-28) {
+  width: 7rem !important;
 }
 </style>

@@ -67,7 +67,8 @@ const {
 const pagination = computed(() => ({
   total: 200,
   current: current.value,
-  pageSize: pageSize.value
+  pageSize: pageSize.value,
+  size: 'small'
 }))
 
 const handleTableChange = (pag, filters, sorter) => {

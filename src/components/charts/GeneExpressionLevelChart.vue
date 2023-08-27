@@ -1,13 +1,9 @@
 <template>
   <div>
-    <img class="w-full" src="../../assets/dev/gene_level.png" alt="">
+    <img class="w-full" src="../../assets/dev/gene_level.png" alt="" />
   </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

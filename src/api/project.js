@@ -28,6 +28,30 @@ export function getProjectDetail(id) {
   return request.get(`/project/${id}`)
 }
 
+export function getAdminProjectDetail(id) {
+  return request.get(`/admin/project/${id}`)
+}
+
 export function getAdminProjectList(params) {
   return request.get('/admin/project/list', { params })
+}
+
+export function getMyProjectList(params) {
+  return request.get('/project/me', { params })
+}
+
+export function createProject(data) {
+  return request.post('/project/create', data)
+}
+
+export function updateProject(data) {
+  return request.post('/project/update', data)
+}
+
+export function offlineProject(id) {
+  return request.post(`/project/${id}/offline`)
+}
+
+export function transferProject(id, mail) {
+  return request.post(`/project/${id}/transfer`, { transfer_to_email_address: mail })
 }

@@ -10,5 +10,4 @@ import router from './router'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-const app = createApp(App)
 createApp(App).use(Antd).use(pinia).use(router).mount('#app')

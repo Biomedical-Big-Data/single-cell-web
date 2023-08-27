@@ -3,13 +3,7 @@
     <a-card title="修改个人信息" bordered>
       <div class="flex items-center flex-col w-full">
         <div class="max-w-lg w-full mt-6">
-          <a-form
-            :model="userInfo"
-            :label-col="{ span: 5 }"
-            :label-wrap="{ span: 13 }"
-            :rules="rules"
-            ref="formRef"
-          >
+          <a-form :model="userInfo" :label-col="{ span: 5 }" :rules="rules" ref="formRef">
             <a-form-item label="用户名">
               <a-input v-model:value="userInfo.user_name" disabled />
             </a-form-item>
