@@ -43,6 +43,14 @@ export const constantRoutes = [
     component: () => import('../views/User/ResetPasswordView.vue')
   },
   {
+    path: '/files/manage',
+    name: 'files_manage',
+    meta: {
+      title: '文件管理'
+    },
+    component: () => import('../views/File/ManageView.vue')
+  },
+  {
     path: '/projects',
     name: 'projects',
     component: () => import('../views/Project/ListView.vue')
@@ -91,6 +99,7 @@ export const asyncRoutes = [
     props: true,
     component: () => import('../views/User/SettingView.vue')
   },
+
   {
     path: '/projects/admin',
     name: 'projects_admin',

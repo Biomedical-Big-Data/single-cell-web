@@ -29,6 +29,9 @@
         <a-menu-item key="projects_manage">
           <RouterLink to="/projects/manage">我的项目</RouterLink>
         </a-menu-item>
+        <a-menu-item key="file_manage">
+          <RouterLink to="/files/manage">我的文件</RouterLink>
+        </a-menu-item>
         <a-sub-menu key="admin">
           <template #title>系统管理</template>
           <a-menu-item key="user_admin">

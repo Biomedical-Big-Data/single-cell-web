@@ -36,6 +36,16 @@ export function getAdminProjectList(params) {
   return request.get('/admin/project/list', { params })
 }
 
+export function getMyProjectFile(params) {
+  return request.get('/project/h5ad_file/me', { params })
+}
+
+export function uploadProjectFile(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  return request.post('/project/h5ad_file/upload', formData)
+}
+
 export function getMyProjectList(params) {
   return request.get('/project/me', { params })
 }
