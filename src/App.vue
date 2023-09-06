@@ -51,7 +51,7 @@
       </a-menu-item>
     </a-menu>
   </a-layout-header>
-  <a-layout-content>
+  <a-layout-content class="flex-1">
     <RouterView />
   </a-layout-content>
   <!--  <a-layout-footer class="text-center"> Ant Design ©2018 Created by Ant UED </a-layout-footer>-->

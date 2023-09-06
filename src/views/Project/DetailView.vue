@@ -1,12 +1,15 @@
 <template>
-  <div v-if="projectDetail">
+  <div v-if="projectDetail" class="project-detail-container">
     <div class="py-4 px-6 bg-white">
       <div class="summary">
         {{ projectDetail.title }}
       </div>
       <div class="mt-4">{{ projectDetail.description }}</div>
       <div class="mt-4">
-        <a-tag v-for="item in projectDetail.tags.split(',').filter((item) => !!item)" :key="item">
+        <a-tag
+          v-for="item in (projectDetail.tags || '').split(',').filter((item) => !!item)"
+          :key="item"
+        >
           {{ item }}
         </a-tag>
       </div>
@@ -22,14 +25,14 @@
         </a-button>
       </div>
     </div>
-    <div class="mt-4 px-4">
-      <a-tabs v-model:activeKey="activeKey" tab-position="left" class="py-4 bg-white">
+    <div class="mt-4 px-4 flex-1">
+      <a-tabs v-model:activeKey="activeKey" tab-position="left" class="py-4 bg-white h-full">
         <a-tab-pane key="similarity" tab="Cell cell similarity">
           <div>
             <SimilarityChart></SimilarityChart>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="barplot" tab="Barplot of cell umber in each type">
+        <a-tab-pane key="barplot" tab="Barplot of cell umber in each type" class="abc">
           <BarChart></BarChart>
         </a-tab-pane>
         <a-tab-pane key="celltype" tab="Celltype Markers">
@@ -42,7 +45,7 @@
       </a-tabs>
     </div>
     <div class="information mt-4 px-4">
-      <div class="bg-white p-5">
+      <div class="bg-white p-5 text-sm">
         <div>Publication: {{ dayjs(projectDetail.update_at).format('YYYY-MM-DD HH:mm') }}</div>
         <div class="mt-4">Email: {{ projectDetail.project_user_meta.email_address }}</div>
       </div>
@@ -95,5 +98,15 @@ const handleOpenCellxgene = (record) => {
   color: var(--character-title-85, rgba(0, 0, 0, 0.85));
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.project-detail-container {
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+:deep(.ant-tabs-content) {
+  height: 100%;
 }
 </style>
