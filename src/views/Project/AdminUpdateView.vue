@@ -38,26 +38,54 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="H5AD文件" name="file">
-              <a-upload name="file">
-                <a-button class="w-full flex items-center" type="dashed">
-                  <template #icon>
-                    <PlusOutlined></PlusOutlined>
-                  </template>
-                  H5AD 文件
-                </a-button>
-              </a-upload>
+            <a-form-item label="H5AD文件">
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_file')"
+              >
+                <template #icon>
+                  <PlusOutlined></PlusOutlined>
+                </template>
+                H5AD 文件
+              </a-button>
             </a-form-item>
 
-            <a-form-item label="Excel文件" name="file">
-              <a-upload name="file">
-                <a-button class="w-full flex items-center" type="dashed">
-                  <template #icon>
-                    <PlusOutlined></PlusOutlined>
-                  </template>
-                  Excel 文件
-                </a-button>
-              </a-upload>
+            <a-form-item label="Excel文件">
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('excel_file')"
+              >
+                <template #icon>
+                  <PlusOutlined></PlusOutlined>
+                </template>
+                Excel 文件
+              </a-button>
+            </a-form-item>
+            <a-form-item label="UMap文件">
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_file')"
+              >
+                <template #icon>
+                  <PlusOutlined></PlusOutlined>
+                </template>
+                UMap 文件
+              </a-button>
+            </a-form-item>
+            <a-form-item label="Cell Type ">
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('Marker')"
+              >
+                <template #icon>
+                  <PlusOutlined></PlusOutlined>
+                </template>
+                Cell Type Marker 文件
+              </a-button>
             </a-form-item>
 
             <a-form-item label="项目描述" name="description" required>
@@ -101,6 +129,7 @@
       </div>
     </a-modal>
   </div>
+  <FileModalView ref="fileModalRef" @selected="handleFileSelected"></FileModalView>
 </template>
 
 <script setup>
@@ -113,6 +142,7 @@ import {
   updateProject
 } from '@/api/project.js'
 import { message, Modal } from 'ant-design-vue'
+import FileModalView from '@/views/File/ModalView.vue'
 
 const props = defineProps({
   id: { required: true }
@@ -130,7 +160,7 @@ const formState = ref({
 const projectDetail = ref({})
 
 const transferMail = ref('')
-
+const fileModalRef = ref()
 const open = ref(false)
 const loading = ref(false)
 const saving = ref(false)
@@ -250,6 +280,10 @@ const handleProjectOffline = () => {
       await handleProjectFetch()
     }
   })
+}
+
+const handleFileSelected = (record) => {
+  console.log(record)
 }
 </script>
 

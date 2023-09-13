@@ -65,7 +65,7 @@ const {
 })
 
 const pagination = computed(() => ({
-  total: 200,
+  total: 0,
   current: current.value,
   pageSize: pageSize.value,
   size: 'small'

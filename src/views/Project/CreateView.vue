@@ -1,57 +1,57 @@
 <template>
-  <div class='p-5 page'>
-    <a-card title='创建项目' :bordered='false'>
-      <div class='flex items-center flex-col w-full'>
-        <div class='max-w-lg w-full mt-6'>
+  <div class="p-5 page">
+    <a-card title="创建项目" :bordered="false">
+      <div class="flex items-center flex-col w-full">
+        <div class="max-w-lg w-full mt-6">
           <a-form
-            ref='formRef'
-            :model='formState'
-            name='basic'
-            :rules='rules'
-            autocomplete='off'
-            :label-col='{ span: 5 }'
+            ref="formRef"
+            :model="formState"
+            name="basic"
+            :rules="rules"
+            autocomplete="off"
+            :label-col="{ span: 5 }"
           >
-            <a-form-item label='项目名称' name='title' required>
-              <a-input v-model:value='formState.title' placeholder='项目名称' />
+            <a-form-item label="项目名称" name="title" required>
+              <a-input v-model:value="formState.title" placeholder="项目名称" />
             </a-form-item>
 
-            <a-form-item label='Species' name='species_id' required>
+            <a-form-item label="Species" name="species_id" required>
               <a-select
-                v-model:value='formState.species_id'
-                :options='SPECIES'
-                placeholder='Species'
+                v-model:value="formState.species_id"
+                :options="SPECIES"
+                placeholder="Species"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label='Organ' name='organ' required>
-              <a-input v-model:value='formState.organ' placeholder='Organ' />
+            <a-form-item label="Organ" name="organ" required>
+              <a-input v-model:value="formState.organ" placeholder="Organ" />
             </a-form-item>
 
-            <a-form-item label='标签' name='tags'>
+            <a-form-item label="标签" name="tags">
               <a-select
-                v-model:value='formState.tags'
-                mode='tags'
-                placeholder='标签'
-                :options='[]'
+                v-model:value="formState.tags"
+                mode="tags"
+                placeholder="标签"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label='访问权限' name='public'>
-              <a-switch v-model:checked='formState.isPrivate' />
+            <a-form-item label="访问权限" name="public">
+              <a-switch v-model:checked="formState.isPrivate" />
               私有，仅受邀人可看
             </a-form-item>
 
-            <a-form-item label='可访问人员' name='public' v-if='!!formState.isPrivate'>
+            <a-form-item label="可访问人员" name="public" v-if="!!formState.isPrivate">
               <a-select
-                v-model:value='formState.members'
-                mode='tags'
-                placeholder='受邀人'
-                :options='[]'
+                v-model:value="formState.members"
+                mode="tags"
+                placeholder="受邀人"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label='上传文件' name='file'>
-              <a-button class='w-full flex items-center' type='dashed' @click='fileModalRef?.open'>
+            <a-form-item label="上传文件" name="file">
+              <a-button class="w-full flex items-center" type="dashed" @click="fileModalRef?.open">
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
                 </template>
@@ -59,31 +59,29 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label='项目描述' name='description' required>
+            <a-form-item label="项目描述" name="description" required>
               <a-textarea
-                v-model:value='formState.description'
+                v-model:value="formState.description"
                 show-count
-                :maxlength='1000'
-                :auto-size='{ minRows: 4 }'
+                :maxlength="1000"
+                :auto-size="{ minRows: 4 }"
               />
             </a-form-item>
 
-            <a-form-item :wrapper-col='{ offset: 5 }'>
-              <a-button type='primary' :loading='loading' @click='handleProjectCreate(true)'
-              >发布
-              </a-button
-              >
-              <a-button class='ml-3' :loading='loading' @click='handleProjectCreate(false)'
-              >保存
-              </a-button
-              >
-              <a-button class='ml-3' :loading='loading'>取消</a-button>
+            <a-form-item :wrapper-col="{ offset: 5 }">
+              <a-button type="primary" :loading="loading" @click="handleProjectCreate(true)"
+                >发布
+              </a-button>
+              <a-button class="ml-3" :loading="loading" @click="handleProjectCreate(false)"
+                >保存
+              </a-button>
+              <a-button class="ml-3" :loading="loading">取消</a-button>
             </a-form-item>
           </a-form>
         </div>
       </div>
     </a-card>
-    <FileModalView ref='fileModalRef' @selected='handleFileSelected'></FileModalView>
+    <FileModalView ref="fileModalRef" @selected="handleFileSelected"></FileModalView>
   </div>
 </template>
 
@@ -103,7 +101,7 @@ const formState = ref({
   tags: [],
   members: [],
   description: '',
-  file:null,
+  file: null,
   isPrivate: true
 })
 
@@ -183,4 +181,4 @@ const handleProjectCreate = async (isPublish) => {
 }
 </script>
 
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>

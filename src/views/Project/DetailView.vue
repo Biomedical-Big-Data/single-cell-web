@@ -38,9 +38,9 @@
         <a-tab-pane key="celltype" tab="Celltype Markers">
           <CellTypeMarkers></CellTypeMarkers>
         </a-tab-pane>
-        <a-tab-pane key="score" tab="Score of pathway">
-          <PathWayChart></PathWayChart>
-        </a-tab-pane>
+<!--        <a-tab-pane key="score" tab="Score of pathway">-->
+<!--          <PathWayChart></PathWayChart>-->
+<!--        </a-tab-pane>-->
         <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>
       </a-tabs>
     </div>
@@ -56,7 +56,7 @@
 import { computed, onMounted, ref } from 'vue'
 import BarChart from '@/components/charts/BarChart.vue'
 import SimilarityChart from '@/components/charts/SimilarityChart.vue'
-import PathWayChart from '@/components/charts/PathWayChart.vue'
+// import PathWayChart from '@/components/charts/PathWayChart.vue'
 import CellTypeMarkers from '@/components/CellTypeMarkers.vue'
 import { getProjectDetail } from '@/api/project'
 import dayjs from 'dayjs'

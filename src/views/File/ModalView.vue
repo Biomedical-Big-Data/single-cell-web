@@ -1,20 +1,20 @@
 <template>
-  <a-modal title='选择文件' v-model:open='open' :footer='null' width='500'>
-    <div class='bg-white py-2 px-4 rounded-lg'>
-      <a-form :model='conditions' layout='inline' autocomplete='off'>
-        <a-form-item label='文件名称' name='file_name'>
+  <a-modal title="选择文件" v-model:open="open" :footer="null" width="500">
+    <div class="bg-white py-2 px-4 rounded-lg">
+      <a-form :model="conditions" layout="inline" autocomplete="off">
+        <a-form-item label="文件名称" name="file_name">
           <a-input
-            class='w-56'
-            v-model:value='conditions.file_name'
-            placeholder='文件名称'
+            class="w-56"
+            v-model:value="conditions.file_name"
+            placeholder="文件名称"
           ></a-input>
         </a-form-item>
         <a-form-item>
           <a-button
-            type='primary'
-            class='flex items-center'
-            @click='handleSearch'
-            :loading='loading'
+            type="primary"
+            class="flex items-center"
+            @click="handleSearch"
+            :loading="loading"
           >
             <template #icon>
               <SearchOutlined></SearchOutlined>
@@ -24,36 +24,36 @@
         </a-form-item>
         <a-form-item>
           <a-button
-            type='primary'
-            class='flex items-center'
-            @click='fileRef.click()'
-            :loading='uploading'
+            type="primary"
+            class="flex items-center"
+            @click="fileRef.click()"
+            :loading="uploading"
           >
             <template #icon>
               <CloudUploadOutlined></CloudUploadOutlined>
             </template>
             上传
           </a-button>
-          <input type='file' hidden ref='fileRef' @change='handleUpload' />
+          <input type="file" hidden ref="fileRef" @change="handleUpload" />
         </a-form-item>
       </a-form>
     </div>
 
-    <div class='mt-5 rounded-lg bg-white'>
+    <div class="mt-5 rounded-lg bg-white">
       <a-table
-        :columns='columns'
-        :row-key='(record) => record.id'
-        :data-source='list'
-        :pagination='pagination'
-        :loading='loading'
-        @change='handleTableChange'
+        :columns="columns"
+        :row-key="(record) => record.id"
+        :data-source="list"
+        :pagination="pagination"
+        :loading="loading"
+        @change="handleTableChange"
       >
-        <template #bodyCell='{ column: { dataIndex }, text,record }'>
+        <template #bodyCell="{ column: { dataIndex }, text, record }">
           <template v-if="dataIndex === 'create_at'">
             {{ dayjs(text).format('YYYY-MM-DD') }}
           </template>
           <template v-if="dataIndex === 'action'">
-            <a-button size='small' @click='handleFileSelected(record)'>选择</a-button>
+            <a-button size="small" @click="handleFileSelected(record)">选择</a-button>
           </template>
         </template>
       </a-table>
@@ -72,6 +72,7 @@ import dayjs from 'dayjs'
 const emits = defineEmits(['selected'])
 
 const fileRef = ref()
+const target = ref(null)
 const open = ref(false)
 const uploading = ref(false)
 const conditions = ref({
@@ -81,7 +82,7 @@ const conditions = ref({
 const columns = [
   {
     title: '文件ID',
-    dataIndex: 'h5ad_id',
+    dataIndex: 'file_id',
     width: '200px'
   },
   {
@@ -126,7 +127,7 @@ const list = computed(() => {
   return dataSource?.value?.h5ad_list || []
 })
 
-const getConditions = function() {
+const getConditions = function () {
   const result = {}
   const { file_name } = conditions.value
 
@@ -155,8 +156,9 @@ const handleTableChange = (pag, filters, sorter) => {
   })
 }
 
-const handleOpen = () => {
+const handleOpen = (t) => {
   open.value = true
+  target.value = t
   handleSearch()
 }
 
@@ -184,7 +186,7 @@ const handleUpload = async (event) => {
 }
 
 const handleFileSelected = (record) => {
-  emits('selected', record)
+  emits('selected', { ...record, target: target.value })
   open.value = false
 }
 
@@ -193,5 +195,4 @@ defineExpose({
 })
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

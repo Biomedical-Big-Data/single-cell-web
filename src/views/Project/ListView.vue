@@ -73,10 +73,18 @@
                 />
               </a-form-item>
               <a-form-item label="Positive" name="positive">
-                <a-select v-model:value="cell.positive" mode="tags"></a-select>
+                <a-select
+                  v-model:value="cell.positive"
+                  mode="tags"
+                  placeholder="Positive"
+                ></a-select>
               </a-form-item>
               <a-form-item label="Negative" name="negative">
-                <a-select v-model:value="cell.negative" mode="tags"></a-select>
+                <a-select
+                  v-model:value="cell.negative"
+                  mode="tags"
+                  placeholder="Negative"
+                ></a-select>
               </a-form-item>
             </a-form>
           </div>
@@ -150,7 +158,7 @@ const state = ref({
   geneSymbolFetching: false
 })
 
-const filter = ref('gene')
+const filter = ref('sample')
 
 const sample = reactive({
   species: undefined,

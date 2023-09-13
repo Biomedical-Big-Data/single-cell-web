@@ -75,7 +75,7 @@ const conditions = ref({
 const columns = [
   {
     title: '文件ID',
-    dataIndex: 'h5ad_id',
+    dataIndex: 'file_id',
     width: '200px'
   },
   {
