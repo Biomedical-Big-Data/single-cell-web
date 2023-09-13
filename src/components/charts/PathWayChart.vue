@@ -62,7 +62,10 @@ const trace2 = {
 const data = [trace1, trace2]
 
 const layout = {
-  title: 'Always Display the Modebar'
+  title: 'Always Display the Modebar',
+  autosize: true,
+  height: 700,
+  showlegend: true
 }
 
 const config = { responsive: true, scrollZoom: true }

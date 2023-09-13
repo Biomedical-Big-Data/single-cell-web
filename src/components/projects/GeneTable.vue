@@ -38,20 +38,27 @@
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, record }">
+    <template #bodyCell="{ column, record, index }">
+      <template v-if="column.dataIndex === 'index'">{{ getTrueIndex(index) }}</template>
       <template v-if="column.dataIndex === 'action'">
         <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
       </template>
     </template>
   </a-table>
 
-  <a-modal v-model:open="open" width="100%" wrap-class-name="full-modal" :footer="null">
+  <a-modal v-model:open="open" width="60%" wrap-class-name="full-modal" :footer="null">
     <a-tabs v-model:activeKey="geneChartType">
       <a-tab-pane key="percent" tab="Cell Number Percentage">
-        <CellPercentageChart></CellPercentageChart>
+        <GeneExpressionLevelChart
+          :data="geneChartData"
+          value-key="cell_proportion_expression_the_gene"
+        ></GeneExpressionLevelChart>
       </a-tab-pane>
       <a-tab-pane key="expression" tab="Gene Expression Level">
-        <GeneExpressionLevelChart></GeneExpressionLevelChart>
+        <GeneExpressionLevelChart
+          :data="geneChartData"
+          value-key="average_gene_expression"
+        ></GeneExpressionLevelChart>
       </a-tab-pane>
     </a-tabs>
   </a-modal>
@@ -59,28 +66,28 @@
 
 <script setup>
 import { usePagination } from 'vue-request'
-import { getGeneProjectList } from '@/api/project.js'
+import { getGeneProjectList, getProjectGeneChartData } from '@/api/project.js'
 import { computed, h, reactive, ref } from 'vue'
 import {
-  DownloadOutlined,
-  SettingOutlined,
   DotChartOutlined,
-  EyeOutlined
+  DownloadOutlined,
+  EyeOutlined,
+  SettingOutlined
 } from '@ant-design/icons-vue'
-import CellPercentageChart from '@/components/charts/CellPercentageChart.vue'
-import GeneExpressionLevelChart from '@/components/charts/GeneExpressionLevelChart.vue'
+import GeneExpressionLevelChart from '@/components/charts/GeneExpressionChart.vue'
 import { useRouter } from 'vue-router'
 
 const condition = ref({})
 const open = ref(false)
 const geneChartType = ref('percent')
+const geneChartData = ref([])
 
 const router = useRouter()
 
 const columns = [
   {
     title: 'Result',
-    dataIndex: 'id',
+    dataIndex: 'index',
     align: 'center',
     width: '20px'
   },
@@ -148,13 +155,33 @@ const count = reactive({
   cell: 0
 })
 
+const getConditions = () => {
+  const { species, symbol } = condition.value
+  return {
+    ...(species ? { species_id: species } : {}),
+    ...(symbol ? { gene_symbol: symbol } : {})
+  }
+}
+
+const getTrueIndex = (index) => {
+  return (current.value - 1) * pageSize.value + index + 1
+}
+
+const handleGeneChartDataFetch = async () => {
+  geneChartData.value = await getProjectGeneChartData(getConditions())
+}
+
+const queryData = (params) => {
+  return handleGeneChartDataFetch().then(() => getGeneProjectList(params))
+}
+
 const {
   data: dataSource,
   run,
   loading,
   current,
   pageSize
-} = usePagination(getGeneProjectList, {
+} = usePagination(queryData, {
   pagination: {
     currentKey: 'page',
     pageSizeKey: 'page_size'
@@ -183,14 +210,6 @@ const handleTableChange = (pag, filters, sorter) => {
   })
 }
 
-const getConditions = () => {
-  const { species, symbol } = condition.value
-  return {
-    ...(species ? { species_id: species } : {}),
-    ...(symbol ? { gene_symbol: symbol } : {})
-  }
-}
-
 const handleSearch = (conditions) => {
   condition.value = conditions
   run({
@@ -205,7 +224,6 @@ const handleChartModalOpen = () => {
 }
 
 const handleToProject = (record) => {
-  console.log()
   const routeData = router.resolve({
     name: 'project_detail',
     params: {

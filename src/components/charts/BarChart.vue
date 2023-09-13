@@ -24,7 +24,10 @@ const data = [
 ]
 
 const layout = {
-  title: 'Always Display the Modebar'
+  title: 'Always Display the Modebar',
+  autosize: true,
+  height: 700,
+  showlegend: true
 }
 
 const config = { responsive: true, scrollZoom: true }

@@ -30,7 +30,8 @@
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, record }">
+    <template #bodyCell="{ column, record, index }">
+      <template v-if="column.dataIndex === 'index'">{{ getTrueIndex(index) }}</template>
       <template v-if="column.dataIndex === 'projects'">
         <a-button
           shape="circle"
@@ -83,7 +84,7 @@ const open = ref(false)
 const columns = [
   {
     title: 'Result',
-    dataIndex: 'id',
+    dataIndex: 'index',
     align: 'center',
     width: '20px'
   },
@@ -166,6 +167,10 @@ const pagination = computed(() => ({
   pageSize: pageSize.value,
   size: 'small'
 }))
+
+const getTrueIndex = (index) => {
+  return (current.value - 1) * pageSize.value + index + 1
+}
 
 const handleTableChange = (pag, filters, sorter) => {
   run({

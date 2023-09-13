@@ -17,6 +17,6 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['vue3-plotly', 'uuid']
+    include: ['vue3-plotly', 'uuid', 'lodash']
   }
 })

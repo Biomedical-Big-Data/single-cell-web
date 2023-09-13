@@ -65,3 +65,9 @@ export function offlineProject(id) {
 export function transferProject(id, mail) {
   return request.post(`/project/${id}/transfer`, { transfer_to_email_address: mail })
 }
+
+export function getProjectGeneChartData({ gene_symbol, species_id }) {
+  return request.get(`/project/list/by/gene/graph`, {
+    params: { gene_symbol, species_id }
+  })
+}

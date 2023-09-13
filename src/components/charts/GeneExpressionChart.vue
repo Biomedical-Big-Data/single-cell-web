@@ -11,26 +11,29 @@
 
 <script setup>
 import { VuePlotly } from 'vue3-plotly'
-import { computed } from 'vue'
 import _ from 'lodash'
+import { computed } from 'vue'
 
 const props = defineProps({
   data: {
     type: Array,
     required: true
+  },
+  valueKey: {
+    type: String,
+    required: true
   }
 })
 
 const chartData = computed(() => {
+  console.log(props.valueKey)
   return _.chain(props.data)
-    .filter(({ cell_proportion_expression_the_gene }) => !!cell_proportion_expression_the_gene)
+    .filter((item) => !!item[props.valueKey])
     .groupBy('cell_type_name')
     .toPairs()
     .map(([name, values]) => {
       return {
-        x: values.map(
-          ({ cell_proportion_expression_the_gene }) => cell_proportion_expression_the_gene
-        ),
+        x: values.map((item) => item[props.valueKey]),
         y: new Array(values.length).fill(name),
         mode: 'markers',
         type: 'scatter',
@@ -42,7 +45,7 @@ const chartData = computed(() => {
 })
 
 const layout = {
-  title: 'Cell Number Percentage',
+  title: 'Gene Expression Level',
   autosize: true,
   height: 700,
   showlegend: true
