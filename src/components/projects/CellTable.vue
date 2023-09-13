@@ -154,14 +154,26 @@ const handleTableChange = (pag, filters, sorter) => {
 }
 
 const getConditions = () => {
-  return condition.value
+  const result = {}
+  const { positive, negative, species } = condition.value
+  if (species) {
+    result.species_id = species
+  }
+  if (positive?.length) {
+    result.genes_positive = positive.join(',')
+  }
+  if (negative?.length) {
+    result.genes_negative = negative.join(',')
+  }
+  return result
 }
 
-const handleSearch = (condition) => {
-  condition.value = condition
+const handleSearch = (conditions) => {
+  console.log(conditions)
+  condition.value = conditions
   run({
-    page: current,
-    page_size: pageSize,
+    page: current.value,
+    page_size: pageSize.value,
     ...getConditions()
   })
 }

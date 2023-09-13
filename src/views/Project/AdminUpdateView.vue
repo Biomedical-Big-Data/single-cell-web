@@ -98,7 +98,7 @@
             </a-form-item>
 
             <a-form-item :wrapper-col="{ offset: 5 }">
-              <a-button class="mr-3" :saving="saving" @click="handleProjectCreate(false)">
+              <a-button class="mr-3" :saving="saving" @click="handleProjectUpdate(false)">
                 保存
               </a-button>
               <a-button
@@ -206,7 +206,7 @@ const handleProjectFetch = async () => {
     const data = await getAdminProjectDetail(props.id)
     const result = {
       title: data.title,
-      tags: data.tags.split(','),
+      tags: data.tags ? data.tags.split(',') : [],
       members: data.project_project_user_meta
         .filter((item) => item.project_user_user_meta.id !== data.project_user_meta.id)
         .map((item) => item.project_user_user_meta.email_address),
@@ -223,7 +223,7 @@ const handleProjectFetch = async () => {
   }
 }
 
-const handleProjectCreate = async (isPublish) => {
+const handleProjectUpdate = async (isPublish) => {
   try {
     await formRef.value.validate()
     const { title, species_id, organ, tags, description, isPrivate, members } = formState.value

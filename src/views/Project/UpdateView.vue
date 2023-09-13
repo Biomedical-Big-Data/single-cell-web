@@ -188,7 +188,7 @@ const handleProjectFetch = async () => {
       species_id:
         data.project_project_biosample_meta[0].project_biosample_biosample_meta.species_id,
       organ: data.project_project_biosample_meta[0].project_biosample_biosample_meta.organ,
-      tags: data.tags.split(','),
+      tags: data.tags ? data.tags.split(',') : [],
       members: data.project_project_user_meta
         .filter((item) => item.project_user_user_meta.id !== data.project_user_meta.id)
         .map((item) => item.project_user_user_meta.email_address),

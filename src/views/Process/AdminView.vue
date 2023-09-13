@@ -3,14 +3,20 @@
     <div class="p-3 bg-white">
       <a-table
         :columns="columns"
-        :row-key="(record) => record.login.uuid"
+        :row-key="(record) => record.ip"
         :data-source="dataSource"
-        :pagination="pagination"
+        :pagination="false"
         :loading="loading"
-        @change="handleTableChange"
       >
-        <template #bodyCell="{ column, text }">
-          <template v-if="column.dataIndex === 'name'">{{ text.first }} {{ text.last }}</template>
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex === 'entry_list'">
+            <ul>
+              <li v-for="(item, index) in record.entry_list" :key="index">
+                {{ item.name }}
+                <a-button size="small" @click="handleTerminateProcess(item)">终止</a-button>
+              </li>
+            </ul>
+          </template>
         </template>
       </a-table>
     </div>
@@ -18,67 +24,45 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { usePagination } from 'vue-request'
-import axios from 'axios'
+import { useRequest } from 'vue-request'
+import { getSeverList, terminateProcess } from '@/api/process.js'
+import { message } from 'ant-design-vue'
+import { ref } from 'vue'
+
+const terminating = ref(false)
 
 const columns = [
   {
-    title: '项目名称',
-    dataIndex: 'name',
-    sorter: true
-  },
-  {
     title: '目标IP端口',
-    dataIndex: 'gender',
-    filters: [
-      { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' }
-    ]
+    dataIndex: 'ip'
   },
   {
-    title: '持续时间',
-    dataIndex: 'email'
+    title: '可用内存(G)',
+    dataIndex: 'available_memory'
   },
   {
-    title: '持续时间',
-    dataIndex: 'email'
+    title: '进程',
+    dataIndex: 'entry_list'
+  },
+
+  {
+    title: '服务器时间',
+    dataIndex: 'server_time',
+    width: 200
   }
 ]
 
-const queryData = (params) => {
-  return axios.get('https://randomuser.me/api?noinfo', { params })
-}
+const { data: dataSource, loading, run } = useRequest(getSeverList, {})
 
-const {
-  data: dataSource,
-  run,
-  loading,
-  current,
-  pageSize
-} = usePagination(queryData, {
-  formatResult: (res) => res.data.results,
-  pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'results'
+const handleTerminateProcess = async (record) => {
+  try {
+    terminating.value = true
+    await terminateProcess(record)
+    message.success('终止进程成功')
+    run()
+  } finally {
+    terminating.value = false
   }
-})
-
-const pagination = computed(() => ({
-  total: 0,
-  current: current.value,
-  pageSize: pageSize.value,
-  size: 'small'
-}))
-
-const handleTableChange = (pag, filters, sorter) => {
-  run({
-    results: pag.pageSize,
-    page: pag?.current,
-    sortField: sorter.field,
-    sortOrder: sorter.order,
-    ...filters
-  })
 }
 </script>
 

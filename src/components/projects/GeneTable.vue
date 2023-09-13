@@ -184,11 +184,15 @@ const handleTableChange = (pag, filters, sorter) => {
 }
 
 const getConditions = () => {
-  return condition.value
+  const { species, symbol } = condition.value
+  return {
+    ...(species ? { species_id: species } : {}),
+    ...(symbol ? { gene_symbol: symbol } : {})
+  }
 }
 
-const handleSearch = (condition) => {
-  condition.value = condition
+const handleSearch = (conditions) => {
+  condition.value = conditions
   run({
     page: current,
     page_size: pageSize,

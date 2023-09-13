@@ -20,6 +20,7 @@
                   placeholder="Organ"
                   :options="options.organ"
                   @search="handleOrganSearch"
+                  allow-clear
                 >
                   <template v-if="state.organFetching" #notFoundContent>
                     <a-spin size="small" />
@@ -32,6 +33,7 @@
                   v-model:value="sample.species"
                   :options="SPECIES"
                   placeholder="Species"
+                  allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="External Accession" name="external_sample_accession">
@@ -58,6 +60,7 @@
                   v-model:value="cell.species"
                   :options="SPECIES"
                   placeholder="Species"
+                  allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="Name" name="name">
@@ -77,6 +80,7 @@
                   v-model:value="cell.positive"
                   mode="tags"
                   placeholder="Positive"
+                  allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="Negative" name="negative">
@@ -84,6 +88,7 @@
                   v-model:value="cell.negative"
                   mode="tags"
                   placeholder="Negative"
+                  allow-clear
                 ></a-select>
               </a-form-item>
             </a-form>
@@ -95,6 +100,7 @@
                   v-model:value="gene.species"
                   :options="SPECIES"
                   placeholder="Species"
+                  allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="Search by gene symbol" name="symbol">
@@ -104,6 +110,7 @@
                   placeholder="Gene Symbol"
                   :options="options.geneSymbol"
                   @search="handleGeneSymbolSearch"
+                  allow-clear
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
                     <a-spin size="small" />
@@ -139,13 +146,14 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { UndoOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import { SPECIES } from '@/constants/common'
 import { getOrganList } from '@/api/project'
 import SampleTable from '@/components/projects/SampleTable.vue'
 import CellTable from '@/components/projects/CellTable.vue'
 import GeneTable from '@/components/projects/GeneTable.vue'
+import { getGeneSymbolList } from '@/api/options.js'
 
 const options = ref({
   organ: [],
@@ -160,7 +168,7 @@ const state = ref({
 
 const filter = ref('sample')
 
-const sample = reactive({
+const sample = ref({
   species: undefined,
   organ: undefined,
   external_sample_accession: '',
@@ -171,7 +179,7 @@ const sample = reactive({
 const sampleFormRef = ref()
 const sampleTableRef = ref()
 
-const cell = reactive({
+const cell = ref({
   species: undefined,
   name: '',
   positive: [],
@@ -181,9 +189,9 @@ const cell = reactive({
 const cellFormRef = ref()
 const cellTableRef = ref()
 
-const gene = reactive({
+const gene = ref({
   species: undefined,
-  symbol: ''
+  symbol: undefined
 })
 
 const geneFormRef = ref()
@@ -217,9 +225,10 @@ const handleOrganSearch = async (keywords) => {
 
 const handleGeneSymbolSearch = async (keywords) => {
   try {
-    console.log(keywords)
     state.value.geneSymbolFetching = true
-    options.value.organ = []
+    const data = await getGeneSymbolList({ gene_symbol: keywords })
+    console.log(data)
+    options.value.geneSymbol = data.map((item) => ({ label: item, value: item }))
   } finally {
     state.value.geneSymbolFetching = false
   }

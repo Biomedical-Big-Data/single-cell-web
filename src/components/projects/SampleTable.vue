@@ -179,11 +179,25 @@ const handleTableChange = (pag, filters, sorter) => {
 }
 
 const getConditions = () => {
-  return condition.value
+  const { species, organ, external_sample_accession, disease, development_stage } = condition.value
+  const result = {}
+  if (species) {
+    result.species_id = species
+  }
+  if (organ) {
+    result.organ = organ
+  }
+  return {
+    ...(species ? { species_id: species } : {}),
+    ...(organ ? { organ } : {}),
+    ...(external_sample_accession ? { external_sample_accession } : {}),
+    ...(disease ? { disease } : {}),
+    ...(development_stage ? { development_stage } : {})
+  }
 }
 
-const handleSearch = (condition) => {
-  condition.value = condition
+const handleSearch = (conditions) => {
+  condition.value = conditions
   run({
     page: current,
     page_size: pageSize,

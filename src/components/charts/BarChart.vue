@@ -1,53 +1,32 @@
 <template>
-  <div class="h-full">
-    <v-chart class="chart" autosize :option="option" />
+  <div class="h-full flex flex-col">
+    <div class="flex-1">
+      <VuePlotly
+        :data="data"
+        :layout="layout"
+        :display-mode-bar="false"
+        :config="config"
+      ></VuePlotly>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { use } from 'echarts/core'
-import { BarChart } from 'echarts/charts'
-import {
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-  GridComponent
-} from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
-import VChart from 'vue-echarts'
+import { VuePlotly } from 'vue3-plotly'
 
-use([TitleComponent, TooltipComponent, LegendComponent, GridComponent, BarChart, CanvasRenderer])
-
-const option = ref({
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
-  grid: {
-    top: '3%',
-    left: '0',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: {
-    type: 'value'
-  },
-  yAxis: {
-    type: 'category',
-    data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World']
-  },
-  series: {
+const data = [
+  {
+    y: ['Marc', 'Henrietta', 'Jean', 'Claude', 'Jeffrey', 'Jonathan', 'Jennifer', 'Zacharias'],
+    x: [90, 40, 60, 80, 75, 92, 87, 73],
     type: 'bar',
-    data: [19325, 23438, 31000, 121594, 134141, 681807]
+    orientation: 'h'
   }
-})
-</script>
-<style scoped lang="scss">
-.chart {
-  height: 100%;
+]
+
+const layout = {
+  title: 'Always Display the Modebar'
 }
-</style>
+
+const config = { responsive: true, scrollZoom: true }
+</script>
+<style scoped lang="scss"></style>
