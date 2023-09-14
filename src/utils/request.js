@@ -23,11 +23,15 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response) => {
     const res = response.data
-    if (res.status === '0000') {
-      return res.data
+    if (res.status) {
+      if (res.status === '0000') {
+        return res.data
+      } else {
+        message.error(res.message)
+        return Promise.reject(res.message)
+      }
     } else {
-      message.error(res.message)
-      return Promise.reject(res.message)
+      return res
     }
   },
   async (error) => {

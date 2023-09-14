@@ -4,7 +4,6 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
-    size="middle"
     @change="handleTableChange"
   >
     <template #title>
@@ -52,7 +51,7 @@
       <a-table :columns="projectColumns" :data-source="projects" :pagination="false">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.title === 'Tags'">
-            <a-tag v-for="item in text.split(',').filter((item) => !!item)" :key="item"
+            <a-tag v-for="item in (text || '').split(',').filter((item) => !!item)" :key="item"
               >{{ item }}
             </a-tag>
           </template>

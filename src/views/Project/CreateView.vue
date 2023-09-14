@@ -50,12 +50,29 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="上传文件" name="file">
-              <a-button class="w-full flex items-center" type="dashed" @click="fileModalRef?.open">
+            <a-form-item label="H5AD文件" name="h5ad_id" required>
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_id')"
+                v-if="!formState.h5ad_id"
+              >
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
                 </template>
                 H5AD 文件
+              </a-button>
+              <a-button
+                v-else
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.h5ad_id = null"
+                danger
+              >
+                <template #icon>
+                  <MinusOutlined></MinusOutlined>
+                </template>
+                {{ formState.h5ad_id }}
               </a-button>
             </a-form-item>
 
@@ -87,7 +104,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { PlusOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons-vue'
 import { SPECIES } from '@/constants/common'
 import { createProject } from '@/api/project.js'
 import { message } from 'ant-design-vue'
@@ -101,7 +118,7 @@ const formState = ref({
   tags: [],
   members: [],
   description: '',
-  file: null,
+  h5ad_id: null,
   isPrivate: true
 })
 
@@ -140,18 +157,20 @@ const rules = {
 }
 
 const handleFileSelected = (record) => {
-  console.log(record)
+  formState.value[record.target] = record.file_id
 }
 
 const handleProjectCreate = async (isPublish) => {
   try {
     await formRef.value.validate()
-    const { title, species_id, organ, tags, description, isPrivate, members } = formState.value
+    const { title, species_id, organ, tags, description, isPrivate, members, h5ad_id } =
+      formState.value
     loading.value = true
     const data = await createProject({
       title,
       species_id,
       organ,
+      h5ad_id,
       tags: tags.join(','),
       is_private: isPrivate,
       is_publish: isPublish,

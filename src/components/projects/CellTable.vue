@@ -4,7 +4,6 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
-    size="middle"
     @change="handleTableChange"
   >
     <template #title>

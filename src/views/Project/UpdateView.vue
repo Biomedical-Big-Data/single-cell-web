@@ -51,15 +51,30 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="上传文件" name="file">
-              <a-upload name="file">
-                <a-button class="w-full flex items-center" type="dashed">
-                  <template #icon>
-                    <PlusOutlined></PlusOutlined>
-                  </template>
-                  H5AD 文件
-                </a-button>
-              </a-upload>
+            <a-form-item label="H5AD文件" name="h5ad_id" required>
+              <a-button
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_id')"
+                v-if="!formState.h5ad_id"
+              >
+                <template #icon>
+                  <PlusOutlined></PlusOutlined>
+                </template>
+                H5AD 文件
+              </a-button>
+              <a-button
+                v-else
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.h5ad_id = null"
+                danger
+              >
+                <template #icon>
+                  <MinusOutlined></MinusOutlined>
+                </template>
+                {{ formState.h5ad_id }}
+              </a-button>
             </a-form-item>
 
             <a-form-item label="项目描述" name="description" required>
@@ -77,14 +92,14 @@
                 class="mr-3"
                 :saving="saving"
                 v-if="!projectDetail.isPublish"
-                @click="handleProjectCreate(true)"
+                @click="handleProjectUpdate(true)"
                 >发布
               </a-button>
               <a-button
                 class="mr-3"
                 :saving="saving"
                 v-if="projectDetail.isPrivate"
-                @click="handleProjectCreate(false)"
+                @click="handleProjectUpdate(false)"
                 >保存
               </a-button>
               <a-button
@@ -114,14 +129,16 @@
       </div>
     </a-modal>
   </div>
+  <FileModalView ref="fileModalRef" @selected="handleFileSelected"></FileModalView>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { PlusOutlined } from '@ant-design/icons-vue'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import { SPECIES } from '@/constants/common'
 import { getProjectDetail, offlineProject, transferProject, updateProject } from '@/api/project.js'
 import { message, Modal } from 'ant-design-vue'
+import FileModalView from '@/views/File/ModalView.vue'
 
 const props = defineProps({
   id: { required: true }
@@ -129,6 +146,7 @@ const props = defineProps({
 
 const formState = ref({
   title: '',
+  h5ad_id: null,
   species_id: undefined,
   organ: '',
   tags: [],
@@ -144,6 +162,8 @@ const open = ref(false)
 const loading = ref(false)
 const saving = ref(false)
 const formRef = ref()
+const fileModalRef = ref()
+
 const rules = {
   title: [
     {
@@ -193,7 +213,8 @@ const handleProjectFetch = async () => {
         .filter((item) => item.project_user_user_meta.id !== data.project_user_meta.id)
         .map((item) => item.project_user_user_meta.email_address),
       description: data.description,
-      isPrivate: !!data.is_private
+      isPrivate: !!data.is_private,
+      h5ad_id: data.project_analysis_meta[0].h5ad_id
     }
     formState.value = result
     projectDetail.value = {
@@ -205,16 +226,18 @@ const handleProjectFetch = async () => {
   }
 }
 
-const handleProjectCreate = async (isPublish) => {
+const handleProjectUpdate = async (isPublish) => {
   try {
     await formRef.value.validate()
-    const { title, species_id, organ, tags, description, isPrivate, members } = formState.value
+    const { title, species_id, organ, tags, description, isPrivate, members, h5ad_id } =
+      formState.value
     saving.value = true
     await updateProject({
       project_id: props.id,
       title,
       species_id,
       organ,
+      h5ad_id,
       tags: tags.join(','),
       is_private: isPrivate,
       is_publish: isPublish,
@@ -262,6 +285,10 @@ const handleProjectOffline = () => {
       await handleProjectFetch()
     }
   })
+}
+
+const handleFileSelected = (record) => {
+  formState.value[record.target] = record.file_id
 }
 </script>
 

@@ -36,7 +36,7 @@
           <!--              <SimilarityChart></SimilarityChart>-->
           <!--            </div>-->
           <!--          </a-tab-pane>-->
-          <a-tab-pane key="barplot" tab="Barplot of cell umber in each type" class="abc">
+          <a-tab-pane key="barplot" tab="Barplot of cell number in each type" class="abc">
             <BarChart></BarChart>
           </a-tab-pane>
           <a-tab-pane key="celltype" tab="Celltype Markers">

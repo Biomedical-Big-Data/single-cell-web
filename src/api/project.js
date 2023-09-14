@@ -37,13 +37,13 @@ export function getAdminProjectList(params) {
 }
 
 export function getMyProjectFile(params) {
-  return request.get('/project/h5ad_file/me', { params })
+  return request.get('/project/file/me', { params })
 }
 
 export function uploadProjectFile(file) {
   const formData = new FormData()
   formData.append('file', file)
-  return request.post('/project/h5ad_file/upload', formData)
+  return request.post('/project/file/upload', formData)
 }
 
 export function getMyProjectList(params) {
@@ -56,6 +56,9 @@ export function createProject(data) {
 
 export function updateProject(data) {
   return request.post('/project/update', data)
+}
+export function updateAdminProject(data) {
+  return request.post(`/admin/project/${data.project_id}/update`, data)
 }
 
 export function offlineProject(id) {
