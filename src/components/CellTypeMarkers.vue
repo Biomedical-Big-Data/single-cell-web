@@ -1,7 +1,25 @@
 <template>
   <div class="pr-6">
     <div class="flex justify-end">
-      <a-button :loading="downloading" @click="handleFileDownload">
+      <a-popover trigger="click" placement="bottom">
+        <template #content>
+          <a-checkbox-group v-model:value="columnSettings" class="flex-col">
+            <div v-for="item in columns" :key="item.title" class="p-2">
+              <a-checkbox :value="item.title">
+                {{ item.title }}
+              </a-checkbox>
+            </div>
+          </a-checkbox-group>
+        </template>
+        <a-button>
+          <template #icon>
+            <SettingOutlined />
+          </template>
+          Column Setting
+        </a-button>
+      </a-popover>
+
+      <a-button :loading="downloading" @click="handleFileDownload" class="ml-4">
         <template #icon>
           <DownloadOutlined />
         </template>
@@ -9,74 +27,40 @@
       </a-button>
     </div>
     <div class="mt-4">
-      <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: true }" />
+      <a-table
+        :columns="columnResult"
+        :data-source="result"
+        :scroll="{ x: columnSettings.length * 150 }"
+      >
+        <template #headerCell="{ title }">
+          <div>{{ title }}</div>
+          <div class="mt-2">
+            <a-input size="small" @click.stop @change="filterBy(title, $event)"></a-input>
+          </div>
+        </template>
+      </a-table>
     </div>
   </div>
 </template>
 
 <script setup>
 import { getFile } from '@/api/file.js'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import * as csv from 'csvtojson'
-import { DownloadOutlined } from '@ant-design/icons-vue'
+import { DownloadOutlined, SettingOutlined } from '@ant-design/icons-vue'
 import { saveAs } from 'file-saver'
 
 const props = defineProps({
   fileId: {
     type: String,
-    default: 'fd6a51d26c7d40ab86146926827651f9.csv'
+    default: '6072da6dc9204ed9ae7c914acd675fdf.csv'
   }
 })
 
 const downloading = ref(false)
-
+const condition = ref({})
 const columns = ref([])
-
-// [
-//   {
-//     title: 'Name',
-//     dataIndex: 'name',
-//     filters: [
-//       {
-//         text: 'Joe',
-//         value: 'Joe'
-//       },
-//       {
-//         text: 'Jim',
-//         value: 'Jim'
-//       }
-//     ],
-//     // specify the condition of filtering result
-//     // here is that finding the name started with `value`
-//     onFilter: (value, record) => record.name.indexOf(value) === 0,
-//     sorter: (a, b) => a.name.length - b.name.length,
-//     sortDirections: ['descend']
-//   },
-//   {
-//     title: 'Age',
-//     dataIndex: 'age',
-//     defaultSortOrder: 'descend',
-//     sorter: (a, b) => a.age - b.age
-//   },
-//   {
-//     title: 'Address',
-//     dataIndex: 'address',
-//     filters: [
-//       {
-//         text: 'London',
-//         value: 'London'
-//       },
-//       {
-//         text: 'New York',
-//         value: 'New York'
-//       }
-//     ],
-//     filterMultiple: false,
-//     onFilter: (value, record) => record.address.indexOf(value) === 0,
-//     sorter: (a, b) => a.address.length - b.address.length,
-//     sortDirections: ['descend', 'ascend']
-//   }
-// ]
+const columnSettings = ref([])
 
 const dataSource = ref([])
 
@@ -84,19 +68,41 @@ onMounted(() => {
   handleCellTypeMarkersFetch()
 })
 
+const result = computed(() => {
+  const conditionKeys = Object.keys(condition.value)
+  return dataSource.value.filter((item) => {
+    const temp = conditionKeys.every((key) => {
+      return String(item[key]).toLowerCase().includes(condition.value[key].toLowerCase())
+    })
+    console.log(temp)
+    return temp
+  })
+})
+
+const columnResult = computed(() => {
+  return columns.value.filter((item) => {
+    return columnSettings.value.includes(item.title)
+  })
+})
+
 const handleCellTypeMarkersFetch = async () => {
   const data = await getFile(props.fileId)
   dataSource.value = await csv({ output: 'json' })
     .on('header', (header) => {
-      console.log(header)
+      columnSettings.value = header
       columns.value = header.map((item) => {
         return {
           title: item,
+          key: item,
           dataIndex: item,
-          sorter: (a, b) => a > b,
+          align: 'center',
+          sorter: (a, b) => {
+            return a[item] > b[item] ? 1 : -1
+          },
           sortDirections: ['descend', 'ascend']
         }
       })
+      console.log(columns.value)
     })
     .fromString(data)
 }
@@ -110,6 +116,10 @@ const handleFileDownload = async () => {
   } finally {
     downloading.value = false
   }
+}
+
+const filterBy = (title, event) => {
+  condition.value[title] = event.target.value
 }
 </script>
 

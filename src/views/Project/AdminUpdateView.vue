@@ -1,48 +1,48 @@
 <template>
-  <div class='p-5 page'>
-    <a-card :title='projectDetail.title' :bordered='false'>
-      <div class='flex items-center flex-col w-full'>
-        <div class='max-w-lg w-full mt-6'>
+  <div class="p-5 page">
+    <a-card :title="projectDetail.title" :bordered="false">
+      <div class="flex items-center flex-col w-full">
+        <div class="max-w-lg w-full mt-6">
           <a-form
-            ref='formRef'
-            :model='formState'
-            name='basic'
-            :rules='rules'
-            autocomplete='off'
-            :label-col='{ span: 5 }'
+            ref="formRef"
+            :model="formState"
+            name="basic"
+            :rules="rules"
+            autocomplete="off"
+            :label-col="{ span: 5 }"
           >
-            <a-form-item label='项目名称' name='title' required>
-              <a-input v-model:value='formState.title' placeholder='项目名称' />
+            <a-form-item label="项目名称" name="title" required>
+              <a-input v-model:value="formState.title" placeholder="项目名称" />
             </a-form-item>
 
-            <a-form-item label='标签' name='tags'>
+            <a-form-item label="标签" name="tags">
               <a-select
-                v-model:value='formState.tags'
-                mode='tags'
-                placeholder='标签'
-                :options='[]'
+                v-model:value="formState.tags"
+                mode="tags"
+                placeholder="标签"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label='访问权限' name='public'>
-              <a-switch v-model:checked='formState.isPrivate' />
+            <a-form-item label="访问权限" name="public">
+              <a-switch v-model:checked="formState.isPrivate" />
               私有，仅受邀人可看
             </a-form-item>
 
-            <a-form-item label='可访问人员' name='public' v-if='!!formState.isPrivate'>
+            <a-form-item label="可访问人员" name="public" v-if="!!formState.isPrivate">
               <a-select
-                v-model:value='formState.members'
-                mode='tags'
-                placeholder='受邀人'
-                :options='[]'
+                v-model:value="formState.members"
+                mode="tags"
+                placeholder="受邀人"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label='H5AD文件' name='h5ad_id' required>
+            <a-form-item label="H5AD文件" name="h5ad_id" required>
               <a-button
-                v-if='!formState.h5ad_id'
-                class='w-full flex items-center'
-                type='dashed'
+                v-if="!formState.h5ad_id"
+                class="w-full flex items-center"
+                type="dashed"
                 @click="fileModalRef?.open('h5ad_id')"
               >
                 <template #icon>
@@ -52,9 +52,9 @@
               </a-button>
               <a-button
                 v-else
-                class='w-full flex items-center'
-                type='dashed'
-                @click='formState.h5ad_id = null'
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.h5ad_id = null"
                 danger
               >
                 <template #icon>
@@ -64,11 +64,11 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label='Excel文件' name='excel_id' required>
+            <a-form-item label="Excel文件" name="excel_id" required>
               <a-button
-                v-if='!formState.excel_id'
-                class='w-full flex items-center'
-                type='dashed'
+                v-if="!formState.excel_id"
+                class="w-full flex items-center"
+                type="dashed"
                 @click="fileModalRef?.open('excel_id')"
               >
                 <template #icon>
@@ -78,9 +78,9 @@
               </a-button>
               <a-button
                 v-else
-                class='w-full flex items-center'
-                type='dashed'
-                @click='formState.excel_id = null'
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.excel_id = null"
                 danger
               >
                 <template #icon>
@@ -89,11 +89,11 @@
                 {{ formState.excel_id }}
               </a-button>
             </a-form-item>
-            <a-form-item label='UMap文件' name='umap_id' required>
+            <a-form-item label="UMap文件" name="umap_id" required>
               <a-button
-                v-if='!formState.umap_id'
-                class='w-full flex items-center'
-                type='dashed'
+                v-if="!formState.umap_id"
+                class="w-full flex items-center"
+                type="dashed"
                 @click="fileModalRef?.open('umap_id')"
               >
                 <template #icon>
@@ -103,9 +103,9 @@
               </a-button>
               <a-button
                 v-else
-                class='w-full flex items-center'
-                type='dashed'
-                @click='formState.umap_id = null'
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.umap_id = null"
                 danger
               >
                 <template #icon>
@@ -114,11 +114,11 @@
                 {{ formState.umap_id }}
               </a-button>
             </a-form-item>
-            <a-form-item label='Cell Type' name='cell_marker_id'>
+            <a-form-item label="Cell Type" name="cell_marker_id">
               <a-button
-                v-if='!formState.cell_marker_id'
-                class='w-full flex items-center'
-                type='dashed'
+                v-if="!formState.cell_marker_id"
+                class="w-full flex items-center"
+                type="dashed"
                 @click="fileModalRef?.open('cell_marker_id')"
               >
                 <template #icon>
@@ -128,9 +128,9 @@
               </a-button>
               <a-button
                 v-else
-                class='w-full flex items-center'
-                type='dashed'
-                @click='formState.cell_marker_id = null'
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.cell_marker_id = null"
                 danger
               >
                 <template #icon>
@@ -140,33 +140,33 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label='项目描述' name='description' required>
+            <a-form-item label="项目描述" name="description" required>
               <a-textarea
-                v-model:value='formState.description'
+                v-model:value="formState.description"
                 show-count
-                :maxlength='1000'
-                :auto-size='{ minRows: 4 }'
+                :maxlength="1000"
+                :auto-size="{ minRows: 4 }"
               />
             </a-form-item>
 
-            <a-form-item :wrapper-col='{ offset: 5 }'>
-              <a-button class='mr-3' :saving='saving' @click='handleProjectUpdate(false)'>
+            <a-form-item :wrapper-col="{ offset: 5 }">
+              <a-button class="mr-3" :saving="saving" @click="handleProjectUpdate(false)">
                 保存
               </a-button>
               <a-button
-                class='mr-3'
-                :saving='saving'
-                v-if='projectDetail.isPrivate && projectDetail.isPublish'
-                @click='handleProjectOffline()'
+                class="mr-3"
+                :saving="saving"
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                @click="handleProjectOffline()"
               >
                 下线
               </a-button>
               <a-button
-                class='mr-3'
+                class="mr-3"
                 danger
-                v-if='projectDetail.isPublish'
-                :saving='saving'
-                @click='handleTransferModalShow'
+                v-if="projectDetail.isPublish"
+                :saving="saving"
+                @click="handleTransferModalShow"
               >
                 转移项目
               </a-button>
@@ -175,13 +175,13 @@
         </div>
       </div>
     </a-card>
-    <a-modal title='转移项目' v-model:open='open' width='300px' @ok='handleProjectTransfer'>
-      <div class='py-5'>
-        <a-input v-model:value='transferMail' placeholder='请输入新管理员邮箱'></a-input>
+    <a-modal title="转移项目" v-model:open="open" width="300px" @ok="handleProjectTransfer">
+      <div class="py-5">
+        <a-input v-model:value="transferMail" placeholder="请输入新管理员邮箱"></a-input>
       </div>
     </a-modal>
   </div>
-  <FileModalView ref='fileModalRef' @selected='handleFileSelected'></FileModalView>
+  <FileModalView ref="fileModalRef" @selected="handleFileSelected"></FileModalView>
 </template>
 
 <script setup>
@@ -190,7 +190,8 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import {
   getAdminProjectDetail,
   offlineProject,
-  transferProject, updateAdminProject,
+  transferProject,
+  updateAdminProject
 } from '@/api/project.js'
 import { message, Modal } from 'ant-design-vue'
 import FileModalView from '@/views/File/ModalView.vue'
@@ -366,4 +367,4 @@ const handleFileSelected = (record) => {
 }
 </script>
 
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>
