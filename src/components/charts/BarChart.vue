@@ -26,7 +26,7 @@ const props = defineProps({
 const chartData = ref([])
 
 const layout = {
-  title: 'Always Display the Modebar',
+  title: 'Bar plot of cell number in each type',
   autosize: true,
   height: 700,
   showlegend: true
