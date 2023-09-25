@@ -37,15 +37,15 @@
           <!--            </div>-->
           <!--          </a-tab-pane>-->
           <a-tab-pane key="barplot" tab="Barplot of cell number in each type" class="abc">
-            <BarChart></BarChart>
+            <BarChart :analysis-id='projectDetail.project_analysis_meta[0].id'></BarChart>
           </a-tab-pane>
           <a-tab-pane key="celltype" tab="Celltype Markers">
-            <CellTypeMarkers
-              :file-id="projectDetail.project_analysis_meta[0].cell_marker_id"
-            />
+            <CellTypeMarkers :file-id="projectDetail.project_analysis_meta[0].cell_marker_id" />
           </a-tab-pane>
           <a-tab-pane key="score" tab="Score of pathway">
-            <PathWayChart></PathWayChart>
+            <PathWayChart
+              :pathways="projectDetail.project_analysis_meta[0].analysis_pathway_score_meta"
+            ></PathWayChart>
           </a-tab-pane>
           <!--          <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>-->
         </a-tabs>
@@ -72,7 +72,8 @@ import dayjs from 'dayjs'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const activeKey = ref('umap')
+const activeKey = ref('score')
+// const activeKey = ref('umap')
 const projectDetail = ref(null)
 const props = defineProps({
   id: {

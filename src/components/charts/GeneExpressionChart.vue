@@ -1,10 +1,10 @@
 <template>
-  <div class='h-full'>
+  <div class="h-full">
     <VuePlotly
-      :data='chartData'
-      :layout='layout'
-      :display-mode-bar='false'
-      :config='config'
+      :data="chartData"
+      :layout="layout"
+      :display-mode-bar="false"
+      :config="config"
     ></VuePlotly>
   </div>
 </template>
@@ -60,7 +60,7 @@ const layout = computed(() => ({
 const config = { responsive: true, scrollZoom: true }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .chart {
   height: 50vh;
 }

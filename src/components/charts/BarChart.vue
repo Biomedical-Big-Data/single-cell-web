@@ -1,11 +1,11 @@
 <template>
-  <div class="h-full flex flex-col">
-    <div class="flex-1">
+  <div class='h-full flex flex-col'>
+    <div class='flex-1'>
       <VuePlotly
-        :data="data"
-        :layout="layout"
-        :display-mode-bar="false"
-        :config="config"
+        :data='chartData'
+        :layout='layout'
+        :display-mode-bar='false'
+        :config='config'
       ></VuePlotly>
     </div>
   </div>
@@ -13,15 +13,17 @@
 
 <script setup>
 import { VuePlotly } from 'vue3-plotly'
+import { onMounted, ref } from 'vue'
+import { getCellNumber } from '@/api/project.js'
+import _ from 'lodash'
 
-const data = [
-  {
-    y: ['Marc', 'Henrietta', 'Jean', 'Claude', 'Jeffrey', 'Jonathan', 'Jennifer', 'Zacharias'],
-    x: [90, 40, 60, 80, 75, 92, 87, 73],
-    type: 'bar',
-    orientation: 'h'
+const props = defineProps({
+  analysisId: {
+    type: [String, Number],
+    required: true
   }
-]
+})
+const chartData = ref([])
 
 const layout = {
   title: 'Always Display the Modebar',
@@ -30,6 +32,25 @@ const layout = {
   showlegend: true
 }
 
+onMounted(() => {
+  handleCellNumberFetch()
+})
+
 const config = { responsive: true, scrollZoom: true }
+
+const handleCellNumberFetch = async () => {
+  const data = await getCellNumber(props.analysisId)
+  // eslint-disable-next-line no-unused-vars
+  const temp = _.chain(data).groupBy('cell_type_id').toPairs().map(([cell_type_id, values]) => ({
+    name: values[0].proportion_cell_type_meta.cell_type_name,
+    total: _.sumBy(values, 'cell_number')
+  })).value()
+  chartData.value = [{
+    y: _.map(temp, 'name'),
+    x: _.map(temp, 'total'),
+    type: 'bar',
+    orientation: 'h'
+  }]
+}
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang='scss'></style>

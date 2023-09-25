@@ -74,3 +74,7 @@ export function getProjectGeneChartData({ gene_symbol, species_id }) {
     params: { gene_symbol, species_id }
   })
 }
+
+export function getCellNumber(analysis_id){
+  return request.get(`/project/${analysis_id}/graph/cell_number`)
+}
