@@ -50,12 +50,14 @@
       <a-tab-pane key="percent" tab="Cell Number Percentage">
         <GeneExpressionLevelChart
           :data="geneChartData"
+          title='Cell Number Percentage'
           value-key="cell_proportion_expression_the_gene"
         ></GeneExpressionLevelChart>
       </a-tab-pane>
       <a-tab-pane key="expression" tab="Gene Expression Level">
         <GeneExpressionLevelChart
           :data="geneChartData"
+          title='Gene Expression Level'
           value-key="average_gene_expression"
         ></GeneExpressionLevelChart>
       </a-tab-pane>

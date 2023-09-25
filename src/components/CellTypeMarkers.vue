@@ -53,7 +53,7 @@ import { saveAs } from 'file-saver'
 const props = defineProps({
   fileId: {
     type: String,
-    default: '6072da6dc9204ed9ae7c914acd675fdf.csv'
+    required: true
   }
 })
 

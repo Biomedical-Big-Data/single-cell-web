@@ -93,17 +93,17 @@ const remember = ref(false)
 
 const logining = ref(false)
 const loginForm = reactive({
-  email_address: '445295862@qq.com',
-  user_password: '111111'
+  email_address: '',
+  user_password: ''
 })
 
 const registering = ref(false)
 const registerForm = reactive({
-  user_name: 'xiaowei',
-  email_address: '445295862@qq.com',
-  organization: 'home',
-  user_password: '111111',
-  user_verify_password: '111111'
+  user_name: '',
+  email_address: '',
+  organization: '',
+  user_password: '',
+  user_verify_password: ''
 })
 
 const userRegister = async function () {

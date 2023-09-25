@@ -32,7 +32,7 @@ import * as csv from 'csvtojson'
 const props = defineProps({
   fileId: {
     type: String,
-    default: 'ef75abf11365465f9b4ad1ca3ea5c63a.csv'
+    required: true
   }
 })
 

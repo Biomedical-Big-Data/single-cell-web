@@ -26,10 +26,10 @@
       </div>
     </div>
     <div class="mt-4 px-4 flex-1">
-      <div class="h-full">
+      <div class="h-full" v-if="projectDetail">
         <a-tabs v-model:activeKey="activeKey" tab-position="left" class="py-4 bg-white h-full">
           <a-tab-pane key="umap" tab="UMap">
-            <UMapChart></UMapChart>
+            <UMapChart :file-id="projectDetail.project_analysis_meta[0].umap_id" />
           </a-tab-pane>
           <!--          <a-tab-pane key="similarity" tab="Cell cell similarity">-->
           <!--            <div>-->
@@ -40,7 +40,9 @@
             <BarChart></BarChart>
           </a-tab-pane>
           <a-tab-pane key="celltype" tab="Celltype Markers">
-            <CellTypeMarkers></CellTypeMarkers>
+            <CellTypeMarkers
+              :file-id="projectDetail.project_analysis_meta[0].cell_marker_id"
+            />
           </a-tab-pane>
           <a-tab-pane key="score" tab="Score of pathway">
             <PathWayChart></PathWayChart>
