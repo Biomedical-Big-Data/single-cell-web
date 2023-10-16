@@ -4,20 +4,28 @@
       <img class="logo" src="../../assets/logo.svg" alt="" />
       <span class="title">scRNA-seq database</span>
     </div>
-    <div class="sub-title text-center">Welcome to my amazing scRNA-seq database</div>
+    <div class="sub-title text-center">
+      Welcome to my amazing scRNA-seq database
+    </div>
   </div>
   <div class="flex justify-center mt-16">
     <a-tabs v-model:activeKey="activeKey" class="login-content">
       <a-tab-pane key="login" tab="Login">
         <div class="mt-4">
-          <a-input placeholder="输入登录邮箱" v-model:value="loginForm.email_address">
+          <a-input
+            placeholder="输入登录邮箱"
+            v-model:value="loginForm.email_address"
+          >
             <template #prefix>
               <user-outlined :style="{ color: '#1890FF' }" />
             </template>
           </a-input>
         </div>
         <div class="mt-6">
-          <a-input-password placeholder="输入密码" v-model:value="loginForm.user_password">
+          <a-input-password
+            placeholder="输入密码"
+            v-model:value="loginForm.user_password"
+          >
             <template #prefix>
               <lock-outlined :style="{ color: '#1890FF' }" />
             </template>
@@ -25,36 +33,52 @@
         </div>
         <div class="mt-6 flex items-center justify-between">
           <a-checkbox v-model:checked="remember">Remember me</a-checkbox>
-          <router-link :to="{ name: 'user_forget_password' }">Forgot your password?</router-link>
+          <router-link :to="{ name: 'user_forget_password' }">
+            Forgot your password?
+          </router-link>
         </div>
         <div class="mt-6">
-          <a-button type="primary" @click="userLogin" :loading="logining">Sign In</a-button>
+          <a-button type="primary" @click="userLogin" :loading="logining">
+            Sign In
+          </a-button>
         </div>
       </a-tab-pane>
       <a-tab-pane key="register" tab="Sign Up">
         <div class="mt-4">
-          <a-input placeholder="输入用户名" v-model:value="registerForm.user_name">
+          <a-input
+            placeholder="输入用户名"
+            v-model:value="registerForm.user_name"
+          >
             <template #prefix>
               <user-outlined :style="{ color: '#1890FF' }" />
             </template>
           </a-input>
         </div>
         <div class="mt-6">
-          <a-input placeholder="输入邮箱" v-model:value="registerForm.email_address">
+          <a-input
+            placeholder="输入邮箱"
+            v-model:value="registerForm.email_address"
+          >
             <template #prefix>
               <mail-outlined :style="{ color: '#1890FF' }" />
             </template>
           </a-input>
         </div>
         <div class="mt-6">
-          <a-input placeholder="输入您的组织" v-model:value="registerForm.organization">
+          <a-input
+            placeholder="输入您的组织"
+            v-model:value="registerForm.organization"
+          >
             <template #prefix>
               <team-outlined :style="{ color: '#1890FF' }" />
             </template>
           </a-input>
         </div>
         <div class="mt-6">
-          <a-input-password placeholder="输入密码" v-model:value="registerForm.user_password">
+          <a-input-password
+            placeholder="输入密码"
+            v-model:value="registerForm.user_password"
+          >
             <template #prefix>
               <lock-outlined :style="{ color: '#1890FF' }" />
             </template>
@@ -71,65 +95,73 @@
           </a-input-password>
         </div>
         <div class="mt-6">
-          <a-button type="primary" @click="userRegister" :loading="registering">Sign Up</a-button>
+          <a-button type="primary" @click="userRegister" :loading="registering">
+            Sign Up
+          </a-button>
         </div>
       </a-tab-pane>
     </a-tabs>
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
-import { UserOutlined, LockOutlined, TeamOutlined, MailOutlined } from '@ant-design/icons-vue'
-import { register, login } from '@/api/user'
-import { message } from 'ant-design-vue'
-import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
+import { reactive, ref } from "vue";
+import {
+  UserOutlined,
+  LockOutlined,
+  TeamOutlined,
+  MailOutlined,
+} from "@ant-design/icons-vue";
+import { register, login } from "@/api/user";
+import { message } from "ant-design-vue";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
-const userStore = useUserStore()
-const router = useRouter()
+const userStore = useUserStore();
+const router = useRouter();
 
-const activeKey = ref('login')
-const remember = ref(false)
+const activeKey = ref("login");
+const remember = ref(false);
 
-const logining = ref(false)
+const logining = ref(false);
 const loginForm = reactive({
-  email_address: '',
-  user_password: ''
-})
+  email_address: "",
+  user_password: "",
+});
 
-const registering = ref(false)
+const registering = ref(false);
 const registerForm = reactive({
-  user_name: '',
-  email_address: '',
-  organization: '',
-  user_password: '',
-  user_verify_password: ''
-})
+  user_name: "",
+  email_address: "",
+  organization: "",
+  user_password: "",
+  user_verify_password: "",
+});
 
 const userRegister = async function () {
-  const { user_name, user_password, organization, email_address } = registerForm
+  const { user_name, user_password, organization, email_address } =
+    registerForm;
   try {
-    registering.value = true
-    await register({ user_name, user_password, organization, email_address })
-    message.success('注册成功，请查看邮箱激活')
+    registering.value = true;
+    await register({ user_name, user_password, organization, email_address });
+    message.success("注册成功，请查看邮箱激活");
   } finally {
-    registering.value = false
+    registering.value = false;
   }
-}
+};
 
 const userLogin = async function () {
-  const { email_address, user_password } = loginForm
+  const { email_address, user_password } = loginForm;
 
   try {
-    logining.value = true
-    const result = await login({ email_address, user_password })
-    console.log(result)
-    userStore.setUser(result)
-    await router.replace({ name: 'home' })
+    logining.value = true;
+    const result = await login({ email_address, user_password });
+    console.log(result);
+    userStore.setUser(result);
+    await router.replace({ name: "home" });
   } finally {
-    logining.value = false
+    logining.value = false;
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .logo {

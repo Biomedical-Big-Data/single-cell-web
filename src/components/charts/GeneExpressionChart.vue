@@ -10,54 +10,54 @@
 </template>
 
 <script setup>
-import { VuePlotly } from 'vue3-plotly'
-import _ from 'lodash'
-import { computed } from 'vue'
+import { VuePlotly } from "vue3-plotly";
+import _ from "lodash";
+import { computed } from "vue";
 
 const props = defineProps({
   data: {
     type: Array,
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   valueKey: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const chartData = computed(() => {
-  console.log(props.valueKey)
+  console.log(props.valueKey);
   return _.chain(props.data)
     .filter((item) => !!item[props.valueKey])
-    .groupBy('cell_type_name')
+    .groupBy("cell_type_name")
     .toPairs()
     .map(([name, values], index) => {
       return {
         x: values.map((item) => item[props.valueKey]),
         // y: new Array(values.length).fill(name),
         y: values.map(() => index + Math.random()),
-        mode: 'markers',
-        type: 'scatter',
+        mode: "markers",
+        type: "scatter",
         name,
         labels: values.map((item) => item[props.valueKey]),
-        marker: { size: 12 }
-      }
+        marker: { size: 12 },
+      };
     })
-    .value()
-})
+    .value();
+});
 
 const layout = computed(() => ({
   title: props.title,
   autosize: true,
   height: 700,
-  showlegend: true
-}))
+  showlegend: true,
+}));
 
-const config = { responsive: true, scrollZoom: true }
+const config = { responsive: true, scrollZoom: true };
 </script>
 
 <style scoped lang="scss">

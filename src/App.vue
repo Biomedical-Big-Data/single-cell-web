@@ -14,7 +14,11 @@
       <a-menu-item v-if="userStore?.getIsAuthenticated">
         <RouterLink to="/projects/create">Create Project</RouterLink>
       </a-menu-item>
-      <a-sub-menu key="user" v-if="userStore?.getIsAuthenticated" class="ml-auto">
+      <a-sub-menu
+        key="user"
+        v-if="userStore?.getIsAuthenticated"
+        class="ml-auto"
+      >
         <template #title>
           <a-avatar :size="24" style="background-color: #87d068">
             <template #icon>
@@ -58,17 +62,17 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { UserOutlined } from '@ant-design/icons-vue'
-import { useUserStore } from '@/stores/user'
+import { RouterLink, RouterView, useRouter } from "vue-router";
+import { UserOutlined } from "@ant-design/icons-vue";
+import { useUserStore } from "@/stores/user";
 
-const userStore = useUserStore()
-const router = useRouter()
+const userStore = useUserStore();
+const router = useRouter();
 
 const logout = function () {
-  userStore.setUser(null)
-  router.replace({ name: 'home' })
-}
+  userStore.setUser(null);
+  router.replace({ name: "home" });
+};
 </script>
 
 <style scoped lang="scss">

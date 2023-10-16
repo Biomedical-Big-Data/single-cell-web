@@ -42,7 +42,11 @@
               私有，仅受邀人可看
             </a-form-item>
 
-            <a-form-item label="可访问人员" name="public" v-if="!!formState.isPrivate">
+            <a-form-item
+              label="可访问人员"
+              name="public"
+              v-if="!!formState.isPrivate"
+            >
               <a-select
                 v-model:value="formState.members"
                 mode="tags"
@@ -93,21 +97,24 @@
                 :saving="saving"
                 v-if="!projectDetail.isPublish"
                 @click="handleProjectUpdate(true)"
-                >发布
+              >
+                发布
               </a-button>
               <a-button
                 class="mr-3"
                 :saving="saving"
                 v-if="projectDetail.isPrivate"
                 @click="handleProjectUpdate(false)"
-                >保存
+              >
+                保存
               </a-button>
               <a-button
                 class="mr-3"
                 :saving="saving"
                 v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 @click="handleProjectOffline()"
-                >下线
+              >
+                下线
               </a-button>
               <a-button
                 class="mr-3"
@@ -123,173 +130,203 @@
         </div>
       </div>
     </a-card>
-    <a-modal title="转移项目" v-model:open="open" width="300px" @ok="handleProjectTransfer">
+    <a-modal
+      title="转移项目"
+      v-model:open="open"
+      width="300px"
+      @ok="handleProjectTransfer"
+    >
       <div class="py-5">
-        <a-input v-model:value="transferMail" placeholder="请输入新管理员邮箱"></a-input>
+        <a-input
+          v-model:value="transferMail"
+          placeholder="请输入新管理员邮箱"
+        ></a-input>
       </div>
     </a-modal>
   </div>
-  <FileModalView ref="fileModalRef" @selected="handleFileSelected"></FileModalView>
+  <FileModalView
+    ref="fileModalRef"
+    @selected="handleFileSelected"
+  ></FileModalView>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import { SPECIES } from '@/constants/common'
-import { getProjectDetail, offlineProject, transferProject, updateProject } from '@/api/project.js'
-import { message, Modal } from 'ant-design-vue'
-import FileModalView from '@/views/File/ModalView.vue'
+import { onMounted, ref } from "vue";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import { SPECIES } from "@/constants/common";
+import {
+  getProjectDetail,
+  offlineProject,
+  transferProject,
+  updateProject,
+} from "@/api/project.js";
+import { message, Modal } from "ant-design-vue";
+import FileModalView from "@/views/File/ModalView.vue";
 
 const props = defineProps({
-  id: { required: true }
-})
+  id: { required: true },
+});
 
 const formState = ref({
-  title: '',
+  title: "",
   h5ad_id: null,
   species_id: undefined,
-  organ: '',
+  organ: "",
   tags: [],
   members: [],
-  description: '',
-  isPrivate: true
-})
-const projectDetail = ref({})
+  description: "",
+  isPrivate: true,
+});
+const projectDetail = ref({});
 
-const transferMail = ref('')
+const transferMail = ref("");
 
-const open = ref(false)
-const loading = ref(false)
-const saving = ref(false)
-const formRef = ref()
-const fileModalRef = ref()
+const open = ref(false);
+const loading = ref(false);
+const saving = ref(false);
+const formRef = ref();
+const fileModalRef = ref();
 
 const rules = {
   title: [
     {
       required: true,
-      message: '项目名称不能为空',
-      trigger: 'blur'
-    }
+      message: "项目名称不能为空",
+      trigger: "blur",
+    },
   ],
   description: [
     {
       required: true,
-      message: '项目描述不能为空',
-      trigger: 'blur'
-    }
+      message: "项目描述不能为空",
+      trigger: "blur",
+    },
   ],
   organ: [
     {
       required: true,
-      message: 'Organ不能为空',
-      trigger: 'blur'
-    }
+      message: "Organ不能为空",
+      trigger: "blur",
+    },
   ],
   species_id: [
     {
       required: true,
-      message: 'Species不能为空',
-      trigger: 'change'
-    }
-  ]
-}
+      message: "Species不能为空",
+      trigger: "change",
+    },
+  ],
+};
 
 onMounted(() => {
-  handleProjectFetch()
-})
+  handleProjectFetch();
+});
 
 const handleProjectFetch = async () => {
   try {
-    loading.value = true
-    const data = await getProjectDetail(props.id)
+    loading.value = true;
+    const data = await getProjectDetail(props.id);
     const result = {
       title: data.title,
       species_id:
-        data.project_project_biosample_meta[0].project_biosample_biosample_meta.species_id,
-      organ: data.project_project_biosample_meta[0].project_biosample_biosample_meta.organ,
-      tags: data.tags ? data.tags.split(',') : [],
+        data.project_project_biosample_meta[0].project_biosample_biosample_meta
+          .species_id,
+      organ:
+        data.project_project_biosample_meta[0].project_biosample_biosample_meta
+          .organ,
+      tags: data.tags ? data.tags.split(",") : [],
       members: data.project_project_user_meta
-        .filter((item) => item.project_user_user_meta.id !== data.project_user_meta.id)
+        .filter(
+          (item) =>
+            item.project_user_user_meta.id !== data.project_user_meta.id,
+        )
         .map((item) => item.project_user_user_meta.email_address),
       description: data.description,
       isPrivate: !!data.is_private,
-      h5ad_id: data.project_analysis_meta[0].h5ad_id
-    }
-    formState.value = result
+      h5ad_id: data.project_analysis_meta[0].h5ad_id,
+    };
+    formState.value = result;
     projectDetail.value = {
       ...result,
-      isPublish: !!data.is_publish
-    }
+      isPublish: !!data.is_publish,
+    };
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const handleProjectUpdate = async (isPublish) => {
   try {
-    await formRef.value.validate()
-    const { title, species_id, organ, tags, description, isPrivate, members, h5ad_id } =
-      formState.value
-    saving.value = true
+    await formRef.value.validate();
+    const {
+      title,
+      species_id,
+      organ,
+      tags,
+      description,
+      isPrivate,
+      members,
+      h5ad_id,
+    } = formState.value;
+    saving.value = true;
     await updateProject({
       project_id: props.id,
       title,
       species_id,
       organ,
       h5ad_id,
-      tags: tags.join(','),
+      tags: tags.join(","),
       is_private: isPrivate,
       is_publish: isPublish,
       members: isPrivate ? members : [],
-      description
-    })
+      description,
+    });
 
     if (isPublish) {
-      message.success('保存并发布成功')
+      message.success("保存并发布成功");
     } else {
-      message.success('保存成功')
+      message.success("保存成功");
     }
-    await handleProjectFetch()
+    await handleProjectFetch();
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const handleTransferModalShow = () => {
-  open.value = true
-}
+  open.value = true;
+};
 
 const handleProjectTransfer = async () => {
   if (!transferMail.value) {
-    return message.error('邮箱不能为空')
+    return message.error("邮箱不能为空");
   }
   try {
-    saving.value = true
-    await transferProject(props.id, transferMail.value)
-    message.success('转移项目成功')
-    await handleProjectFetch()
-    open.value = false
+    saving.value = true;
+    await transferProject(props.id, transferMail.value);
+    message.success("转移项目成功");
+    await handleProjectFetch();
+    open.value = false;
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const handleProjectOffline = () => {
   Modal.confirm({
-    title: '下线确认?',
-    content: '您确认现在下线改项目吗？',
+    title: "下线确认?",
+    content: "您确认现在下线改项目吗？",
     onOk: async () => {
-      await offlineProject(props.id)
-      message.success('下线项目成功')
-      await handleProjectFetch()
-    }
-  })
-}
+      await offlineProject(props.id);
+      message.success("下线项目成功");
+      await handleProjectFetch();
+    },
+  });
+};
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id
-}
+  formState.value[record.target] = record.file_id;
+};
 </script>
 
 <style lang="scss" scoped></style>

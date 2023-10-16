@@ -5,9 +5,15 @@
         <div>Filters</div>
         <div class="mt-2">
           <a-radio-group v-model:value="filter" class="flex w-full">
-            <a-radio-button value="sample" class="flex-1 text-center">Sample</a-radio-button>
-            <a-radio-button value="cell" class="flex-1 text-center">Cell</a-radio-button>
-            <a-radio-button value="gene" class="flex-1 text-center">Gene</a-radio-button>
+            <a-radio-button value="sample" class="flex-1 text-center">
+              Sample
+            </a-radio-button>
+            <a-radio-button value="cell" class="flex-1 text-center">
+              Cell
+            </a-radio-button>
+            <a-radio-button value="gene" class="flex-1 text-center">
+              Gene
+            </a-radio-button>
           </a-radio-group>
         </div>
         <div class="mt-4">
@@ -36,14 +42,20 @@
                   allow-clear
                 ></a-select>
               </a-form-item>
-              <a-form-item label="External Accession" name="external_sample_accession">
+              <a-form-item
+                label="External Accession"
+                name="external_sample_accession"
+              >
                 <a-input
                   v-model:value="sample.external_sample_accession"
                   placeholder="External Accession"
                 ></a-input>
               </a-form-item>
               <a-form-item label="Disease" name="disease">
-                <a-input v-model:value="sample.disease" placeholder="Disease"></a-input>
+                <a-input
+                  v-model:value="sample.disease"
+                  placeholder="Disease"
+                ></a-input>
               </a-form-item>
               <a-form-item label="Development Stage" name="development_stage">
                 <a-input
@@ -127,7 +139,11 @@
             </template>
             <span>Reset</span>
           </a-button>
-          <a-button type="primary" class="ml-2 flex items-center" @click="handleSearch">
+          <a-button
+            type="primary"
+            class="ml-2 flex items-center"
+            @click="handleSearch"
+          >
             <template #icon>
               <search-outlined />
             </template>
@@ -138,7 +154,10 @@
     </div>
     <div class="flex-1">
       <div class="bg-white rounded-lg">
-        <SampleTable ref="sampleTableRef" v-if="filter === 'sample'"></SampleTable>
+        <SampleTable
+          ref="sampleTableRef"
+          v-if="filter === 'sample'"
+        ></SampleTable>
         <CellTable ref="cellTableRef" v-if="filter === 'cell'"></CellTable>
         <GeneTable ref="geneTableRef" v-if="filter === 'gene'"></GeneTable>
       </div>
@@ -146,122 +165,125 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import { UndoOutlined, SearchOutlined } from '@ant-design/icons-vue'
-import { SPECIES } from '@/constants/common'
-import { getOrganList } from '@/api/project'
-import SampleTable from '@/components/projects/SampleTable.vue'
-import CellTable from '@/components/projects/CellTable.vue'
-import GeneTable from '@/components/projects/GeneTable.vue'
-import { getGeneSymbolList } from '@/api/options.js'
+import { ref } from "vue";
+import { UndoOutlined, SearchOutlined } from "@ant-design/icons-vue";
+import { SPECIES } from "@/constants/common";
+import { getOrganList } from "@/api/project";
+import SampleTable from "@/components/projects/SampleTable.vue";
+import CellTable from "@/components/projects/CellTable.vue";
+import GeneTable from "@/components/projects/GeneTable.vue";
+import { getGeneSymbolList } from "@/api/options.js";
 
 const options = ref({
   organ: [],
   cell: [],
-  geneSymbol: []
-})
+  geneSymbol: [],
+});
 
 const state = ref({
   organFetching: false,
-  geneSymbolFetching: false
-})
+  geneSymbolFetching: false,
+});
 
-const filter = ref('sample')
+const filter = ref("sample");
 
 const sample = ref({
   species: undefined,
   organ: undefined,
-  external_sample_accession: '',
-  disease: '',
-  development_stage: ''
-})
+  external_sample_accession: "",
+  disease: "",
+  development_stage: "",
+});
 
-const sampleFormRef = ref()
-const sampleTableRef = ref()
+const sampleFormRef = ref();
+const sampleTableRef = ref();
 
 const cell = ref({
   species: undefined,
-  name: '',
+  name: "",
   positive: [],
-  negative: []
-})
+  negative: [],
+});
 
-const cellFormRef = ref()
-const cellTableRef = ref()
+const cellFormRef = ref();
+const cellTableRef = ref();
 
 const gene = ref({
   species: undefined,
-  symbol: undefined
-})
+  symbol: undefined,
+});
 
-const geneFormRef = ref()
-const geneTableRef = ref()
+const geneFormRef = ref();
+const geneTableRef = ref();
 
 const resetForm = () => {
   switch (filter.value) {
-    case 'sample':
-      sampleFormRef.value.resetFields()
-      break
-    case 'cell':
-      cellFormRef.value.resetFields()
-      break
-    case 'gene':
-      geneFormRef.value.resetFields()
-      break
+    case "sample":
+      sampleFormRef.value.resetFields();
+      break;
+    case "cell":
+      cellFormRef.value.resetFields();
+      break;
+    case "gene":
+      geneFormRef.value.resetFields();
+      break;
     default:
-      break
+      break;
   }
-}
+};
 
 const handleOrganSearch = async (keywords) => {
   try {
-    state.value.organFetching = true
-    const data = await getOrganList(keywords)
-    options.value.organ = data.map((item) => ({ label: item, value: item }))
+    state.value.organFetching = true;
+    const data = await getOrganList(keywords);
+    options.value.organ = data.map((item) => ({ label: item, value: item }));
   } finally {
-    state.value.organFetching = false
+    state.value.organFetching = false;
   }
-}
+};
 
 const handleGeneSymbolSearch = async (keywords) => {
   try {
-    state.value.geneSymbolFetching = true
-    const data = await getGeneSymbolList({ gene_symbol: keywords })
-    console.log(data)
-    options.value.geneSymbol = data.map((item) => ({ label: item, value: item }))
+    state.value.geneSymbolFetching = true;
+    const data = await getGeneSymbolList({ gene_symbol: keywords });
+    console.log(data);
+    options.value.geneSymbol = data.map((item) => ({
+      label: item,
+      value: item,
+    }));
   } finally {
-    state.value.geneSymbolFetching = false
+    state.value.geneSymbolFetching = false;
   }
-}
+};
 
 const getConditions = () => {
   switch (filter.value) {
-    case 'sample':
-      return sample.value
-    case 'cell':
-      return cell.value
-    case 'gene':
-      return gene.value
+    case "sample":
+      return sample.value;
+    case "cell":
+      return cell.value;
+    case "gene":
+      return gene.value;
     default:
-      return {}
+      return {};
   }
-}
+};
 
 const handleSearch = () => {
   switch (filter.value) {
-    case 'sample':
-      sampleTableRef.value.handleSearch(getConditions())
-      break
-    case 'cell':
-      cellTableRef.value.handleSearch(getConditions())
-      break
-    case 'gene':
-      geneTableRef.value.handleSearch(getConditions())
-      break
+    case "sample":
+      sampleTableRef.value.handleSearch(getConditions());
+      break;
+    case "cell":
+      cellTableRef.value.handleSearch(getConditions());
+      break;
+    case "gene":
+      geneTableRef.value.handleSearch(getConditions());
+      break;
     default:
-      break
+      break;
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

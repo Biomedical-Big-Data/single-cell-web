@@ -3,7 +3,11 @@
     <div class="bg-white py-2 px-4 rounded-lg">
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="用户名" name="user_name">
-          <a-input class="w-28" v-model:value="conditions.user_name" placeholder="用户名"></a-input>
+          <a-input
+            class="w-28"
+            v-model:value="conditions.user_name"
+            placeholder="用户名"
+          ></a-input>
         </a-form-item>
         <a-form-item label="组织" name="organization">
           <a-input
@@ -29,10 +33,18 @@
           ></a-select>
         </a-form-item>
         <a-form-item label="注册时间" name="create_at">
-          <a-date-picker v-model:value="conditions.create_at" placeholder="注册时间" class="w-32" />
+          <a-date-picker
+            v-model:value="conditions.create_at"
+            placeholder="注册时间"
+            class="w-32"
+          />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" class="flex items-center" @click="handleSearch">
+          <a-button
+            type="primary"
+            class="flex items-center"
+            @click="handleSearch"
+          >
             <template #icon>
               <SearchOutlined></SearchOutlined>
             </template>
@@ -53,7 +65,7 @@
       >
         <template #bodyCell="{ column: { dataIndex }, text, record }">
           <template v-if="dataIndex === 'create_at'">
-            {{ dayjs(text).format('YYYY-MM-DD') }}
+            {{ dayjs(text).format("YYYY-MM-DD") }}
           </template>
           <template v-if="dataIndex === 'state'">
             {{ getStateName(text) }}
@@ -109,72 +121,75 @@
 </template>
 
 <script setup>
-import { computed, createVNode, ref } from 'vue'
-import { ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons-vue'
-import { usePagination } from 'vue-request'
-import { updateUserState, getUserList, updateUserPassword } from '@/api/user'
-import dayjs from 'dayjs'
-import { message, Modal } from 'ant-design-vue'
+import { computed, createVNode, ref } from "vue";
+import {
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons-vue";
+import { usePagination } from "vue-request";
+import { updateUserState, getUserList, updateUserPassword } from "@/api/user";
+import dayjs from "dayjs";
+import { message, Modal } from "ant-design-vue";
 
 const conditions = ref({
-  user_name: '',
-  organization: '',
-  email_address: '',
+  user_name: "",
+  organization: "",
+  email_address: "",
   state: undefined,
-  create_at: ''
-})
+  create_at: "",
+});
 
-const open = ref(false)
-const currentUser = ref({})
+const open = ref(false);
+const currentUser = ref({});
 
 const USER_STATUS = [
   {
-    label: '正常',
-    value: 1
+    label: "正常",
+    value: 1,
   },
   {
-    label: '未激活',
-    value: 0
+    label: "未激活",
+    value: 0,
   },
   {
-    label: '禁用',
-    value: -1
-  }
-]
+    label: "禁用",
+    value: -1,
+  },
+];
 
 const getStateName = function (state) {
-  return USER_STATUS.find((item) => item.value === state)?.label
-}
+  return USER_STATUS.find((item) => item.value === state)?.label;
+};
 
 const columns = [
   {
-    title: '用户名',
-    dataIndex: 'user_name'
+    title: "用户名",
+    dataIndex: "user_name",
   },
   {
-    title: '邮箱',
-    dataIndex: 'email_address'
+    title: "邮箱",
+    dataIndex: "email_address",
   },
   {
-    title: '组织',
-    dataIndex: 'organization'
+    title: "组织",
+    dataIndex: "organization",
   },
   {
-    title: '状态',
-    dataIndex: 'state',
-    width: 100
+    title: "状态",
+    dataIndex: "state",
+    width: 100,
   },
   {
-    title: '创建时间',
-    dataIndex: 'create_at',
-    width: 120
+    title: "创建时间",
+    dataIndex: "create_at",
+    width: 120,
   },
   {
-    title: '操作',
-    dataIndex: 'operation',
-    width: 160
-  }
-]
+    title: "操作",
+    dataIndex: "operation",
+    width: 160,
+  },
+];
 
 const {
   data: dataSource,
@@ -182,52 +197,53 @@ const {
   loading,
   current,
   pageSize,
-  total
+  total,
 } = usePagination(getUserList, {
   defaultParams: [
     {
-      page_size: 20
-    }
+      page_size: 20,
+    },
   ],
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size'
-  }
-})
+    currentKey: "page",
+    pageSizeKey: "page_size",
+  },
+});
 
 const list = computed(() => {
-  return dataSource?.value?.user_list || []
-})
+  return dataSource?.value?.user_list || [];
+});
 
 const getConditions = function () {
-  const result = {}
-  const { user_name, organization, email_address, state, create_at } = conditions.value
+  const result = {};
+  const { user_name, organization, email_address, state, create_at } =
+    conditions.value;
 
   if (user_name) {
-    result.user_name = user_name
+    result.user_name = user_name;
   }
   if (organization) {
-    result.organization = organization
+    result.organization = organization;
   }
   if (email_address) {
-    result.email_address = email_address
+    result.email_address = email_address;
   }
-  console.log(state)
+  console.log(state);
   if (!isNaN(state)) {
-    result.state = state
+    result.state = state;
   }
   if (create_at) {
-    result.create_at = dayjs(create_at).format('YYYY-MM-DD')
+    result.create_at = dayjs(create_at).format("YYYY-MM-DD");
   }
-  return result
-}
+  return result;
+};
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: 'small'
-}))
+  size: "small",
+}));
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -236,68 +252,74 @@ const handleTableChange = (pag, filters, sorter) => {
     sortField: sorter.field,
     sortOrder: sorter.order,
     ...filters,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleSearch = () => {
-  console.log(conditions.value)
+  console.log(conditions.value);
   run({
     page: current,
     page_size: pageSize,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleUpdateUserPasswordModalOpen = (record) => {
-  open.value = true
-  currentUser.value = record
-}
+  open.value = true;
+  currentUser.value = record;
+};
 
 const handleClearCurrentUser = async () => {
-  open.value = false
-  currentUser.value = {}
-  Modal.destroyAll()
-}
+  open.value = false;
+  currentUser.value = {};
+  Modal.destroyAll();
+};
 
 const handleUpdateUserPassword = async () => {
   try {
-    await updateUserPassword(currentUser.value.id, currentUser.value.password)
-    message.success('操作成功')
-    return true
+    await updateUserPassword(currentUser.value.id, currentUser.value.password);
+    message.success("操作成功");
+    return true;
   } finally {
-    open.value = false
-    currentUser.value = {}
+    open.value = false;
+    currentUser.value = {};
   }
-}
+};
 
 const handleUpdateUserState = (record, nextState) => {
   Modal.confirm({
-    title: nextState === -1 ? `确认禁用${record.user_name}?` : `确认启用${record.user_name}?`,
+    title:
+      nextState === -1
+        ? `确认禁用${record.user_name}?`
+        : `确认启用${record.user_name}?`,
     icon: createVNode(ExclamationCircleOutlined),
-    content: nextState === -1 ? '该操作会禁止用户登录和项目操作' : '该操作会允许用户登录和项目操作',
+    content:
+      nextState === -1
+        ? "该操作会禁止用户登录和项目操作"
+        : "该操作会允许用户登录和项目操作",
     okButtonProps: {
-      size: 'small'
+      size: "small",
     },
     cancelButtonProps: {
-      size: 'small'
+      size: "small",
     },
     onOk: async () => {
       try {
-        await updateUserState(record.id, nextState)
-        message.success('操作成功')
-        return true
+        await updateUserState(record.id, nextState);
+        message.success("操作成功");
+        return true;
       } finally {
         run({
           page: current,
           page_size: pageSize,
-          ...getConditions()
-        })
+          ...getConditions(),
+        });
       }
     },
-    onCancel() {}
-  })
-}
+    onCancel() {},
+  });
+};
 </script>
 
 <style scoped lang="scss">

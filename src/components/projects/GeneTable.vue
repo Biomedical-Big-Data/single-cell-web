@@ -38,14 +38,25 @@
       </div>
     </template>
     <template #bodyCell="{ column, record, index }">
-      <template v-if="column.dataIndex === 'index'">{{ getTrueIndex(index) }}</template>
+      <template v-if="column.dataIndex === 'index'">
+        {{ getTrueIndex(index) }}
+      </template>
       <template v-if="column.dataIndex === 'action'">
-        <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
+        <a-button
+          shape="circle"
+          :icon="h(EyeOutlined)"
+          @click="handleToProject(record)"
+        />
       </template>
     </template>
   </a-table>
 
-  <a-modal v-model:open="open" width="60%" wrap-class-name="full-modal" :footer="null">
+  <a-modal
+    v-model:open="open"
+    width="60%"
+    wrap-class-name="full-modal"
+    :footer="null"
+  >
     <a-tabs v-model:activeKey="geneChartType">
       <a-tab-pane key="percent" tab="Cell Number Percentage">
         <GeneExpressionLevelChart
@@ -66,139 +77,143 @@
 </template>
 
 <script setup>
-import { usePagination } from 'vue-request'
-import { getGeneProjectList, getProjectGeneChartData } from '@/api/project.js'
-import { computed, h, reactive, ref } from 'vue'
+import { usePagination } from "vue-request";
+import { getGeneProjectList, getProjectGeneChartData } from "@/api/project.js";
+import { computed, h, reactive, ref } from "vue";
 import {
   DotChartOutlined,
   DownloadOutlined,
   EyeOutlined,
-  SettingOutlined
-} from '@ant-design/icons-vue'
-import GeneExpressionLevelChart from '@/components/charts/GeneExpressionChart.vue'
-import { useRouter } from 'vue-router'
+  SettingOutlined,
+} from "@ant-design/icons-vue";
+import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue";
+import { useRouter } from "vue-router";
 
-const condition = ref({})
-const open = ref(false)
-const geneChartType = ref('percent')
-const geneChartData = ref([])
+const condition = ref({});
+const open = ref(false);
+const geneChartType = ref("percent");
+const geneChartData = ref([]);
 
-const router = useRouter()
+const router = useRouter();
 
 const columns = [
   {
-    title: 'Result',
-    dataIndex: 'index',
-    align: 'center',
-    width: '20px'
+    title: "Result",
+    dataIndex: "index",
+    align: "center",
+    width: "20px",
   },
   {
-    title: 'CellType',
-    dataIndex: ['gene_expression_proportion_meta', 'proportion_cell_type_meta', 'cell_type_name'],
-    align: 'center',
-    width: 150
-  },
-  {
-    title: 'Project',
+    title: "CellType",
     dataIndex: [
-      'gene_expression_proportion_meta',
-      'cell_proportion_analysis_meta',
-      'analysis_project_meta',
-      'title'
+      "gene_expression_proportion_meta",
+      "proportion_cell_type_meta",
+      "cell_type_name",
     ],
-    width: 200
+    align: "center",
+    width: 150,
   },
   {
-    title: 'Disease',
+    title: "Project",
     dataIndex: [
-      'gene_expression_proportion_meta',
-      'cell_proportion_analysis_meta',
-      'analysis_biosample_analysis_meta',
-      '0',
-      'biosample_analysis_biosample_meta',
-      'disease'
-    ]
+      "gene_expression_proportion_meta",
+      "cell_proportion_analysis_meta",
+      "analysis_project_meta",
+      "title",
+    ],
+    width: 200,
   },
   {
-    title: 'Organ',
+    title: "Disease",
     dataIndex: [
-      'gene_expression_proportion_meta',
-      'cell_proportion_analysis_meta',
-      'analysis_biosample_analysis_meta',
-      '0',
-      'biosample_analysis_biosample_meta',
-      'organ'
-    ]
+      "gene_expression_proportion_meta",
+      "cell_proportion_analysis_meta",
+      "analysis_biosample_analysis_meta",
+      "0",
+      "biosample_analysis_biosample_meta",
+      "disease",
+    ],
   },
   {
-    title: 'Sex',
+    title: "Organ",
     dataIndex: [
-      'gene_expression_proportion_meta',
-      'cell_proportion_analysis_meta',
-      'analysis_biosample_analysis_meta',
-      '0',
-      'biosample_analysis_biosample_meta',
-      'biosample_donor_meta',
-      'sex'
-    ]
+      "gene_expression_proportion_meta",
+      "cell_proportion_analysis_meta",
+      "analysis_biosample_analysis_meta",
+      "0",
+      "biosample_analysis_biosample_meta",
+      "organ",
+    ],
   },
   {
-    title: '',
-    dataIndex: 'action',
-    align: 'center',
-    width: 100
-  }
-]
+    title: "Sex",
+    dataIndex: [
+      "gene_expression_proportion_meta",
+      "cell_proportion_analysis_meta",
+      "analysis_biosample_analysis_meta",
+      "0",
+      "biosample_analysis_biosample_meta",
+      "biosample_donor_meta",
+      "sex",
+    ],
+  },
+  {
+    title: "",
+    dataIndex: "action",
+    align: "center",
+    width: 100,
+  },
+];
 
 const count = reactive({
   project: 0,
   sample: 0,
-  cell: 0
-})
+  cell: 0,
+});
 
 const getConditions = () => {
-  const { species, symbol } = condition.value
+  const { species, symbol } = condition.value;
   return {
     ...(species ? { species_id: species } : {}),
-    ...(symbol ? { gene_symbol: symbol } : {})
-  }
-}
+    ...(symbol ? { gene_symbol: symbol } : {}),
+  };
+};
 
 const getTrueIndex = (index) => {
-  return (current.value - 1) * pageSize.value + index + 1
-}
+  return (current.value - 1) * pageSize.value + index + 1;
+};
 
 const handleGeneChartDataFetch = async () => {
-  geneChartData.value = await getProjectGeneChartData(getConditions())
-}
+  geneChartData.value = await getProjectGeneChartData(getConditions());
+};
 
 const queryData = (params) => {
-  return handleGeneChartDataFetch().then(() => getGeneProjectList(params))
-}
+  return handleGeneChartDataFetch().then(() => getGeneProjectList(params));
+};
 
 const {
   data: dataSource,
   run,
   loading,
   current,
-  pageSize
+  pageSize,
 } = usePagination(queryData, {
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size'
-  }
-})
+    currentKey: "page",
+    pageSizeKey: "page_size",
+  },
+});
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
-})
+  return dataSource?.value?.project_list || [];
+});
 
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
-  size: 'small'
-}))
+  size: "small",
+}));
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -207,39 +222,41 @@ const handleTableChange = (pag, filters, sorter) => {
     sortField: sorter.field,
     sortOrder: sorter.order,
     ...getConditions(),
-    ...filters
-  })
-}
+    ...filters,
+  });
+};
 
 const handleSearch = (conditions) => {
-  condition.value = conditions
+  condition.value = conditions;
   run({
     page: current,
     page_size: pageSize,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleChartModalOpen = () => {
-  open.value = true
-}
+  open.value = true;
+};
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
-      id: record.gene_expression_proportion_meta.cell_proportion_analysis_meta.project_id
+      id: record.gene_expression_proportion_meta.cell_proportion_analysis_meta
+        .project_id,
     },
     query: {
-      analysis_id: record.gene_expression_proportion_meta.cell_proportion_analysis_meta.id
-    }
-  })
-  window.open(routeData.href, '_blank')
-}
+      analysis_id:
+        record.gene_expression_proportion_meta.cell_proportion_analysis_meta.id,
+    },
+  });
+  window.open(routeData.href, "_blank");
+};
 
 defineExpose({
-  handleSearch
-})
+  handleSearch,
+});
 </script>
 
 <style scoped lang="scss"></style>

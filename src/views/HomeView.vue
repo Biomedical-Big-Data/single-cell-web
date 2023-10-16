@@ -73,114 +73,114 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const species = ref([
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
-  }
-])
+    icon: "body",
+    name: "Human",
+    count: 100,
+  },
+]);
 
 const organs = ref([
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
-  }
-])
+    icon: "body",
+    name: "Human",
+    count: 100,
+  },
+]);
 
 const samples = ref([
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
+    icon: "body",
+    name: "Human",
+    count: 100,
   },
   {
-    icon: 'body',
-    name: 'Human',
-    count: 100
-  }
-])
+    icon: "body",
+    name: "Human",
+    count: 100,
+  },
+]);
 
-const partners = ref([])
+const partners = ref([]);
 </script>
 
 <style lang="scss" scoped>
 .home-container {
   .banner {
-    background-image: url('../assets/images/home/banner.png');
+    background-image: url("../assets/images/home/banner.png");
     font-size: 2.25rem;
     font-style: normal;
     font-weight: 500;

@@ -30,7 +30,9 @@
       </div>
     </template>
     <template #bodyCell="{ column, record, index }">
-      <template v-if="column.dataIndex === 'index'">{{ getTrueIndex(index) }}</template>
+      <template v-if="column.dataIndex === 'index'">
+        {{ getTrueIndex(index) }}
+      </template>
       <template v-if="column.dataIndex === 'projects'">
         <a-button
           shape="circle"
@@ -48,15 +50,26 @@
     :footer="null"
   >
     <div class="py-5">
-      <a-table :columns="projectColumns" :data-source="projects" :pagination="false">
+      <a-table
+        :columns="projectColumns"
+        :data-source="projects"
+        :pagination="false"
+      >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.title === 'Tags'">
-            <a-tag v-for="item in (text || '').split(',').filter((item) => !!item)" :key="item"
-              >{{ item }}
+            <a-tag
+              v-for="item in (text || '').split(',').filter((item) => !!item)"
+              :key="item"
+            >
+              {{ item }}
             </a-tag>
           </template>
           <template v-if="column.dataIndex === 'action'">
-            <a-button shape="circle" :icon="h(EyeOutlined)" @click="handleToProject(record)" />
+            <a-button
+              shape="circle"
+              :icon="h(EyeOutlined)"
+              @click="handleToProject(record)"
+            />
           </template>
         </template>
       </a-table>
@@ -65,111 +78,111 @@
 </template>
 
 <script setup>
-import { usePagination } from 'vue-request'
-import { getSampleProjectList } from '@/api/project.js'
-import { computed, reactive, ref, h } from 'vue'
+import { usePagination } from "vue-request";
+import { getSampleProjectList } from "@/api/project.js";
+import { computed, reactive, ref, h } from "vue";
 import {
   SettingOutlined,
   DownloadOutlined,
   OrderedListOutlined,
-  EyeOutlined
-} from '@ant-design/icons-vue'
-import { useRouter } from 'vue-router'
+  EyeOutlined,
+} from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
-const condition = ref({})
-const open = ref(false)
+const condition = ref({});
+const open = ref(false);
 const columns = [
   {
-    title: 'Result',
-    dataIndex: 'index',
-    align: 'center',
-    width: '20px'
+    title: "Result",
+    dataIndex: "index",
+    align: "center",
+    width: "20px",
   },
   {
-    title: 'Projects',
-    dataIndex: 'projects',
+    title: "Projects",
+    dataIndex: "projects",
     width: 80,
-    align: 'center'
+    align: "center",
   },
   {
-    title: 'Disease',
-    dataIndex: 'disease'
+    title: "Disease",
+    dataIndex: "disease",
   },
   {
-    title: 'Platform',
-    dataIndex: 'sequencing_instrument_manufacturer_model'
+    title: "Platform",
+    dataIndex: "sequencing_instrument_manufacturer_model",
   },
   {
-    title: 'Species',
-    dataIndex: ['biosample_species_meta', 'species']
+    title: "Species",
+    dataIndex: ["biosample_species_meta", "species"],
   },
   {
-    title: 'Organ',
-    dataIndex: 'organ'
+    title: "Organ",
+    dataIndex: "organ",
   },
 
   {
-    title: 'Sex',
-    dataIndex: ['biosample_donor_meta', 'sex']
-  }
-]
+    title: "Sex",
+    dataIndex: ["biosample_donor_meta", "sex"],
+  },
+];
 const projectColumns = [
   {
-    title: 'Title',
-    dataIndex: ['project_biosample_project_meta', 'title'],
-    width: 200
+    title: "Title",
+    dataIndex: ["project_biosample_project_meta", "title"],
+    width: 200,
   },
   {
-    title: 'Description',
-    dataIndex: ['project_biosample_project_meta', 'description']
+    title: "Description",
+    dataIndex: ["project_biosample_project_meta", "description"],
   },
   {
-    title: 'Tags',
-    dataIndex: ['project_biosample_project_meta', 'tags'],
-    width: 300
+    title: "Tags",
+    dataIndex: ["project_biosample_project_meta", "tags"],
+    width: 300,
   },
   {
-    title: '',
-    dataIndex: 'action',
-    align: 'center',
-    width: 100
-  }
-]
+    title: "",
+    dataIndex: "action",
+    align: "center",
+    width: 100,
+  },
+];
 const count = reactive({
   project: 0,
   sample: 0,
-  cell: 0
-})
-const projects = ref([])
+  cell: 0,
+});
+const projects = ref([]);
 const {
   data: dataSource,
   run,
   loading,
   current,
-  pageSize
+  pageSize,
 } = usePagination(getSampleProjectList, {
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size'
-  }
-})
+    currentKey: "page",
+    pageSizeKey: "page_size",
+  },
+});
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
-})
+  return dataSource?.value?.project_list || [];
+});
 
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
-  size: 'small'
-}))
+  size: "small",
+}));
 
 const getTrueIndex = (index) => {
-  return (current.value - 1) * pageSize.value + index + 1
-}
+  return (current.value - 1) * pageSize.value + index + 1;
+};
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -178,55 +191,61 @@ const handleTableChange = (pag, filters, sorter) => {
     sortField: sorter.field,
     sortOrder: sorter.order,
     ...getConditions(),
-    ...filters
-  })
-}
+    ...filters,
+  });
+};
 
 const getConditions = () => {
-  const { species, organ, external_sample_accession, disease, development_stage } = condition.value
-  const result = {}
+  const {
+    species,
+    organ,
+    external_sample_accession,
+    disease,
+    development_stage,
+  } = condition.value;
+  const result = {};
   if (species) {
-    result.species_id = species
+    result.species_id = species;
   }
   if (organ) {
-    result.organ = organ
+    result.organ = organ;
   }
   return {
     ...(species ? { species_id: species } : {}),
     ...(organ ? { organ } : {}),
     ...(external_sample_accession ? { external_sample_accession } : {}),
     ...(disease ? { disease } : {}),
-    ...(development_stage ? { development_stage } : {})
-  }
-}
+    ...(development_stage ? { development_stage } : {}),
+  };
+};
 
 const handleSearch = (conditions) => {
-  condition.value = conditions
+  condition.value = conditions;
   run({
     page: current,
     page_size: pageSize,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleProjectsModalOpen = (records) => {
-  projects.value = records.biosample_project_biosample_meta
-  open.value = true
-}
+  projects.value = records.biosample_project_biosample_meta;
+  open.value = true;
+};
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
-      id: record.project_id
-    }
-  })
-  window.open(routeData.href, '_blank')
-}
+      id: record.project_id,
+    },
+  });
+  window.open(routeData.href, "_blank");
+};
 
 defineExpose({
-  handleSearch
-})
+  handleSearch,
+});
 </script>
 
 <style scoped lang="scss"></style>

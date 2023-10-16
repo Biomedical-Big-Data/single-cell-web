@@ -3,7 +3,11 @@
     <div class="bg-white py-2 px-4 rounded-lg">
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="项目名称" name="user_name">
-          <a-input class="w-28" v-model:value="conditions.title" placeholder="项目名称"></a-input>
+          <a-input
+            class="w-28"
+            v-model:value="conditions.title"
+            placeholder="项目名称"
+          ></a-input>
         </a-form-item>
         <a-form-item label="状态" name="is_publish">
           <a-select
@@ -24,7 +28,11 @@
           ></a-select>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" class="flex items-center" @click="handleSearch">
+          <a-button
+            type="primary"
+            class="flex items-center"
+            @click="handleSearch"
+          >
             <template #icon>
               <SearchOutlined></SearchOutlined>
             </template>
@@ -44,8 +52,10 @@
         @change="handleTableChange"
       >
         <template #bodyCell="{ column: { dataIndex }, text, record }">
-          <template v-if="dataIndex === 'create_at' || dataIndex === 'update_at'">
-            {{ dayjs(text).format('YYYY-MM-DD') }}
+          <template
+            v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
+          >
+            {{ dayjs(text).format("YYYY-MM-DD") }}
           </template>
           <template v-if="dataIndex === 'is_publish'">
             {{ getPublishState(text) }}
@@ -54,12 +64,19 @@
             {{ getPrivateState(text) }}
           </template>
           <template v-if="dataIndex === 'tags'">
-            <a-tag v-for="item in (text || '').split(',').filter((a) => !!a)" :key="item">
+            <a-tag
+              v-for="item in (text || '').split(',').filter((a) => !!a)"
+              :key="item"
+            >
               {{ item }}
             </a-tag>
           </template>
           <template v-if="dataIndex === 'operation'">
-            <a-button type="primary" size="small" @click="handleToAdminProject(record)">
+            <a-button
+              type="primary"
+              size="small"
+              @click="handleToAdminProject(record)"
+            >
               <template #icon>
                 <EyeOutlined></EyeOutlined>
               </template>
@@ -73,67 +90,67 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { SearchOutlined, EyeOutlined } from '@ant-design/icons-vue'
-import { usePagination } from 'vue-request'
-import dayjs from 'dayjs'
-import { getMyProjectList } from '@/api/project'
-import { useRouter } from 'vue-router'
-import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from '@/constants/common.js'
+import { computed, ref } from "vue";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons-vue";
+import { usePagination } from "vue-request";
+import dayjs from "dayjs";
+import { getMyProjectList } from "@/api/project";
+import { useRouter } from "vue-router";
+import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js";
 
-const router = useRouter()
+const router = useRouter();
 const conditions = ref({
-  title: '',
+  title: "",
   is_publish: undefined,
-  is_private: undefined
-})
+  is_private: undefined,
+});
 
 const getPublishState = function (state) {
-  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
-}
+  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label;
+};
 const getPrivateState = function (state) {
-  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label
-}
+  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label;
+};
 
 const columns = [
   {
-    title: '项目名称',
-    dataIndex: 'title'
+    title: "项目名称",
+    dataIndex: "title",
   },
   {
-    title: '是否私有',
-    dataIndex: 'is_private',
+    title: "是否私有",
+    dataIndex: "is_private",
     width: 100,
-    align: 'center'
+    align: "center",
   },
   {
-    title: '是否发布',
-    dataIndex: 'is_publish',
+    title: "是否发布",
+    dataIndex: "is_publish",
     width: 100,
-    align: 'center'
+    align: "center",
   },
   {
-    title: '标签',
-    dataIndex: 'tags',
-    width: 300
+    title: "标签",
+    dataIndex: "tags",
+    width: 300,
   },
   {
-    title: '创建时间',
-    dataIndex: 'create_at',
-    width: 120
+    title: "创建时间",
+    dataIndex: "create_at",
+    width: 120,
   },
   {
-    title: '更新时间',
-    dataIndex: 'update_at',
-    width: 120
+    title: "更新时间",
+    dataIndex: "update_at",
+    width: 120,
   },
   {
-    title: '操作',
-    dataIndex: 'operation',
+    title: "操作",
+    dataIndex: "operation",
     width: 40,
-    align: 'center'
-  }
-]
+    align: "center",
+  },
+];
 
 const {
   data: dataSource,
@@ -141,47 +158,47 @@ const {
   loading,
   current,
   pageSize,
-  total
+  total,
 } = usePagination(getMyProjectList, {
   defaultParams: [
     {
-      page_size: 20
-    }
+      page_size: 20,
+    },
   ],
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size'
-  }
-})
+    currentKey: "page",
+    pageSizeKey: "page_size",
+  },
+});
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
-})
+  return dataSource?.value?.project_list || [];
+});
 
 const getConditions = function () {
-  const result = {}
-  const { is_private, is_publish, title } = conditions.value
+  const result = {};
+  const { is_private, is_publish, title } = conditions.value;
 
   if (title) {
-    result.title = title
+    result.title = title;
   }
 
   if (!isNaN(is_private)) {
-    result.is_private = is_private
+    result.is_private = is_private;
   }
   if (!isNaN(is_publish)) {
-    result.is_publish = is_publish
+    result.is_publish = is_publish;
   }
 
-  return result
-}
+  return result;
+};
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: 'small'
-}))
+  size: "small",
+}));
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -190,26 +207,26 @@ const handleTableChange = (pag, filters, sorter) => {
     sortField: sorter.field,
     sortOrder: sorter.order,
     ...filters,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleSearch = () => {
   run({
     page: current,
     page_size: pageSize,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleToAdminProject = (record) => {
   router.push({
-    name: 'project_detail_update',
+    name: "project_detail_update",
     params: {
-      id: record.id
-    }
-  })
-}
+      id: record.id,
+    },
+  });
+};
 </script>
 
 <style scoped lang="scss">

@@ -29,74 +29,76 @@
 </template>
 
 <script setup>
-import { VuePlotly } from 'vue3-plotly'
-import { computed, ref } from 'vue'
-import _ from 'lodash'
+import { VuePlotly } from "vue3-plotly";
+import { computed, ref } from "vue";
+import _ from "lodash";
 
-const pathType = ref(undefined)
-const pathWay = ref(undefined)
+const pathType = ref(undefined);
+const pathWay = ref(undefined);
 
 const props = defineProps({
   pathways: {
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const pathTypeList = computed(() => {
-  const { pathways } = props
-  return [...new Set(pathways.map((item) => item.pathway_name))].map((item) => ({
-    label: item,
-    value: item
-  }))
-})
+  const { pathways } = props;
+  return [...new Set(pathways.map((item) => item.pathway_name))].map(
+    (item) => ({
+      label: item,
+      value: item,
+    }),
+  );
+});
 
 const pathWayList = computed(() => {
-  const { pathways } = props
+  const { pathways } = props;
   return [
     ...new Set(
       pathways
         .filter((item) => item.pathway_name === pathType.value)
-        .map((item) => item.pathway_source)
-    )
+        .map((item) => item.pathway_source),
+    ),
   ].map((item) => ({
     label: item,
-    value: item
-  }))
-})
+    value: item,
+  }));
+});
 
 const chartData = computed(() => {
-  const { pathways } = props
+  const { pathways } = props;
   return _.chain(pathways)
     .filter({ pathway_name: pathType.value, pathway_source: pathWay.value })
-    .groupBy('cell_type_name')
+    .groupBy("cell_type_name")
     .toPairs()
     .map(([name, values], index) => {
       return {
         y: values.map((item) => item.score),
         // y: new Array(values.length).fill(name),
         x: values.map(() => index + Math.random()),
-        mode: 'markers',
-        type: 'scatter',
+        mode: "markers",
+        type: "scatter",
         name,
         labels: values.map((item) => item.score),
-        marker: { size: 12 }
-      }
+        marker: { size: 12 },
+      };
     })
-    .value()
-})
+    .value();
+});
 
 const layout = {
-  title: 'Score of Pathway',
+  title: "Score of Pathway",
   autosize: true,
   height: 700,
-  showlegend: true
-}
+  showlegend: true,
+};
 
-const config = { responsive: true, scrollZoom: true }
+const config = { responsive: true, scrollZoom: true };
 
 const handlePathTypeChange = () => {
-  pathWay.value = undefined
-}
+  pathWay.value = undefined;
+};
 </script>
 
 <style scoped lang="scss"></style>

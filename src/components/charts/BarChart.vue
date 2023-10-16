@@ -12,51 +12,51 @@
 </template>
 
 <script setup>
-import { VuePlotly } from 'vue3-plotly'
-import { onMounted, ref } from 'vue'
-import { getCellNumber } from '@/api/project.js'
-import _ from 'lodash'
+import { VuePlotly } from "vue3-plotly";
+import { onMounted, ref } from "vue";
+import { getCellNumber } from "@/api/project.js";
+import _ from "lodash";
 
 const props = defineProps({
   analysisId: {
     type: [String, Number],
-    required: true
-  }
-})
-const chartData = ref([])
+    required: true,
+  },
+});
+const chartData = ref([]);
 
 const layout = {
-  title: 'Bar plot of cell number in each type',
+  title: "Bar plot of cell number in each type",
   autosize: true,
   height: 700,
-  showlegend: true
-}
+  showlegend: true,
+};
 
 onMounted(() => {
-  handleCellNumberFetch()
-})
+  handleCellNumberFetch();
+});
 
-const config = { responsive: true, scrollZoom: true }
+const config = { responsive: true, scrollZoom: true };
 
 const handleCellNumberFetch = async () => {
-  const data = await getCellNumber(props.analysisId)
+  const data = await getCellNumber(props.analysisId);
   // eslint-disable-next-line no-unused-vars
   const temp = _.chain(data)
-    .groupBy('cell_type_id')
+    .groupBy("cell_type_id")
     .toPairs()
     .map(([cell_type_id, values]) => ({
       name: values[0].proportion_cell_type_meta.cell_type_name,
-      total: _.sumBy(values, 'cell_number')
+      total: _.sumBy(values, "cell_number"),
     }))
-    .value()
+    .value();
   chartData.value = [
     {
-      y: _.map(temp, 'name'),
-      x: _.map(temp, 'total'),
-      type: 'bar',
-      orientation: 'h'
-    }
-  ]
-}
+      y: _.map(temp, "name"),
+      x: _.map(temp, "total"),
+      type: "bar",
+      orientation: "h",
+    },
+  ];
+};
 </script>
 <style scoped lang="scss"></style>
