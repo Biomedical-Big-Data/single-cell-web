@@ -75,34 +75,46 @@
                   allow-clear
                 ></a-select>
               </a-form-item>
-              <a-form-item label="Name" name="name">
-                <a-tree-select
-                  v-model:value="cell.name"
-                  :tree-data-simple-mode="true"
-                  style="width: 100%"
-                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                  :tree-data="treeData"
-                  placeholder="Please select"
-                  :load-data="onLoadData"
-                  showSearch
-                />
-              </a-form-item>
-              <a-form-item label="Positive" name="positive">
-                <a-select
-                  v-model:value="cell.positive"
-                  mode="tags"
-                  placeholder="Positive"
-                  allow-clear
-                ></a-select>
-              </a-form-item>
-              <a-form-item label="Negative" name="negative">
-                <a-select
-                  v-model:value="cell.negative"
-                  mode="tags"
-                  placeholder="Negative"
-                  allow-clear
-                ></a-select>
-              </a-form-item>
+              <div v-if="cell.species">
+                <a-form-item label="Search By" name="searchBy">
+                  <a-radio-group v-model:value="cell.searchBy">
+                    <a-radio value="name">Name</a-radio>
+                    <a-radio value="2">Mark</a-radio>
+                  </a-radio-group>
+                </a-form-item>
+                <div v-if="cell.searchBy === 'name'">
+                  <a-form-item label="Name" name="name">
+                    <a-tree-select
+                      v-model:value="cell.name"
+                      :tree-data-simple-mode="true"
+                      style="width: 100%"
+                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                      :tree-data="treeData"
+                      placeholder="Please select"
+                      :load-data="onLoadData"
+                      showSearch
+                    />
+                  </a-form-item>
+                </div>
+                <div v-else>
+                  <a-form-item label="Positive" name="positive">
+                    <a-select
+                      v-model:value="cell.positive"
+                      mode="tags"
+                      placeholder="Positive"
+                      allow-clear
+                    ></a-select>
+                  </a-form-item>
+                  <a-form-item label="Negative" name="negative">
+                    <a-select
+                      v-model:value="cell.negative"
+                      mode="tags"
+                      placeholder="Negative"
+                      allow-clear
+                    ></a-select>
+                  </a-form-item>
+                </div>
+              </div>
             </a-form>
           </div>
           <div v-if="filter === 'gene'">
@@ -200,6 +212,7 @@ const sampleTableRef = ref();
 
 const cell = ref({
   species: undefined,
+  searchBy: "name",
   name: "",
   positive: [],
   negative: [],

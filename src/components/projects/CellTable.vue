@@ -175,16 +175,23 @@ const handleTableChange = (pag, filters, sorter) => {
 
 const getConditions = () => {
   const result = {};
-  const { positive, negative, species } = condition.value;
+  const { positive, negative, species, name, searchBy } = condition.value;
   if (species) {
     result.species_id = species;
   }
-  if (positive?.length) {
-    result.genes_positive = positive.join(",");
+  if (searchBy === "name") {
+    if (name) {
+      result.name = name;
+    }
+  } else {
+    if (positive?.length) {
+      result.genes_positive = positive.join(",");
+    }
+    if (negative?.length) {
+      result.genes_negative = negative.join(",");
+    }
   }
-  if (negative?.length) {
-    result.genes_negative = negative.join(",");
-  }
+
   return result;
 };
 
