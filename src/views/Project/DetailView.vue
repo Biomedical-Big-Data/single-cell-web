@@ -37,7 +37,7 @@
           <!--            </div>-->
           <!--          </a-tab-pane>-->
           <a-tab-pane key="barplot" tab="Barplot of cell number in each type" class="abc">
-            <BarChart :analysis-id='projectDetail.project_analysis_meta[0].id'></BarChart>
+            <BarChart :analysis-id="projectDetail.project_analysis_meta[0].id"></BarChart>
           </a-tab-pane>
           <a-tab-pane key="celltype" tab="Celltype Markers">
             <CellTypeMarkers :file-id="projectDetail.project_analysis_meta[0].cell_marker_id" />

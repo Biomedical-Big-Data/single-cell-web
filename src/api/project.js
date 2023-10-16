@@ -40,10 +40,10 @@ export function getMyProjectFile(params) {
   return request.get('/project/file/me', { params })
 }
 
-export function uploadProjectFile(file) {
+export function uploadProjectFile(file, config) {
   const formData = new FormData()
   formData.append('file', file)
-  return request.post('/project/file/upload', formData)
+  return request.post('/project/file/upload', formData, config)
 }
 
 export function getMyProjectList(params) {
@@ -57,6 +57,7 @@ export function createProject(data) {
 export function updateProject(data) {
   return request.post('/project/update', data)
 }
+
 export function updateAdminProject(data) {
   return request.post(`/admin/project/${data.project_id}/update`, data)
 }
@@ -75,6 +76,6 @@ export function getProjectGeneChartData({ gene_symbol, species_id }) {
   })
 }
 
-export function getCellNumber(analysis_id){
+export function getCellNumber(analysis_id) {
   return request.get(`/project/${analysis_id}/graph/cell_number`)
 }

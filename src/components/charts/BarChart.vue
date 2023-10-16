@@ -1,11 +1,11 @@
 <template>
-  <div class='h-full flex flex-col'>
-    <div class='flex-1'>
+  <div class="h-full flex flex-col">
+    <div class="flex-1">
       <VuePlotly
-        :data='chartData'
-        :layout='layout'
-        :display-mode-bar='false'
-        :config='config'
+        :data="chartData"
+        :layout="layout"
+        :display-mode-bar="false"
+        :config="config"
       ></VuePlotly>
     </div>
   </div>
@@ -41,16 +41,22 @@ const config = { responsive: true, scrollZoom: true }
 const handleCellNumberFetch = async () => {
   const data = await getCellNumber(props.analysisId)
   // eslint-disable-next-line no-unused-vars
-  const temp = _.chain(data).groupBy('cell_type_id').toPairs().map(([cell_type_id, values]) => ({
-    name: values[0].proportion_cell_type_meta.cell_type_name,
-    total: _.sumBy(values, 'cell_number')
-  })).value()
-  chartData.value = [{
-    y: _.map(temp, 'name'),
-    x: _.map(temp, 'total'),
-    type: 'bar',
-    orientation: 'h'
-  }]
+  const temp = _.chain(data)
+    .groupBy('cell_type_id')
+    .toPairs()
+    .map(([cell_type_id, values]) => ({
+      name: values[0].proportion_cell_type_meta.cell_type_name,
+      total: _.sumBy(values, 'cell_number')
+    }))
+    .value()
+  chartData.value = [
+    {
+      y: _.map(temp, 'name'),
+      x: _.map(temp, 'total'),
+      type: 'bar',
+      orientation: 'h'
+    }
+  ]
 }
 </script>
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>

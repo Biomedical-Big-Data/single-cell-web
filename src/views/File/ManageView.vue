@@ -50,45 +50,63 @@
       >
         <template #bodyCell="{ column: { dataIndex }, text }">
           <template v-if="dataIndex === 'create_at'">
-            {{ dayjs(text).format('YYYY-MM-DD') }}
+            {{ dayjs(text).format("YYYY-MM-DD") }}
           </template>
         </template>
       </a-table>
     </div>
+
+    <a-modal
+      v-model:open="uploading"
+      :centered="true"
+      title="Uploading"
+      :footer="null"
+      :closable="false"
+      :maskClosable="false"
+    >
+      <div class="p-2">
+        <div>{{ uploadFileName }}</div>
+        <div class="mt-2">
+          <a-progress class="w-full" :percent="uploadProgress" />
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { SearchOutlined, CloudUploadOutlined } from '@ant-design/icons-vue'
-import { usePagination } from 'vue-request'
-import { getMyProjectFile, uploadProjectFile } from '@/api/project'
-import { message } from 'ant-design-vue'
-import dayjs from 'dayjs'
+import { computed, ref } from "vue";
+import { SearchOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
+import { usePagination } from "vue-request";
+import { getMyProjectFile, uploadProjectFile } from "@/api/project";
+import { message } from "ant-design-vue";
+import dayjs from "dayjs";
 
-const fileRef = ref()
-const uploading = ref(false)
+const fileRef = ref();
+const uploading = ref(false);
+const uploadFileName = ref("");
+const uploadProgress = ref(0);
 const conditions = ref({
-  file_name: ''
-})
+  file_name: "",
+});
 
 const columns = [
   {
-    title: '文件ID',
-    dataIndex: 'file_id',
-    width: '200px'
+    title: "文件ID",
+    dataIndex: "file_id",
+    width: "200px",
   },
   {
-    title: '文件名称',
-    dataIndex: 'file_name'
+    title: "文件名称",
+    dataIndex: "file_name",
   },
   {
-    title: '上传时间',
-    dataIndex: 'create_at',
-    width: '150px',
-    align: 'center'
-  }
-]
+    title: "上传时间",
+    dataIndex: "create_at",
+    width: "150px",
+    align: "center",
+  },
+];
 
 const {
   data: dataSource,
@@ -96,40 +114,40 @@ const {
   loading,
   current,
   pageSize,
-  total
+  total,
 } = usePagination(getMyProjectFile, {
   defaultParams: [
     {
-      page_size: 20
-    }
+      page_size: 20,
+    },
   ],
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size'
-  }
-})
+    currentKey: "page",
+    pageSizeKey: "page_size",
+  },
+});
 
 const list = computed(() => {
-  return dataSource?.value?.h5ad_list || []
-})
+  return dataSource?.value?.h5ad_list || [];
+});
 
 const getConditions = function () {
-  const result = {}
-  const { file_name } = conditions.value
+  const result = {};
+  const { file_name } = conditions.value;
 
   if (file_name) {
-    result.file_name = file_name
+    result.file_name = file_name;
   }
 
-  return result
-}
+  return result;
+};
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: 'small'
-}))
+  size: "small",
+}));
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -138,32 +156,42 @@ const handleTableChange = (pag, filters, sorter) => {
     sortField: sorter.field,
     sortOrder: sorter.order,
     ...filters,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleSearch = () => {
   run({
     page: current,
     page_size: pageSize,
-    ...getConditions()
-  })
-}
+    ...getConditions(),
+  });
+};
 
 const handleUpload = async (event) => {
-  const files = event.target.files
+  const files = event.target.files;
   if (files.length) {
     try {
-      uploading.value = true
-      await uploadProjectFile(files[0])
-      message.success('上传成功')
-      handleSearch()
-      fileRef.value.value = null
+      uploading.value = true;
+      const file = files[0];
+      uploadFileName.value = file.name;
+      await uploadProjectFile(file, {
+        onUploadProgress: ({ progress }) => {
+          updateProgress(progress);
+        },
+      });
+      message.success("上传成功");
+      handleSearch();
+      fileRef.value.value = null;
     } finally {
-      uploading.value = false
+      uploading.value = false;
     }
   }
-}
+};
+
+const updateProgress = (progress) => {
+  uploadProgress.value = +(progress * 100).toFixed(2);
+};
 </script>
 
 <style scoped lang="scss">

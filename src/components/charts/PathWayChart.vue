@@ -1,28 +1,28 @@
 <template>
-  <div class='h-full flex flex-col'>
-    <div class='flex items-center px-4 p-2'>
+  <div class="h-full flex flex-col">
+    <div class="flex items-center px-4 p-2">
       <a-select
-        class='w-50'
-        v-model:value='pathType'
-        :options='pathTypeList'
-        placeholder='Select pathway type'
-        size='small'
-        @change='handlePathTypeChange'
+        class="w-50"
+        v-model:value="pathType"
+        :options="pathTypeList"
+        placeholder="Select pathway type"
+        size="small"
+        @change="handlePathTypeChange"
       ></a-select>
       <a-select
-        class='w-40 ml-4'
-        v-model:value='pathWay'
-        :options='pathWayList'
-        size='small'
-        placeholder='Select pathway'
+        class="w-40 ml-4"
+        v-model:value="pathWay"
+        :options="pathWayList"
+        size="small"
+        placeholder="Select pathway"
       ></a-select>
     </div>
-    <div class='flex-1'>
+    <div class="flex-1">
       <VuePlotly
-        :data='chartData'
-        :layout='layout'
-        :display-mode-bar='false'
-        :config='config'
+        :data="chartData"
+        :layout="layout"
+        :display-mode-bar="false"
+        :config="config"
       ></VuePlotly>
     </div>
   </div>
@@ -66,7 +66,8 @@ const pathWayList = computed(() => {
 
 const chartData = computed(() => {
   const { pathways } = props
-  return _.chain(pathways).filter({ pathway_name: pathType.value, pathway_source: pathWay.value })
+  return _.chain(pathways)
+    .filter({ pathway_name: pathType.value, pathway_source: pathWay.value })
     .groupBy('cell_type_name')
     .toPairs()
     .map(([name, values], index) => {
@@ -82,7 +83,6 @@ const chartData = computed(() => {
       }
     })
     .value()
-
 })
 
 const layout = {
@@ -99,4 +99,4 @@ const handlePathTypeChange = () => {
 }
 </script>
 
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>
