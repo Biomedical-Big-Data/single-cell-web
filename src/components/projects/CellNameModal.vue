@@ -1,104 +1,76 @@
 <template>
-  <a-modal v-model:open="open" title="Search Cell Name" @ok="confirm">
+  <a-modal v-model:open="open" title="Search Cell Name" @ok="confirm" :width="700">
     <div class="p-4">
       <div>
-        <a-input-search placeholder="Search" @search="handleSearch" />
+        <a-input-search placeholder="Search" @search="handleSearch"/>
       </div>
       <div class="mt-4">
         <a-tree
-          v-model:selectedKeys="selectedKeys"
-          :tree-data="treeData"
-          :show-line="true"
-          @select="handleNodeSelected"
+            v-model:selectedKeys="selectedKeys"
+            :tree-data="treeData"
+            :show-line="true"
+            @select="handleNodeSelected"
         ></a-tree>
       </div>
-      <div class="mt-4">
-        {{ selectedKeys }}
+      <div class="mt-4" v-if="current">
+        {{ current.name }} {{ current.cl_id }}
       </div>
     </div>
   </a-modal>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { getCellTaxonomy } from "@/api/cell.js";
+import { computed, ref } from 'vue'
+import { getCellTaxonomy } from '@/api/cell.js'
+import arrayToTree from 'array-to-tree'
+import _ from 'lodash'
 
-const emits = defineEmits(["confirm"]);
+const emits = defineEmits(['confirm'])
 
-const open = ref(true);
-const selectedKeys = ref([]);
-const treeData = [
-  {
-    title: "parent 1",
-    key: "0-0",
-    children: [
-      {
-        title: "parent 1-0",
-        key: "0-0-0",
-        children: [
-          { title: "leaf", key: "0-0-0-0" },
-          {
-            key: "0-0-0-1",
-          },
-          { title: "leaf", key: "0-0-0-2" },
-        ],
-      },
-      {
-        title: "parent 1-1",
-        key: "0-0-1",
-        children: [{ title: "leaf", key: "0-0-1-0" }],
-      },
-      {
-        title: "parent 1-2",
-        key: "0-0-2",
-        children: [
-          { title: "leaf 1", key: "0-0-2-0" },
-          {
-            title: "leaf 2",
-            key: "0-0-2-1",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "parent 2",
-    key: "0-1",
-    children: [
-      {
-        title: "parent 2-0",
-        key: "0-1-0",
-        children: [
-          { title: "leaf", key: "0-1-0-0" },
-          { title: "leaf", key: "0-1-0-1" },
-        ],
-      },
-    ],
-  },
-];
+const open = ref(false)
+const selectedKeys = ref([])
+const treeData = ref([])
+
+const cache = ref([])
 
 const showModal = () => {
-  open.value = true;
-};
+  open.value = true
+}
 
 const confirm = () => {
-  open.value = false;
-  emits("confirm");
-};
+  open.value = false
+
+  if (selectedKeys.value.length) {
+    emits('confirm', current.value)
+  }
+
+}
+
+const current = computed(() => {
+  console.log(current)
+  return _.find(cache.value, { cl_id: selectedKeys.value[0] })
+})
 
 const handleSearch = async (keyword) => {
-  console.log(keyword);
-  const data = await getCellTaxonomy(keyword);
-  console.log(data);
-};
+  const data = await getCellTaxonomy(keyword)
+  cache.value = data
+  treeData.value = arrayToTree(data.map(({ cl_id, cl_pid, name }) => ({
+    title: name,
+    key: cl_id,
+    pid: cl_pid
+  })), {
+    parentProperty: 'pid',
+    customID: 'key'
+  })
+}
 
 const handleNodeSelected = (event) => {
-  console.log(event);
-};
+  console.log(event)
+}
 
 defineExpose({
   showModal,
-});
+})
 </script>
 
 <style scoped lang="scss"></style>
