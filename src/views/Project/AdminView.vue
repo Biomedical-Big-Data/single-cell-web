@@ -2,7 +2,7 @@
   <div class="p-5">
     <div class="bg-white py-2 px-4 rounded-lg">
       <a-form :model="conditions" layout="inline" autocomplete="off">
-        <a-form-item label="项目名称" name="user_name">
+        <a-form-item label="项目名称" name="project_name">
           <a-input
             class="w-28"
             v-model:value="conditions.title"
