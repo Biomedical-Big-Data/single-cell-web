@@ -175,6 +175,8 @@
       </div>
     </div>
   </div>
+
+  <CellNameModal></CellNameModal>
 </template>
 <script setup>
 import { ref } from "vue";
@@ -185,6 +187,7 @@ import SampleTable from "@/components/projects/SampleTable.vue";
 import CellTable from "@/components/projects/CellTable.vue";
 import GeneTable from "@/components/projects/GeneTable.vue";
 import { getGeneSymbolList } from "@/api/options.js";
+import CellNameModal from "@/components/projects/CellNameModal.vue";
 
 const options = ref({
   organ: [],
