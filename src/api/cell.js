@@ -7,3 +7,11 @@ export function getCellTaxonomy(cell_marker) {
     },
   });
 }
+
+export function getTaxonomyDetail(cl_id) {
+  return request.get("/project/taxonomy/info", {
+    params: {
+      cl_id,
+    },
+  });
+}

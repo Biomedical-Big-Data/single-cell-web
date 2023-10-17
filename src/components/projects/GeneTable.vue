@@ -110,6 +110,7 @@ import {
 } from "@ant-design/icons-vue";
 import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue";
 import { useRouter } from "vue-router";
+import { saveAs } from "file-saver";
 
 const downloading = ref(false);
 const condition = ref({});
@@ -290,7 +291,8 @@ const handleToProject = (record) => {
 const handleListDownload = async () => {
   try {
     downloading.value = true;
-    await downloadGeneProjectList(...getConditions());
+    const data = await downloadGeneProjectList(...getConditions());
+    saveAs(data, "sample_project_list.xlsx");
   } finally {
     downloading.value = false;
   }

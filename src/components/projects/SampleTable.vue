@@ -106,6 +106,7 @@ import {
   EyeOutlined,
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
+import { saveAs } from "file-saver";
 
 const router = useRouter();
 const downloading = ref(false);
@@ -276,7 +277,8 @@ const handleToProject = (record) => {
 const handleListDownload = async () => {
   try {
     downloading.value = true;
-    await downloadSampleProjectList(...getConditions());
+    const data = await downloadSampleProjectList(...getConditions());
+    saveAs(data, "sample_project_list.xlsx");
   } finally {
     downloading.value = false;
   }

@@ -15,6 +15,7 @@ export function getSampleProjectList(params) {
 export function downloadSampleProjectList(params) {
   return request.get("/project/list/by/sample/download", {
     params,
+    responseType: "blob",
   });
 }
 
@@ -27,6 +28,7 @@ export function getCellProjectList(params) {
 export function downloadCellProjectList(params) {
   return request.get("/project/list/by/cell/download", {
     params,
+    responseType: "blob",
   });
 }
 
@@ -39,6 +41,7 @@ export function getGeneProjectList(params) {
 export function downloadGeneProjectList(params) {
   return request.get("/project/list/by/gene/download", {
     params,
+    responseType: "blob",
   });
 }
 

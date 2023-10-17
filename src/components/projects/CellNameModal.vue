@@ -3,22 +3,35 @@
     v-model:open="open"
     title="Search Cell Name"
     @ok="confirm"
-    :width="700"
+    :width="900"
+    :mask-closable="false"
   >
-    <div class="p-4">
-      <div>
-        <a-input-search placeholder="Search" @search="handleSearch" />
+    <div class="p-4 flex">
+      <div class="flex-1">
+        <div>
+          <a-input-search placeholder="Search" @search="handleSearch" />
+        </div>
+        <div class="mt-4">
+          <a-tree
+            v-model:selectedKeys="selectedKeys"
+            :tree-data="treeData"
+            :show-line="true"
+            @select="handleNodeSelected"
+          ></a-tree>
+        </div>
       </div>
-      <div class="mt-4">
-        <a-tree
-          v-model:selectedKeys="selectedKeys"
-          :tree-data="treeData"
-          :show-line="true"
-          @select="handleNodeSelected"
-        ></a-tree>
-      </div>
-      <div class="mt-4" v-if="current">
-        {{ current.name }} {{ current.cl_id }}
+      <div class="flex-1 ml-3">
+        <div v-if="current" class="flex relative">
+          <a
+            class="p-1"
+            target="_blank"
+            :href="getLink(item.cell_marker)"
+            v-for="item in relations"
+            :key="item.id"
+          >
+            {{ item.cell_marker }}
+          </a>
+        </div>
       </div>
     </div>
   </a-modal>
@@ -26,7 +39,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { getCellTaxonomy } from "@/api/cell.js";
+import { getCellTaxonomy, getTaxonomyDetail } from "@/api/cell.js";
 import arrayToTree from "array-to-tree";
 import _ from "lodash";
 
@@ -35,6 +48,7 @@ const emits = defineEmits(["confirm"]);
 const open = ref(false);
 const selectedKeys = ref([]);
 const treeData = ref([]);
+const relations = ref([]);
 
 const cache = ref([]);
 
@@ -70,8 +84,12 @@ const handleSearch = async (keyword) => {
   );
 };
 
-const handleNodeSelected = (event) => {
-  console.log(event);
+const handleNodeSelected = async (event) => {
+  relations.value = await getTaxonomyDetail(event[0]);
+};
+
+const getLink = (cell_marker) => {
+  return `https://www.immunesinglecell.org/genepage/${cell_marker}`;
 };
 
 defineExpose({
@@ -79,4 +97,8 @@ defineExpose({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.relative {
+  flex-wrap: wrap;
+}
+</style>

@@ -97,6 +97,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
+import { saveAs } from "file-saver";
 
 const router = useRouter();
 const downloading = ref(false);
@@ -254,7 +255,8 @@ const handleToProject = (record) => {
 const handleListDownload = async () => {
   try {
     downloading.value = true;
-    await downloadCellProjectList(...getConditions());
+    const data = await downloadCellProjectList({ ...getConditions() });
+    saveAs(data, "cell_project_list.xlsx");
   } finally {
     downloading.value = false;
   }
