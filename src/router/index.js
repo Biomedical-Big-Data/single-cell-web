@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import nProgress from "nprogress";
-import "nprogress/nprogress.css";
+import { createRouter, createWebHashHistory } from "vue-router"
+import nProgress from "nprogress"
+import "nprogress/nprogress.css"
 
 export const constantRoutes = [
   {
@@ -77,7 +77,7 @@ export const constantRoutes = [
     props: true,
     component: () => import("../views/Project/UpdateView.vue"),
   },
-];
+]
 
 export const asyncRoutes = [
   {
@@ -128,22 +128,22 @@ export const asyncRoutes = [
     },
     component: () => import("../views/Process/AdminView.vue"),
   },
-];
+]
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [...asyncRoutes, ...constantRoutes],
-});
+})
 
 router.beforeEach(() => {
-  nProgress.start();
-  return true;
-});
+  nProgress.start()
+  return true
+})
 
 // 全局后置钩子
 router.afterEach(() => {
-  nProgress.done();
-});
+  nProgress.done()
+})
 
-export default router;
+export default router

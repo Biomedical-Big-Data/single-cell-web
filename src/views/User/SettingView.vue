@@ -38,47 +38,47 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { getUserInfo, updateMyUserInfo } from "@/api/user";
-import { message } from "ant-design-vue";
+import { onMounted, ref } from "vue"
+import { getUserInfo, updateMyUserInfo } from "@/api/user"
+import { message } from "ant-design-vue"
 
-const loading = ref(false);
-const userInfo = ref({});
-const formRef = ref();
+const loading = ref(false)
+const userInfo = ref({})
+const formRef = ref()
 const rules = {
   organization: [{ required: true, message: "请输入组织", trigger: "blur" }],
   confirm_password: [
     {
       validator: (rule, value, callback) => {
         if (value !== userInfo.value.password) {
-          callback(new Error("两次输入密码不一致"));
+          callback(new Error("两次输入密码不一致"))
         } else {
-          callback();
+          callback()
         }
       },
       trigger: "blur",
     },
   ],
-};
+}
 onMounted(() => {
-  getPersonalInfo();
-});
+  getPersonalInfo()
+})
 
 const getPersonalInfo = async function () {
-  userInfo.value = await getUserInfo();
-};
+  userInfo.value = await getUserInfo()
+}
 
 const handleUpdateUser = async function () {
-  await formRef.value.validate();
+  await formRef.value.validate()
   try {
-    loading.value = true;
-    const { password, organization } = userInfo.value;
-    await updateMyUserInfo({ password, organization });
-    message.success("修改用户信息成功");
+    loading.value = true
+    const { password, organization } = userInfo.value
+    await updateMyUserInfo({ password, organization })
+    message.success("修改用户信息成功")
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped lang="scss"></style>

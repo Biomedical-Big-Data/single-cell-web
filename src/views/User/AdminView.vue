@@ -121,15 +121,15 @@
 </template>
 
 <script setup>
-import { computed, createVNode, ref } from "vue";
+import { computed, createVNode, ref } from "vue"
 import {
   ExclamationCircleOutlined,
   SearchOutlined,
-} from "@ant-design/icons-vue";
-import { usePagination } from "vue-request";
-import { updateUserState, getUserList, updateUserPassword } from "@/api/user";
-import dayjs from "dayjs";
-import { message, Modal } from "ant-design-vue";
+} from "@ant-design/icons-vue"
+import { usePagination } from "vue-request"
+import { updateUserState, getUserList, updateUserPassword } from "@/api/user"
+import dayjs from "dayjs"
+import { message, Modal } from "ant-design-vue"
 
 const conditions = ref({
   user_name: "",
@@ -137,10 +137,10 @@ const conditions = ref({
   email_address: "",
   state: undefined,
   create_at: "",
-});
+})
 
-const open = ref(false);
-const currentUser = ref({});
+const open = ref(false)
+const currentUser = ref({})
 
 const USER_STATUS = [
   {
@@ -155,11 +155,11 @@ const USER_STATUS = [
     label: "禁用",
     value: -1,
   },
-];
+]
 
 const getStateName = function (state) {
-  return USER_STATUS.find((item) => item.value === state)?.label;
-};
+  return USER_STATUS.find((item) => item.value === state)?.label
+}
 
 const columns = [
   {
@@ -189,7 +189,7 @@ const columns = [
     dataIndex: "operation",
     width: 160,
   },
-];
+]
 
 const {
   data: dataSource,
@@ -208,41 +208,41 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  return dataSource?.value?.user_list || [];
-});
+  return dataSource?.value?.user_list || []
+})
 
 const getConditions = function () {
-  const result = {};
+  const result = {}
   const { user_name, organization, email_address, state, create_at } =
-    conditions.value;
+    conditions.value
 
   if (user_name) {
-    result.user_name = user_name;
+    result.user_name = user_name
   }
   if (organization) {
-    result.organization = organization;
+    result.organization = organization
   }
   if (email_address) {
-    result.email_address = email_address;
+    result.email_address = email_address
   }
   if (!isNaN(state)) {
-    result.state = state;
+    result.state = state
   }
   if (create_at) {
-    result.create_at = dayjs(create_at).format("YYYY-MM-DD");
+    result.create_at = dayjs(create_at).format("YYYY-MM-DD")
   }
-  return result;
-};
+  return result
+}
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -252,38 +252,38 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...filters,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleSearch = () => {
   run({
     page: current,
     page_size: pageSize,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleUpdateUserPasswordModalOpen = (record) => {
-  open.value = true;
-  currentUser.value = record;
-};
+  open.value = true
+  currentUser.value = record
+}
 
 const handleClearCurrentUser = async () => {
-  open.value = false;
-  currentUser.value = {};
-  Modal.destroyAll();
-};
+  open.value = false
+  currentUser.value = {}
+  Modal.destroyAll()
+}
 
 const handleUpdateUserPassword = async () => {
   try {
-    await updateUserPassword(currentUser.value.id, currentUser.value.password);
-    message.success("操作成功");
-    return true;
+    await updateUserPassword(currentUser.value.id, currentUser.value.password)
+    message.success("操作成功")
+    return true
   } finally {
-    open.value = false;
-    currentUser.value = {};
+    open.value = false
+    currentUser.value = {}
   }
-};
+}
 
 const handleUpdateUserState = (record, nextState) => {
   Modal.confirm({
@@ -304,20 +304,20 @@ const handleUpdateUserState = (record, nextState) => {
     },
     onOk: async () => {
       try {
-        await updateUserState(record.id, nextState);
-        message.success("操作成功");
-        return true;
+        await updateUserState(record.id, nextState)
+        message.success("操作成功")
+        return true
       } finally {
         run({
           page: current,
           page_size: pageSize,
           ...getConditions(),
-        });
+        })
       }
     },
     onCancel() {},
-  });
-};
+  })
+}
 </script>
 
 <style scoped lang="scss">

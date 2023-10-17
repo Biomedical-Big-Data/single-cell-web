@@ -63,24 +63,24 @@
 </template>
 
 <script setup>
-import { usePagination } from "vue-request";
+import { usePagination } from "vue-request"
 import {
   downloadSampleProjectList,
   getSampleProjectList,
-} from "@/api/project.js";
-import { computed, reactive, ref, h } from "vue";
+} from "@/api/project.js"
+import { computed, reactive, ref, h } from "vue"
 import {
   SettingOutlined,
   DownloadOutlined,
   EyeOutlined,
-} from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-import { saveAs } from "file-saver";
-import _ from "lodash";
+} from "@ant-design/icons-vue"
+import { useRouter } from "vue-router"
+import { saveAs } from "file-saver"
+import _ from "lodash"
 
-const router = useRouter();
-const downloading = ref(false);
-const condition = ref({});
+const router = useRouter()
+const downloading = ref(false)
+const condition = ref({})
 
 const columns = [
   {
@@ -116,14 +116,14 @@ const columns = [
     title: "Sex",
     dataIndex: ["biosample_donor_meta", "sex"],
   },
-];
+]
 
-const columnSettings = ref(columns.map((item) => item.title));
+const columnSettings = ref(columns.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
     ...columns.filter((item) => {
-      return columnSettings.value.includes(item.title);
+      return columnSettings.value.includes(item.title)
     }),
     {
       title: "",
@@ -131,14 +131,14 @@ const columnResult = computed(() => {
       align: "center",
       width: 100,
     },
-  ];
-});
+  ]
+})
 
 const count = reactive({
   project: 0,
   sample: 0,
   cell: 0,
-});
+})
 
 const {
   data: dataSource,
@@ -151,32 +151,32 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  console.log(dataSource?.value?.project_list);
-  const data = dataSource?.value?.project_list || [];
+  console.log(dataSource?.value?.project_list)
+  const data = dataSource?.value?.project_list || []
   const result = data.map((item) => {
-    const { biosample_project_biosample_meta, ...other } = item;
+    const { biosample_project_biosample_meta, ...other } = item
     return biosample_project_biosample_meta.map((project) => ({
       project,
       ...other,
-    }));
-  });
-  console.log(_.flatten(result));
-  return _.flatten(result);
-});
+    }))
+  })
+  console.log(_.flatten(result))
+  return _.flatten(result)
+})
 
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const getTrueIndex = (index) => {
-  return (current.value - 1) * pageSize.value + index + 1;
-};
+  return (current.value - 1) * pageSize.value + index + 1
+}
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -186,8 +186,8 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
-  });
-};
+  })
+}
 
 const getConditions = () => {
   const {
@@ -196,13 +196,13 @@ const getConditions = () => {
     external_sample_accession,
     disease,
     development_stage,
-  } = condition.value;
-  const result = {};
+  } = condition.value
+  const result = {}
   if (species) {
-    result.species_id = species;
+    result.species_id = species
   }
   if (organ) {
-    result.organ = organ;
+    result.organ = organ
   }
   return {
     ...(species ? { species_id: species } : {}),
@@ -210,17 +210,17 @@ const getConditions = () => {
     ...(external_sample_accession ? { external_sample_accession } : {}),
     ...(disease ? { disease } : {}),
     ...(development_stage ? { development_stage } : {}),
-  };
-};
+  }
+}
 
 const handleSearch = (conditions) => {
-  condition.value = conditions;
+  condition.value = conditions
   run({
     page: current,
     page_size: pageSize,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
@@ -228,22 +228,22 @@ const handleToProject = (record) => {
     params: {
       id: record.project.project_id,
     },
-  });
-  window.open(routeData.href, "_blank");
-};
+  })
+  window.open(routeData.href, "_blank")
+}
 
 const handleListDownload = async () => {
   try {
-    downloading.value = true;
-    const data = await downloadSampleProjectList(getConditions());
-    saveAs(data, "sample_project_list.xlsx");
+    downloading.value = true
+    const data = await downloadSampleProjectList(getConditions())
+    saveAs(data, "sample_project_list.xlsx")
   } finally {
-    downloading.value = false;
+    downloading.value = false
   }
-};
+}
 defineExpose({
   handleSearch,
-});
+})
 </script>
 
 <style scoped lang="scss"></style>

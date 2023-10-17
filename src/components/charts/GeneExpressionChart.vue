@@ -10,9 +10,9 @@
 </template>
 
 <script setup>
-import { VuePlotly } from "vue3-plotly";
-import _ from "lodash";
-import { computed } from "vue";
+import { VuePlotly } from "vue3-plotly"
+import _ from "lodash"
+import { computed } from "vue"
 
 const props = defineProps({
   data: {
@@ -27,7 +27,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 
 const chartData = computed(() => {
   return _.chain(props.data)
@@ -44,19 +44,19 @@ const chartData = computed(() => {
         name,
         labels: values.map((item) => item[props.valueKey]),
         marker: { size: 12 },
-      };
+      }
     })
-    .value();
-});
+    .value()
+})
 
 const layout = computed(() => ({
   title: props.title,
   autosize: true,
   height: 700,
   showlegend: true,
-}));
+}))
 
-const config = { responsive: true, scrollZoom: true };
+const config = { responsive: true, scrollZoom: true }
 </script>
 
 <style scoped lang="scss">

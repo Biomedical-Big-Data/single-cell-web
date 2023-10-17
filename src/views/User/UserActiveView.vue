@@ -23,30 +23,30 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { LoadingOutlined } from "@ant-design/icons-vue";
-import { activeUser } from "@/api/user";
-import { useRoute } from "vue-router";
+import { onMounted, ref } from "vue"
+import { LoadingOutlined } from "@ant-design/icons-vue"
+import { activeUser } from "@/api/user"
+import { useRoute } from "vue-router"
 
-const success = ref(false);
-const loading = ref(true);
-const route = useRoute();
+const success = ref(false)
+const loading = ref(true)
+const route = useRoute()
 
 onMounted(async () => {
-  const { token } = route.query;
+  const { token } = route.query
   if (token) {
     try {
-      await activeUser(token);
-      success.value = true;
+      await activeUser(token)
+      success.value = true
     } catch (e) {
-      success.value = false;
+      success.value = false
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   } else {
-    success.value = false;
+    success.value = false
   }
-});
+})
 </script>
 
 <style scoped lang="scss"></style>

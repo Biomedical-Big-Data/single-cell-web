@@ -95,30 +95,30 @@
 </template>
 
 <script setup>
-import { usePagination } from "vue-request";
+import { usePagination } from "vue-request"
 import {
   downloadGeneProjectList,
   getGeneProjectList,
   getProjectGeneChartData,
-} from "@/api/project.js";
-import { computed, h, reactive, ref } from "vue";
+} from "@/api/project.js"
+import { computed, h, reactive, ref } from "vue"
 import {
   DotChartOutlined,
   DownloadOutlined,
   EyeOutlined,
   SettingOutlined,
-} from "@ant-design/icons-vue";
-import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue";
-import { useRouter } from "vue-router";
-import { saveAs } from "file-saver";
+} from "@ant-design/icons-vue"
+import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue"
+import { useRouter } from "vue-router"
+import { saveAs } from "file-saver"
 
-const downloading = ref(false);
-const condition = ref({});
-const open = ref(false);
-const geneChartType = ref("percent");
-const geneChartData = ref([]);
+const downloading = ref(false)
+const condition = ref({})
+const open = ref(false)
+const geneChartType = ref("percent")
+const geneChartData = ref([])
 
-const router = useRouter();
+const router = useRouter()
 
 const columns = [
   {
@@ -181,14 +181,14 @@ const columns = [
       "sex",
     ],
   },
-];
+]
 
-const columnSettings = ref(columns.map((item) => item.title));
+const columnSettings = ref(columns.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
     ...columns.value.filter((item) => {
-      return columnSettings.value.includes(item.title);
+      return columnSettings.value.includes(item.title)
     }),
     {
       title: "",
@@ -196,34 +196,34 @@ const columnResult = computed(() => {
       align: "center",
       width: 100,
     },
-  ];
-});
+  ]
+})
 
 const count = reactive({
   project: 0,
   sample: 0,
   cell: 0,
-});
+})
 
 const getConditions = () => {
-  const { species, symbol } = condition.value;
+  const { species, symbol } = condition.value
   return {
     ...(species ? { species_id: species } : {}),
     ...(symbol ? { gene_symbol: symbol } : {}),
-  };
-};
+  }
+}
 
 const getTrueIndex = (index) => {
-  return (current.value - 1) * pageSize.value + index + 1;
-};
+  return (current.value - 1) * pageSize.value + index + 1
+}
 
 const handleGeneChartDataFetch = async () => {
-  geneChartData.value = await getProjectGeneChartData(getConditions());
-};
+  geneChartData.value = await getProjectGeneChartData(getConditions())
+}
 
 const queryData = (params) => {
-  return handleGeneChartDataFetch().then(() => getGeneProjectList(params));
-};
+  return handleGeneChartDataFetch().then(() => getGeneProjectList(params))
+}
 
 const {
   data: dataSource,
@@ -236,18 +236,18 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || [];
-});
+  return dataSource?.value?.project_list || []
+})
 
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -257,21 +257,21 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
-  });
-};
+  })
+}
 
 const handleSearch = (conditions) => {
-  condition.value = conditions;
+  condition.value = conditions
   run({
     page: current,
     page_size: pageSize,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleChartModalOpen = () => {
-  open.value = true;
-};
+  open.value = true
+}
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
@@ -284,23 +284,23 @@ const handleToProject = (record) => {
       analysis_id:
         record.gene_expression_proportion_meta.cell_proportion_analysis_meta.id,
     },
-  });
-  window.open(routeData.href, "_blank");
-};
+  })
+  window.open(routeData.href, "_blank")
+}
 
 const handleListDownload = async () => {
   try {
-    downloading.value = true;
-    const data = await downloadGeneProjectList(...getConditions());
-    saveAs(data, "sample_project_list.xlsx");
+    downloading.value = true
+    const data = await downloadGeneProjectList(...getConditions())
+    saveAs(data, "sample_project_list.xlsx")
   } finally {
-    downloading.value = false;
+    downloading.value = false
   }
-};
+}
 
 defineExpose({
   handleSearch,
-});
+})
 </script>
 
 <style scoped lang="scss"></style>

@@ -185,28 +185,28 @@
   ></CellNameModal>
 </template>
 <script setup>
-import { ref } from "vue";
-import { UndoOutlined, SearchOutlined } from "@ant-design/icons-vue";
-import { SPECIES } from "@/constants/common";
-import { getOrganList } from "@/api/project";
-import SampleTable from "@/components/projects/SampleTable.vue";
-import CellTable from "@/components/projects/CellTable.vue";
-import GeneTable from "@/components/projects/GeneTable.vue";
-import { getGeneSymbolList } from "@/api/options.js";
-import CellNameModal from "@/components/projects/CellNameModal.vue";
+import { ref } from "vue"
+import { UndoOutlined, SearchOutlined } from "@ant-design/icons-vue"
+import { SPECIES } from "@/constants/common"
+import { getOrganList } from "@/api/project"
+import SampleTable from "@/components/projects/SampleTable.vue"
+import CellTable from "@/components/projects/CellTable.vue"
+import GeneTable from "@/components/projects/GeneTable.vue"
+import { getGeneSymbolList } from "@/api/options.js"
+import CellNameModal from "@/components/projects/CellNameModal.vue"
 
 const options = ref({
   organ: [],
   cell: [],
   geneSymbol: [],
-});
+})
 
 const state = ref({
   organFetching: false,
   geneSymbolFetching: false,
-});
+})
 
-const filter = ref("sample");
+const filter = ref("sample")
 // const filter = ref("cell");
 
 const sample = ref({
@@ -215,12 +215,12 @@ const sample = ref({
   external_sample_accession: "",
   disease: "",
   development_stage: "",
-});
+})
 
-const sampleFormRef = ref();
-const sampleTableRef = ref();
-const cellNameRef = ref();
-const cellNameInput = ref();
+const sampleFormRef = ref()
+const sampleTableRef = ref()
+const cellNameRef = ref()
+const cellNameInput = ref()
 
 const cell = ref({
   species: undefined,
@@ -230,96 +230,96 @@ const cell = ref({
   name: "",
   positive: [],
   negative: [],
-});
+})
 
-const cellFormRef = ref();
-const cellTableRef = ref();
+const cellFormRef = ref()
+const cellTableRef = ref()
 
 const gene = ref({
   species: undefined,
   symbol: undefined,
-});
+})
 
-const geneFormRef = ref();
-const geneTableRef = ref();
+const geneFormRef = ref()
+const geneTableRef = ref()
 
 const resetForm = () => {
   switch (filter.value) {
     case "sample":
-      sampleFormRef.value.resetFields();
-      break;
+      sampleFormRef.value.resetFields()
+      break
     case "cell":
-      cellFormRef.value.resetFields();
-      break;
+      cellFormRef.value.resetFields()
+      break
     case "gene":
-      geneFormRef.value.resetFields();
-      break;
+      geneFormRef.value.resetFields()
+      break
     default:
-      break;
+      break
   }
-};
+}
 
 const handleOrganSearch = async (keywords) => {
   try {
-    state.value.organFetching = true;
-    const data = await getOrganList(keywords);
-    options.value.organ = data.map((item) => ({ label: item, value: item }));
+    state.value.organFetching = true
+    const data = await getOrganList(keywords)
+    options.value.organ = data.map((item) => ({ label: item, value: item }))
   } finally {
-    state.value.organFetching = false;
+    state.value.organFetching = false
   }
-};
+}
 
 const handleGeneSymbolSearch = async (keywords) => {
   try {
-    state.value.geneSymbolFetching = true;
-    const data = await getGeneSymbolList({ gene_symbol: keywords });
+    state.value.geneSymbolFetching = true
+    const data = await getGeneSymbolList({ gene_symbol: keywords })
     options.value.geneSymbol = data.map((item) => ({
       label: item,
       value: item,
-    }));
+    }))
   } finally {
-    state.value.geneSymbolFetching = false;
+    state.value.geneSymbolFetching = false
   }
-};
+}
 
 const getConditions = () => {
   switch (filter.value) {
     case "sample":
-      return sample.value;
+      return sample.value
     case "cell":
-      return cell.value;
+      return cell.value
     case "gene":
-      return gene.value;
+      return gene.value
     default:
-      return {};
+      return {}
   }
-};
+}
 
 const handleSearch = () => {
   switch (filter.value) {
     case "sample":
-      sampleTableRef.value.handleSearch(getConditions());
-      break;
+      sampleTableRef.value.handleSearch(getConditions())
+      break
     case "cell":
-      cellTableRef.value.handleSearch(getConditions());
-      break;
+      cellTableRef.value.handleSearch(getConditions())
+      break
     case "gene":
-      geneTableRef.value.handleSearch(getConditions());
-      break;
+      geneTableRef.value.handleSearch(getConditions())
+      break
     default:
-      break;
+      break
   }
-};
+}
 
 const handleCellNameSearch = () => {
-  cellNameInput.value.blur();
-  cellNameRef.value.showModal();
-};
+  cellNameInput.value.blur()
+  cellNameRef.value.showModal()
+}
 
 const handleCellNameChange = (result) => {
-  cell.value.name = result.name;
-  cell.value.cl_id = result.cl_id;
-};
+  cell.value.name = result.name
+  cell.value.cl_id = result.cl_id
+}
 </script>
 
 <style scoped lang="scss">

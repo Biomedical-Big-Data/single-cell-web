@@ -1,11 +1,11 @@
-import request from "@/utils/request.js";
+import request from "@/utils/request.js"
 
 export function getCellTaxonomy(cell_marker) {
   return request.get("/project/view/tree/cell_taxonomy", {
     params: {
       cell_marker,
     },
-  });
+  })
 }
 
 export function getTaxonomyDetail(cl_id) {
@@ -13,5 +13,5 @@ export function getTaxonomyDetail(cl_id) {
     params: {
       cl_id,
     },
-  });
+  })
 }

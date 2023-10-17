@@ -104,63 +104,62 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref } from "vue"
 import {
   UserOutlined,
   LockOutlined,
   TeamOutlined,
   MailOutlined,
-} from "@ant-design/icons-vue";
-import { register, login } from "@/api/user";
-import { message } from "ant-design-vue";
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
+} from "@ant-design/icons-vue"
+import { register, login } from "@/api/user"
+import { message } from "ant-design-vue"
+import { useUserStore } from "@/stores/user"
+import { useRouter } from "vue-router"
 
-const userStore = useUserStore();
-const router = useRouter();
+const userStore = useUserStore()
+const router = useRouter()
 
-const activeKey = ref("login");
-const remember = ref(false);
+const activeKey = ref("login")
+const remember = ref(false)
 
-const logining = ref(false);
+const logining = ref(false)
 const loginForm = reactive({
   email_address: "",
   user_password: "",
-});
+})
 
-const registering = ref(false);
+const registering = ref(false)
 const registerForm = reactive({
   user_name: "",
   email_address: "",
   organization: "",
   user_password: "",
   user_verify_password: "",
-});
+})
 
 const userRegister = async function () {
-  const { user_name, user_password, organization, email_address } =
-    registerForm;
+  const { user_name, user_password, organization, email_address } = registerForm
   try {
-    registering.value = true;
-    await register({ user_name, user_password, organization, email_address });
-    message.success("注册成功，请查看邮箱激活");
+    registering.value = true
+    await register({ user_name, user_password, organization, email_address })
+    message.success("注册成功，请查看邮箱激活")
   } finally {
-    registering.value = false;
+    registering.value = false
   }
-};
+}
 
 const userLogin = async function () {
-  const { email_address, user_password } = loginForm;
+  const { email_address, user_password } = loginForm
 
   try {
-    logining.value = true;
-    const result = await login({ email_address, user_password });
-    userStore.setUser(result);
-    await router.replace({ name: "home" });
+    logining.value = true
+    const result = await login({ email_address, user_password })
+    userStore.setUser(result)
+    await router.replace({ name: "home" })
   } finally {
-    logining.value = false;
+    logining.value = false
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .logo {

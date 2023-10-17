@@ -88,20 +88,20 @@
 </template>
 
 <script setup>
-import { usePagination } from "vue-request";
-import { downloadCellProjectList, getCellProjectList } from "@/api/project.js";
-import { computed, h, reactive, ref } from "vue";
+import { usePagination } from "vue-request"
+import { downloadCellProjectList, getCellProjectList } from "@/api/project.js"
+import { computed, h, reactive, ref } from "vue"
 import {
   DownloadOutlined,
   EyeOutlined,
   SettingOutlined,
-} from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-import { saveAs } from "file-saver";
+} from "@ant-design/icons-vue"
+import { useRouter } from "vue-router"
+import { saveAs } from "file-saver"
 
-const router = useRouter();
-const downloading = ref(false);
-const condition = ref({});
+const router = useRouter()
+const downloading = ref(false)
+const condition = ref({})
 
 const columns = [
   {
@@ -140,14 +140,14 @@ const columns = [
     title: "Sex",
     dataIndex: "sex",
   },
-];
+]
 
-const columnSettings = ref(columns.map((item) => item.title));
+const columnSettings = ref(columns.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
     ...columns.filter((item) => {
-      return columnSettings.value.includes(item.title);
+      return columnSettings.value.includes(item.title)
     }),
     {
       title: "",
@@ -155,14 +155,14 @@ const columnResult = computed(() => {
       align: "center",
       width: 100,
     },
-  ];
-});
+  ]
+})
 
 const count = reactive({
   project: 0,
   sample: 0,
   cell: 0,
-});
+})
 
 const {
   data: dataSource,
@@ -175,22 +175,22 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || [];
-});
+  return dataSource?.value?.project_list || []
+})
 
 const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const getTrueIndex = (index) => {
-  return (current.value - 1) * pageSize.value + index + 1;
-};
+  return (current.value - 1) * pageSize.value + index + 1
+}
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -200,43 +200,43 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
-  });
-};
+  })
+}
 
 const getConditions = () => {
-  const result = {};
+  const result = {}
   const { positive, negative, species, cl_id, ci_id, searchBy } =
-    condition.value;
+    condition.value
   if (species) {
-    result.species_id = species;
+    result.species_id = species
   }
   if (ci_id) {
-    result.ci_id = ci_id;
+    result.ci_id = ci_id
   }
   if (searchBy === "name") {
     if (cl_id) {
-      result.cl_id = cl_id;
+      result.cl_id = cl_id
     }
   } else {
     if (positive?.length) {
-      result.genes_positive = positive.join(",");
+      result.genes_positive = positive.join(",")
     }
     if (negative?.length) {
-      result.genes_negative = negative.join(",");
+      result.genes_negative = negative.join(",")
     }
   }
 
-  return result;
-};
+  return result
+}
 
 const handleSearch = (conditions) => {
-  condition.value = conditions;
+  condition.value = conditions
   run({
     page: current.value,
     page_size: pageSize.value,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
@@ -247,24 +247,24 @@ const handleToProject = (record) => {
     query: {
       analysis_id: record.analysis_id,
     },
-  });
+  })
   // console.log(routeData)
-  window.open(routeData.href, "_blank");
-};
+  window.open(routeData.href, "_blank")
+}
 
 const handleListDownload = async () => {
   try {
-    downloading.value = true;
-    const data = await downloadCellProjectList({ ...getConditions() });
-    saveAs(data, "cell_project_list.xlsx");
+    downloading.value = true
+    const data = await downloadCellProjectList({ ...getConditions() })
+    saveAs(data, "cell_project_list.xlsx")
   } finally {
-    downloading.value = false;
+    downloading.value = false
   }
-};
+}
 
 defineExpose({
   handleSearch,
-});
+})
 </script>
 
 <style scoped lang="scss"></style>

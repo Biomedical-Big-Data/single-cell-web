@@ -62,17 +62,17 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRouter } from "vue-router";
-import { UserOutlined } from "@ant-design/icons-vue";
-import { useUserStore } from "@/stores/user";
+import { RouterLink, RouterView, useRouter } from "vue-router"
+import { UserOutlined } from "@ant-design/icons-vue"
+import { useUserStore } from "@/stores/user"
 
-const userStore = useUserStore();
-const router = useRouter();
+const userStore = useUserStore()
+const router = useRouter()
 
 const logout = function () {
-  userStore.setUser(null);
-  router.replace({ name: "home" });
-};
+  userStore.setUser(null)
+  router.replace({ name: "home" })
+}
 </script>
 
 <style scoped lang="scss">

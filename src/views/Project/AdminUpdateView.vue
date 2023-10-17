@@ -204,20 +204,20 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import { onMounted, ref } from "vue"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import {
   getAdminProjectDetail,
   offlineProject,
   transferProject,
   updateAdminProject,
-} from "@/api/project.js";
-import { message, Modal } from "ant-design-vue";
-import FileModalView from "@/views/File/ModalView.vue";
+} from "@/api/project.js"
+import { message, Modal } from "ant-design-vue"
+import FileModalView from "@/views/File/ModalView.vue"
 
 const props = defineProps({
   id: { required: true },
-});
+})
 
 const formState = ref({
   title: "",
@@ -232,15 +232,15 @@ const formState = ref({
   umap_id: null,
   cell_marker_id: null,
   analysis_id: null,
-});
-const projectDetail = ref({});
+})
+const projectDetail = ref({})
 
-const transferMail = ref("");
-const fileModalRef = ref();
-const open = ref(false);
-const loading = ref(false);
-const saving = ref(false);
-const formRef = ref();
+const transferMail = ref("")
+const fileModalRef = ref()
+const open = ref(false)
+const loading = ref(false)
+const saving = ref(false)
+const formRef = ref()
 const rules = {
   title: [
     {
@@ -270,16 +270,16 @@ const rules = {
       trigger: "change",
     },
   ],
-};
+}
 
 onMounted(() => {
-  handleProjectFetch();
-});
+  handleProjectFetch()
+})
 
 const handleProjectFetch = async () => {
   try {
-    loading.value = true;
-    const data = await getAdminProjectDetail(props.id);
+    loading.value = true
+    const data = await getAdminProjectDetail(props.id)
     const result = {
       title: data.title,
       tags: data.tags ? data.tags.split(",") : [],
@@ -296,20 +296,20 @@ const handleProjectFetch = async () => {
       umap_id: data.project_analysis_meta[0].umap_id,
       cell_marker_id: data.project_analysis_meta[0].cell_marker_id,
       analysis_id: data.project_analysis_meta[0].id,
-    };
-    formState.value = result;
+    }
+    formState.value = result
     projectDetail.value = {
       ...result,
       isPublish: !!data.is_publish,
-    };
+    }
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const handleProjectUpdate = async (isPublish) => {
   try {
-    await formRef.value.validate();
+    await formRef.value.validate()
     const {
       title,
       species_id,
@@ -323,8 +323,8 @@ const handleProjectUpdate = async (isPublish) => {
       h5ad_id,
       cell_marker_id,
       analysis_id,
-    } = formState.value;
-    saving.value = true;
+    } = formState.value
+    saving.value = true
     await updateAdminProject({
       project_id: props.id,
       title,
@@ -340,53 +340,53 @@ const handleProjectUpdate = async (isPublish) => {
       h5ad_id,
       cell_marker_id,
       analysis_id,
-    });
+    })
 
     if (isPublish) {
-      message.success("保存并发布成功");
+      message.success("保存并发布成功")
     } else {
-      message.success("保存成功");
+      message.success("保存成功")
     }
-    await handleProjectFetch();
+    await handleProjectFetch()
   } finally {
-    saving.value = false;
+    saving.value = false
   }
-};
+}
 
 const handleTransferModalShow = () => {
-  open.value = true;
-};
+  open.value = true
+}
 
 const handleProjectTransfer = async () => {
   if (!transferMail.value) {
-    return message.error("邮箱不能为空");
+    return message.error("邮箱不能为空")
   }
   try {
-    saving.value = true;
-    await transferProject(props.id, transferMail.value);
-    message.success("转移项目成功");
-    await handleProjectFetch();
-    open.value = false;
+    saving.value = true
+    await transferProject(props.id, transferMail.value)
+    message.success("转移项目成功")
+    await handleProjectFetch()
+    open.value = false
   } finally {
-    saving.value = false;
+    saving.value = false
   }
-};
+}
 
 const handleProjectOffline = () => {
   Modal.confirm({
     title: "下线确认?",
     content: "您确认现在下线改项目吗？",
     onOk: async () => {
-      await offlineProject(props.id);
-      message.success("下线项目成功");
-      await handleProjectFetch();
+      await offlineProject(props.id)
+      message.success("下线项目成功")
+      await handleProjectFetch()
     },
-  });
-};
+  })
+}
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id;
-};
+  formState.value[record.target] = record.file_id
+}
 </script>
 
 <style lang="scss" scoped></style>

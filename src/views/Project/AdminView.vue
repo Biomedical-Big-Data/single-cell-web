@@ -90,27 +90,27 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons-vue";
-import { usePagination } from "vue-request";
-import dayjs from "dayjs";
-import { getAdminProjectList } from "@/api/project";
-import { useRouter } from "vue-router";
-import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js";
+import { computed, ref } from "vue"
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons-vue"
+import { usePagination } from "vue-request"
+import dayjs from "dayjs"
+import { getAdminProjectList } from "@/api/project"
+import { useRouter } from "vue-router"
+import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js"
 
-const router = useRouter();
+const router = useRouter()
 const conditions = ref({
   title: "",
   is_publish: undefined,
   is_private: undefined,
-});
+})
 
 const getPublishState = function (state) {
-  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label;
-};
+  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
+}
 const getPrivateState = function (state) {
-  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label;
-};
+  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label
+}
 
 const columns = [
   {
@@ -163,7 +163,7 @@ const columns = [
     width: 40,
     align: "center",
   },
-];
+]
 
 const {
   data: dataSource,
@@ -182,37 +182,37 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || [];
-});
+  return dataSource?.value?.project_list || []
+})
 
 const getConditions = function () {
-  const result = {};
-  const { is_publish, is_private, title } = conditions.value;
+  const result = {}
+  const { is_publish, is_private, title } = conditions.value
 
   if (title) {
-    result.title = title;
+    result.title = title
   }
 
   if (!isNaN(is_publish)) {
-    result.status = is_publish;
+    result.status = is_publish
   }
 
   if (!isNaN(is_private)) {
-    result.status = is_private;
+    result.status = is_private
   }
 
-  return result;
-};
+  return result
+}
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -222,16 +222,16 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...filters,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleSearch = () => {
   run({
     page: current,
     page_size: pageSize,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleToAdminProject = (record) => {
   router.push({
@@ -239,8 +239,8 @@ const handleToAdminProject = (record) => {
     params: {
       id: record.id,
     },
-  });
-};
+  })
+}
 </script>
 
 <style scoped lang="scss">

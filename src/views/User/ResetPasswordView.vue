@@ -41,21 +41,21 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
-import { CheckOutlined } from "@ant-design/icons-vue";
-import { useRoute, useRouter } from "vue-router";
-import { resetPassword } from "@/api/user";
-import { message } from "ant-design-vue";
+import { reactive, ref } from "vue"
+import { CheckOutlined } from "@ant-design/icons-vue"
+import { useRoute, useRouter } from "vue-router"
+import { resetPassword } from "@/api/user"
+import { message } from "ant-design-vue"
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 const formState = reactive({
   password: "",
   confirm_password: "",
-});
-const loading = ref(false);
-const formRef = ref();
+})
+const loading = ref(false)
+const formRef = ref()
 
 const rules = {
   password: [
@@ -72,26 +72,26 @@ const rules = {
     {
       validator: (rule, value) => {
         if (value !== formState.password) {
-          return Promise.reject("两次输入的密码不一致");
+          return Promise.reject("两次输入的密码不一致")
         }
-        return Promise.resolve();
+        return Promise.resolve()
       },
     },
   ],
-};
+}
 
 const handleResetPassword = async function () {
-  await formRef.value.validate();
+  await formRef.value.validate()
 
   try {
-    loading.value = true;
-    const { token } = route.query;
-    await resetPassword({ token, password: formState.password });
-    message.success("重置密码成功，请重新登录");
-    await router.replace({ name: "login" });
+    loading.value = true
+    const { token } = route.query
+    await resetPassword({ token, password: formState.password })
+    message.success("重置密码成功，请重新登录")
+    await router.replace({ name: "login" })
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 <style></style>

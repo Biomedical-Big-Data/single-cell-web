@@ -191,7 +191,7 @@ export const trace1 = {
     color: "rgb(238, 135, 50)",
     opacity: 0.8,
   },
-};
+}
 export const trace2 = {
   uid: "ecc76d2d-1f11-44c7-9a0e-95c6575ad08e",
   mode: "markers",
@@ -471,7 +471,7 @@ export const trace2 = {
     color: "rgb(60, 137, 137)",
     opacity: 0.8,
   },
-};
+}
 export const trace3 = {
   uid: "2c45807f-81c3-4442-b410-074c9455b136",
   mode: "markers",
@@ -642,4 +642,4 @@ export const trace3 = {
     color: "rgb(0, 0, 0)",
     opacity: 0.8,
   },
-};
+}

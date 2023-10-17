@@ -226,13 +226,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons-vue";
-import { SPECIES } from "@/constants/common";
-import { createProject } from "@/api/project.js";
-import { message } from "ant-design-vue";
-import router from "@/router/index.js";
-import FileModalView from "@/views/File/ModalView.vue";
+import { ref } from "vue"
+import { PlusOutlined, MinusOutlined } from "@ant-design/icons-vue"
+import { SPECIES } from "@/constants/common"
+import { createProject } from "@/api/project.js"
+import { message } from "ant-design-vue"
+import router from "@/router/index.js"
+import FileModalView from "@/views/File/ModalView.vue"
 
 const formState = ref({
   title: "",
@@ -246,11 +246,11 @@ const formState = ref({
   umap_id: null,
   pathway_id: null,
   isPrivate: true,
-});
+})
 
-const loading = ref(false);
-const formRef = ref();
-const fileModalRef = ref();
+const loading = ref(false)
+const formRef = ref()
+const fileModalRef = ref()
 const rules = {
   title: [
     {
@@ -280,15 +280,15 @@ const rules = {
       trigger: "change",
     },
   ],
-};
+}
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id;
-};
+  formState.value[record.target] = record.file_id
+}
 
 const handleProjectCreate = async (isPublish) => {
   try {
-    await formRef.value.validate();
+    await formRef.value.validate()
     const {
       title,
       species_id,
@@ -298,8 +298,8 @@ const handleProjectCreate = async (isPublish) => {
       isPrivate,
       members,
       h5ad_id,
-    } = formState.value;
-    loading.value = true;
+    } = formState.value
+    loading.value = true
     const data = await createProject({
       title,
       species_id,
@@ -310,27 +310,27 @@ const handleProjectCreate = async (isPublish) => {
       is_publish: isPublish,
       members: isPrivate ? members : [],
       description,
-    });
+    })
     if (isPublish) {
       await router.replace({
         name: "project_detail",
         params: {
           id: data.project_id,
         },
-      });
+      })
     } else {
-      message.success("保存成功");
+      message.success("保存成功")
       await router.replace({
         name: "project_detail_update",
         params: {
           id: data.project_id,
         },
-      });
+      })
     }
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

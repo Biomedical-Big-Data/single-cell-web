@@ -75,20 +75,20 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { SearchOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
-import { usePagination } from "vue-request";
-import { getMyProjectFile, uploadProjectFile } from "@/api/project";
-import { message } from "ant-design-vue";
-import dayjs from "dayjs";
+import { computed, ref } from "vue"
+import { SearchOutlined, CloudUploadOutlined } from "@ant-design/icons-vue"
+import { usePagination } from "vue-request"
+import { getMyProjectFile, uploadProjectFile } from "@/api/project"
+import { message } from "ant-design-vue"
+import dayjs from "dayjs"
 
-const fileRef = ref();
-const uploading = ref(false);
-const uploadFileName = ref("");
-const uploadProgress = ref(0);
+const fileRef = ref()
+const uploading = ref(false)
+const uploadFileName = ref("")
+const uploadProgress = ref(0)
 const conditions = ref({
   file_name: "",
-});
+})
 
 const columns = [
   {
@@ -106,7 +106,7 @@ const columns = [
     width: "150px",
     align: "center",
   },
-];
+]
 
 const {
   data: dataSource,
@@ -125,29 +125,29 @@ const {
     currentKey: "page",
     pageSizeKey: "page_size",
   },
-});
+})
 
 const list = computed(() => {
-  return dataSource?.value?.h5ad_list || [];
-});
+  return dataSource?.value?.h5ad_list || []
+})
 
 const getConditions = function () {
-  const result = {};
-  const { file_name } = conditions.value;
+  const result = {}
+  const { file_name } = conditions.value
 
   if (file_name) {
-    result.file_name = file_name;
+    result.file_name = file_name
   }
 
-  return result;
-};
+  return result
+}
 
 const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
   size: "small",
-}));
+}))
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
@@ -157,41 +157,41 @@ const handleTableChange = (pag, filters, sorter) => {
     sortOrder: sorter.order,
     ...filters,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleSearch = () => {
   run({
     page: current,
     page_size: pageSize,
     ...getConditions(),
-  });
-};
+  })
+}
 
 const handleUpload = async (event) => {
-  const files = event.target.files;
+  const files = event.target.files
   if (files.length) {
     try {
-      uploading.value = true;
-      const file = files[0];
-      uploadFileName.value = file.name;
+      uploading.value = true
+      const file = files[0]
+      uploadFileName.value = file.name
       await uploadProjectFile(file, {
         onUploadProgress: ({ progress }) => {
-          updateProgress(progress);
+          updateProgress(progress)
         },
-      });
-      message.success("上传成功");
-      handleSearch();
-      fileRef.value.value = null;
+      })
+      message.success("上传成功")
+      handleSearch()
+      fileRef.value.value = null
     } finally {
-      uploading.value = false;
+      uploading.value = false
     }
   }
-};
+}
 
 const updateProgress = (progress) => {
-  uploadProgress.value = +(progress * 100).toFixed(2);
-};
+  uploadProgress.value = +(progress * 100).toFixed(2)
+}
 </script>
 
 <style scoped lang="scss">

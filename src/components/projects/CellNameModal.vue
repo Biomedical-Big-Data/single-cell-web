@@ -38,39 +38,39 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { getCellTaxonomy, getTaxonomyDetail } from "@/api/cell.js";
-import arrayToTree from "array-to-tree";
-import _ from "lodash";
+import { computed, ref } from "vue"
+import { getCellTaxonomy, getTaxonomyDetail } from "@/api/cell.js"
+import arrayToTree from "array-to-tree"
+import _ from "lodash"
 
-const emits = defineEmits(["confirm"]);
+const emits = defineEmits(["confirm"])
 
-const open = ref(false);
-const selectedKeys = ref([]);
-const treeData = ref([]);
-const relations = ref([]);
+const open = ref(false)
+const selectedKeys = ref([])
+const treeData = ref([])
+const relations = ref([])
 
-const cache = ref([]);
+const cache = ref([])
 
 const showModal = () => {
-  open.value = true;
-};
+  open.value = true
+}
 
 const confirm = () => {
-  open.value = false;
+  open.value = false
 
   if (selectedKeys.value.length) {
-    emits("confirm", current.value);
+    emits("confirm", current.value)
   }
-};
+}
 
 const current = computed(() => {
-  return _.find(cache.value, { cl_id: selectedKeys.value[0] });
-});
+  return _.find(cache.value, { cl_id: selectedKeys.value[0] })
+})
 
 const handleSearch = async (keyword) => {
-  const data = await getCellTaxonomy(keyword);
-  cache.value = data;
+  const data = await getCellTaxonomy(keyword)
+  cache.value = data
   treeData.value = arrayToTree(
     data.map(({ cl_id, cl_pid, name }) => ({
       title: name,
@@ -81,20 +81,20 @@ const handleSearch = async (keyword) => {
       parentProperty: "pid",
       customID: "key",
     },
-  );
-};
+  )
+}
 
 const handleNodeSelected = async (event) => {
-  relations.value = await getTaxonomyDetail(event[0]);
-};
+  relations.value = await getTaxonomyDetail(event[0])
+}
 
 const getLink = (cell_marker) => {
-  return `https://www.immunesinglecell.org/genepage/${cell_marker}`;
-};
+  return `https://www.immunesinglecell.org/genepage/${cell_marker}`
+}
 
 defineExpose({
   showModal,
-});
+})
 </script>
 
 <style scoped lang="scss">

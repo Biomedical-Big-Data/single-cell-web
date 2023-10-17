@@ -1,4 +1,4 @@
-import request from "@/utils/request.js";
+import request from "@/utils/request.js"
 
 export function getGeneSymbolList({ gene_symbol, page = 1, page_size = 20 }) {
   return request.get("/project/gene_symbol/list", {
@@ -7,5 +7,5 @@ export function getGeneSymbolList({ gene_symbol, page = 1, page_size = 20 }) {
       page,
       page_size,
     },
-  });
+  })
 }

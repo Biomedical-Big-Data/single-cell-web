@@ -132,60 +132,60 @@
   </div>
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import BarChart from "@/components/charts/BarChart.vue";
-import PathWayChart from "@/components/charts/PathWayChart.vue";
-import UMapChart from "@/components/charts/UMapChart.vue";
-import CellTypeMarkers from "@/components/CellTypeMarkers.vue";
-import { getProjectDetail } from "@/api/project";
-import dayjs from "dayjs";
-import { useRoute } from "vue-router";
-import { saveAs } from "file-saver";
-import { CloudDownloadOutlined } from "@ant-design/icons-vue";
+import { computed, onMounted, ref } from "vue"
+import BarChart from "@/components/charts/BarChart.vue"
+import PathWayChart from "@/components/charts/PathWayChart.vue"
+import UMapChart from "@/components/charts/UMapChart.vue"
+import CellTypeMarkers from "@/components/CellTypeMarkers.vue"
+import { getProjectDetail } from "@/api/project"
+import dayjs from "dayjs"
+import { useRoute } from "vue-router"
+import { saveAs } from "file-saver"
+import { CloudDownloadOutlined } from "@ant-design/icons-vue"
 
-const route = useRoute();
+const route = useRoute()
 // const activeKey = ref('score')
-const activeKey = ref("umap");
-const projectDetail = ref(null);
+const activeKey = ref("umap")
+const projectDetail = ref(null)
 const props = defineProps({
   id: {
     required: true,
   },
-});
+})
 
 onMounted(() => {
-  handleProjectDetailFetch();
-});
+  handleProjectDetailFetch()
+})
 
 const analysis = computed(() => {
-  const { analysis_id } = route.query;
+  const { analysis_id } = route.query
   if (analysis_id) {
     return projectDetail.value.project_analysis_meta.filter(
       (item) => +item.id === +analysis_id,
-    );
+    )
   } else {
-    return projectDetail.value.project_analysis_meta;
+    return projectDetail.value.project_analysis_meta
   }
-});
+})
 
 const handleProjectDetailFetch = async () => {
-  const data = await getProjectDetail(props.id);
-  projectDetail.value = data;
-};
+  const data = await getProjectDetail(props.id)
+  projectDetail.value = data
+}
 
 const handleOpenCellxgene = (record) => {
   window.open(
     `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
     "_blank",
-  );
-};
+  )
+}
 
 const handleDownloadFile = (file_id) => {
   saveAs(
     `${import.meta.env.VITE_BASE_API_URL}/project/download/file/${file_id}`,
     file_id,
-  );
-};
+  )
+}
 </script>
 <style scoped lang="scss">
 .summary {

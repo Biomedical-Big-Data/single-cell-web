@@ -48,53 +48,53 @@
 </template>
 
 <script setup>
-import { getFile } from "@/api/file.js";
-import { computed, onMounted, ref } from "vue";
-import * as csv from "csvtojson";
-import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue";
-import { saveAs } from "file-saver";
+import { getFile } from "@/api/file.js"
+import { computed, onMounted, ref } from "vue"
+import * as csv from "csvtojson"
+import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue"
+import { saveAs } from "file-saver"
 
 const props = defineProps({
   fileId: {
     type: String,
     required: true,
   },
-});
+})
 
-const downloading = ref(false);
-const condition = ref({});
-const columns = ref([]);
-const columnSettings = ref([]);
+const downloading = ref(false)
+const condition = ref({})
+const columns = ref([])
+const columnSettings = ref([])
 
-const dataSource = ref([]);
+const dataSource = ref([])
 
 onMounted(() => {
-  handleCellTypeMarkersFetch();
-});
+  handleCellTypeMarkersFetch()
+})
 
 const result = computed(() => {
-  const conditionKeys = Object.keys(condition.value);
+  const conditionKeys = Object.keys(condition.value)
   return dataSource.value.filter((item) => {
     const temp = conditionKeys.every((key) => {
       return String(item[key])
         .toLowerCase()
-        .includes(condition.value[key].toLowerCase());
-    });
-    return temp;
-  });
-});
+        .includes(condition.value[key].toLowerCase())
+    })
+    return temp
+  })
+})
 
 const columnResult = computed(() => {
   return columns.value.filter((item) => {
-    return columnSettings.value.includes(item.title);
-  });
-});
+    return columnSettings.value.includes(item.title)
+  })
+})
 
 const handleCellTypeMarkersFetch = async () => {
-  const data = await getFile(props.fileId);
+  const data = await getFile(props.fileId)
   dataSource.value = await csv({ output: "json" })
     .on("header", (header) => {
-      columnSettings.value = header;
+      columnSettings.value = header
       columns.value = header.map((item) => {
         return {
           title: item,
@@ -102,29 +102,29 @@ const handleCellTypeMarkersFetch = async () => {
           dataIndex: item,
           align: "center",
           sorter: (a, b) => {
-            return a[item] > b[item] ? 1 : -1;
+            return a[item] > b[item] ? 1 : -1
           },
           sortDirections: ["descend", "ascend"],
-        };
-      });
+        }
+      })
     })
-    .fromString(data);
-};
+    .fromString(data)
+}
 
 const handleFileDownload = async () => {
   try {
-    downloading.value = true;
-    const data = await getFile(props.fileId);
-    const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "cell_type_markers.csv");
+    downloading.value = true
+    const data = await getFile(props.fileId)
+    const blob = new Blob([data], { type: "text/csv;charset=utf-8" })
+    saveAs(blob, "cell_type_markers.csv")
   } finally {
-    downloading.value = false;
+    downloading.value = false
   }
-};
+}
 
 const filterBy = (title, event) => {
-  condition.value[title] = event.target.value;
-};
+  condition.value[title] = event.target.value
+}
 </script>
 
 <style scoped lang="scss"></style>

@@ -35,18 +35,18 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import { MailOutlined } from "@ant-design/icons-vue";
-import { sendResetPasswordMail } from "@/api/user";
-import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
+import { ref } from "vue"
+import { MailOutlined } from "@ant-design/icons-vue"
+import { sendResetPasswordMail } from "@/api/user"
+import { message } from "ant-design-vue"
+import { useRouter } from "vue-router"
 
 const formState = ref({
   mail: "",
-});
-const formRef = ref();
-const router = useRouter();
-const loading = ref(false);
+})
+const formRef = ref()
+const router = useRouter()
+const loading = ref(false)
 
 const rules = {
   mail: [
@@ -59,19 +59,19 @@ const rules = {
       message: "请输入正确的邮箱格式",
     },
   ],
-};
+}
 
 const handleSendResetPasswordMail = async function () {
-  await formRef.value.validate();
+  await formRef.value.validate()
   try {
-    loading.value = true;
-    const { mail } = formState.value;
-    await sendResetPasswordMail(mail);
-    message.success("重置邮件发送成功，请前往邮箱查看");
-    await router.replace({ name: "login" });
+    loading.value = true
+    const { mail } = formState.value
+    await sendResetPasswordMail(mail)
+    message.success("重置邮件发送成功，请前往邮箱查看")
+    await router.replace({ name: "login" })
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 <style></style>

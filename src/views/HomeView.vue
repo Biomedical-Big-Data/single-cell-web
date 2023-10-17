@@ -73,53 +73,53 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { getHomeData } from "@/api/home.js";
-import icons from "@/icons/index.js";
+import { onMounted, ref } from "vue"
+import { getHomeData } from "@/api/home.js"
+import icons from "@/icons/index.js"
 
-const species = ref([]);
+const species = ref([])
 
-const organs = ref([]);
+const organs = ref([])
 
-const samples = ref([]);
+const samples = ref([])
 
 // const partners = ref([]);
 
 onMounted(() => {
-  handleFetchHomeData();
-});
+  handleFetchHomeData()
+})
 
 const handleFetchHomeData = async () => {
-  const data = await getHomeData();
+  const data = await getHomeData()
 
   species.value = data.species_list.map((item) => {
     return {
       icon: icons[getStandardName(item.species)] || icons.global,
       name: item.species,
       count: item.count,
-    };
-  });
+    }
+  })
 
   samples.value = data.sample_list.map((item) => {
     return {
       icon: icons[getStandardName(item.biosample_type)] || icons.global,
       name: item.biosample_type || "Unknown",
       count: item.count,
-    };
-  });
+    }
+  })
 
   organs.value = data.organ_list.map((item) => {
     return {
       icon: icons[getStandardName(item.organ)] || icons.global,
       name: item.organ,
       count: item.count,
-    };
-  });
-};
+    }
+  })
+}
 
 const getStandardName = (name) => {
-  return (name || "").replace(/[\s|-]/g, "_").toLowerCase();
-};
+  return (name || "").replace(/[\s|-]/g, "_").toLowerCase()
+}
 </script>
 
 <style lang="scss" scoped>
