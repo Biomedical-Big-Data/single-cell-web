@@ -51,7 +51,6 @@ const confirm = () => {
 };
 
 const current = computed(() => {
-  console.log(current);
   return _.find(cache.value, { cl_id: selectedKeys.value[0] });
 });
 

@@ -91,10 +91,8 @@ onMounted(() => {
 
 const handleFetchHomeData = async () => {
   const data = await getHomeData();
-  console.log();
 
   species.value = data.species_list.map((item) => {
-    console.log(icons[getStandardName(item.species)]);
     return {
       icon: icons[getStandardName(item.species)] || icons.global,
       name: item.species,

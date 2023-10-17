@@ -155,7 +155,6 @@ const userLogin = async function () {
   try {
     logining.value = true;
     const result = await login({ email_address, user_password });
-    console.log(result);
     userStore.setUser(result);
     await router.replace({ name: "home" });
   } finally {

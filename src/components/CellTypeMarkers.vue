@@ -80,7 +80,6 @@ const result = computed(() => {
         .toLowerCase()
         .includes(condition.value[key].toLowerCase());
     });
-    console.log(temp);
     return temp;
   });
 });
@@ -108,7 +107,6 @@ const handleCellTypeMarkersFetch = async () => {
           sortDirections: ["descend", "ascend"],
         };
       });
-      console.log(columns.value);
     })
     .fromString(data);
 };

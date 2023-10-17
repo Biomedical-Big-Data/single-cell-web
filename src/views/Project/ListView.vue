@@ -75,10 +75,10 @@
                   allow-clear
                 ></a-select>
               </a-form-item>
-              <a-form-item label="CL ID" name="cl_id">
+              <a-form-item label="CI ID" name="ci_id">
                 <a-input
-                  v-model:value="cell.cl_id"
-                  placeholder="CL ID"
+                  v-model:value="cell.ci_id"
+                  placeholder="CI ID"
                   allow-clear
                 ></a-input>
               </a-form-item>
@@ -224,6 +224,7 @@ const cellNameInput = ref();
 
 const cell = ref({
   species: undefined,
+  ci_id: "",
   cl_id: "",
   searchBy: "name",
   name: "",
@@ -272,7 +273,6 @@ const handleGeneSymbolSearch = async (keywords) => {
   try {
     state.value.geneSymbolFetching = true;
     const data = await getGeneSymbolList({ gene_symbol: keywords });
-    console.log(data);
     options.value.geneSymbol = data.map((item) => ({
       label: item,
       value: item,
@@ -318,7 +318,7 @@ const handleCellNameSearch = () => {
 
 const handleCellNameChange = (result) => {
   cell.value.name = result.name;
-  cell.value.id = result.cl_id;
+  cell.value.cl_id = result.cl_id;
 };
 </script>
 

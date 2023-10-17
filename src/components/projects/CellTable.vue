@@ -204,16 +204,17 @@ const handleTableChange = (pag, filters, sorter) => {
 
 const getConditions = () => {
   const result = {};
-  const { positive, negative, species, id, cl_id, searchBy } = condition.value;
+  const { positive, negative, species, cl_id, ci_id, searchBy } =
+    condition.value;
   if (species) {
     result.species_id = species;
   }
-  if (cl_id) {
-    result.cl_id = cl_id;
+  if (ci_id) {
+    result.ci_id = ci_id;
   }
   if (searchBy === "name") {
-    if (id) {
-      result.id = id;
+    if (cl_id) {
+      result.cl_id = cl_id;
     }
   } else {
     if (positive?.length) {
@@ -228,7 +229,6 @@ const getConditions = () => {
 };
 
 const handleSearch = (conditions) => {
-  console.log(conditions);
   condition.value = conditions;
   run({
     page: current.value,

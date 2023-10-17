@@ -228,7 +228,6 @@ const getConditions = function () {
   if (email_address) {
     result.email_address = email_address;
   }
-  console.log(state);
   if (!isNaN(state)) {
     result.state = state;
   }
@@ -257,7 +256,6 @@ const handleTableChange = (pag, filters, sorter) => {
 };
 
 const handleSearch = () => {
-  console.log(conditions.value);
   run({
     page: current,
     page_size: pageSize,

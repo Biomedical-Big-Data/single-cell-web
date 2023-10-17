@@ -311,7 +311,6 @@ const handleProjectCreate = async (isPublish) => {
       members: isPrivate ? members : [],
       description,
     });
-    console.log(data);
     if (isPublish) {
       await router.replace({
         name: "project_detail",

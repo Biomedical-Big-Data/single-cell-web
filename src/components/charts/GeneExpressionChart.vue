@@ -30,7 +30,6 @@ const props = defineProps({
 });
 
 const chartData = computed(() => {
-  console.log(props.valueKey);
   return _.chain(props.data)
     .filter((item) => !!item[props.valueKey])
     .groupBy("cell_type_name")
