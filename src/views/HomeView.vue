@@ -163,6 +163,7 @@ const getStandardName = (name) => {
         .name {
           font-size: 1rem;
           line-height: 2rem;
+          margin-top: 0.5rem;
           text-transform: capitalize;
         }
 
