@@ -75,7 +75,6 @@ const chartData = computed(() => {
     .map(([name, values], index) => {
       return {
         y: values.map((item) => item.score),
-        // y: new Array(values.length).fill(name),
         x: values.map(() => index + Math.random()),
         mode: "markers",
         type: "scatter",

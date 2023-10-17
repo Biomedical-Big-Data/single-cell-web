@@ -120,6 +120,35 @@ export const asyncRoutes = [
     component: () => import("../views/Project/AdminUpdateView.vue"),
   },
   {
+    path: "/meta",
+    children: [
+      {
+        path: "species",
+        meta: {
+          title: "Species管理",
+          roles: ["admin"],
+        },
+        component: () => import("../views/Meta/SpeciesView.vue"),
+      },
+      {
+        path: "gene",
+        meta: {
+          title: "Gene管理",
+          roles: ["admin"],
+        },
+        component: () => import("../views/Meta/GeneView.vue"),
+      },
+      {
+        path: "cell_type",
+        meta: {
+          title: "CellType管理",
+          roles: ["admin"],
+        },
+        component: () => import("../views/Meta/CellTypeView.vue"),
+      },
+    ],
+  },
+  {
     path: "/process/admin",
     name: "project_admin",
     meta: {
