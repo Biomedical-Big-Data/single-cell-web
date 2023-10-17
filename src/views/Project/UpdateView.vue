@@ -4,63 +4,63 @@
       <div class="flex items-center flex-col w-full">
         <div class="max-w-lg w-full mt-6">
           <a-form
-              :disabled="!projectDetail.isPrivate"
-              ref="formRef"
-              :model="formState"
-              name="basic"
-              :rules="rules"
-              autocomplete="off"
-              :label-col="{ span: 5 }"
+            :disabled="!projectDetail.isPrivate"
+            ref="formRef"
+            :model="formState"
+            name="basic"
+            :rules="rules"
+            autocomplete="off"
+            :label-col="{ span: 5 }"
           >
             <a-form-item label="项目名称" name="title" required>
-              <a-input v-model:value="formState.title" placeholder="项目名称"/>
+              <a-input v-model:value="formState.title" placeholder="项目名称" />
             </a-form-item>
 
             <a-form-item label="Species" name="species_id" required>
               <a-select
-                  v-model:value="formState.species_id"
-                  :options="SPECIES"
-                  placeholder="Species"
+                v-model:value="formState.species_id"
+                :options="SPECIES"
+                placeholder="Species"
               ></a-select>
             </a-form-item>
 
             <a-form-item label="Organ" name="organ" required>
-              <a-input v-model:value="formState.organ" placeholder="Organ"/>
+              <a-input v-model:value="formState.organ" placeholder="Organ" />
             </a-form-item>
 
             <a-form-item label="标签" name="tags">
               <a-select
-                  v-model:value="formState.tags"
-                  mode="tags"
-                  placeholder="标签"
-                  :options="[]"
+                v-model:value="formState.tags"
+                mode="tags"
+                placeholder="标签"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
             <a-form-item label="访问权限" name="public">
-              <a-switch v-model:checked="formState.isPrivate"/>
+              <a-switch v-model:checked="formState.isPrivate" />
               私有，仅受邀人可看
             </a-form-item>
 
             <a-form-item
-                label="可访问人员"
-                name="public"
-                v-if="!!formState.isPrivate"
+              label="可访问人员"
+              name="public"
+              v-if="!!formState.isPrivate"
             >
               <a-select
-                  v-model:value="formState.members"
-                  mode="tags"
-                  placeholder="受邀人"
-                  :options="[]"
+                v-model:value="formState.members"
+                mode="tags"
+                placeholder="受邀人"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
             <a-form-item label="H5AD文件" name="h5ad_id" required>
               <a-button
-                  class="w-full flex items-center"
-                  type="dashed"
-                  @click="fileModalRef?.open('h5ad_id')"
-                  v-if="!formState.h5ad_id"
+                class="w-full flex items-center"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_id')"
+                v-if="!formState.h5ad_id"
               >
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
@@ -68,11 +68,11 @@
                 H5AD 文件
               </a-button>
               <a-button
-                  v-else
-                  class="w-full flex items-center"
-                  type="dashed"
-                  @click="formState.h5ad_id = null"
-                  danger
+                v-else
+                class="w-full flex items-center"
+                type="dashed"
+                @click="formState.h5ad_id = null"
+                danger
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -83,10 +83,10 @@
             <a-form-item label="UMap文件" name="umap_id">
               <div>
                 <a-button
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="fileModalRef?.open('umap_id')"
-                    v-if="!formState.umap_id"
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="fileModalRef?.open('umap_id')"
+                  v-if="!formState.umap_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -94,11 +94,11 @@
                   UMap 文件
                 </a-button>
                 <a-button
-                    v-else
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="formState.umap_id = null"
-                    danger
+                  v-else
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="formState.umap_id = null"
+                  danger
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -109,17 +109,20 @@
               <div class="mt-2">
                 请按以下格式上传:
                 <a
-                    href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show">umap.csv</a>
+                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
+                >
+                  umap.csv
+                </a>
               </div>
             </a-form-item>
 
             <a-form-item label="CellMarker文件" name="cell_marker_id">
               <div>
                 <a-button
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="fileModalRef?.open('cell_marker_id')"
-                    v-if="!formState.cell_marker_id"
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="fileModalRef?.open('cell_marker_id')"
+                  v-if="!formState.cell_marker_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -127,11 +130,11 @@
                   CellMarker 文件
                 </a-button>
                 <a-button
-                    v-else
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="formState.cell_marker_id = null"
-                    danger
+                  v-else
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="formState.cell_marker_id = null"
+                  danger
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -142,7 +145,8 @@
               <div class="mt-2">
                 请按以下格式上传:
                 <a
-                    href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show">
+                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
+                >
                   cell_marker.csv
                 </a>
               </div>
@@ -151,10 +155,10 @@
             <a-form-item label="Pathway文件" name="pathway_id">
               <div>
                 <a-button
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="fileModalRef?.open('pathway_id')"
-                    v-if="!formState.pathway_id"
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="fileModalRef?.open('pathway_id')"
+                  v-if="!formState.pathway_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -162,11 +166,11 @@
                   PathWay 文件
                 </a-button>
                 <a-button
-                    v-else
-                    class="w-full flex items-center"
-                    type="dashed"
-                    @click="formState.pathway_id = null"
-                    danger
+                  v-else
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="formState.pathway_id = null"
+                  danger
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -177,7 +181,8 @@
               <div class="mt-2">
                 请按以下格式上传:
                 <a
-                    href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show">
+                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
+                >
                   pathway_score.csv
                 </a>
               </div>
@@ -185,45 +190,45 @@
 
             <a-form-item label="项目描述" name="description" required>
               <a-textarea
-                  v-model:value="formState.description"
-                  show-count
-                  :maxlength="1000"
-                  :auto-size="{ minRows: 4 }"
+                v-model:value="formState.description"
+                show-count
+                :maxlength="1000"
+                :auto-size="{ minRows: 4 }"
               />
             </a-form-item>
 
             <a-form-item :wrapper-col="{ offset: 5 }">
               <a-button
-                  type="primary"
-                  class="mr-3"
-                  :saving="saving"
-                  v-if="!projectDetail.isPublish"
-                  @click="handleProjectUpdate(true)"
+                type="primary"
+                class="mr-3"
+                :saving="saving"
+                v-if="!projectDetail.isPublish"
+                @click="handleProjectUpdate(true)"
               >
                 发布
               </a-button>
               <a-button
-                  class="mr-3"
-                  :saving="saving"
-                  v-if="projectDetail.isPrivate"
-                  @click="handleProjectUpdate(false)"
+                class="mr-3"
+                :saving="saving"
+                v-if="projectDetail.isPrivate"
+                @click="handleProjectUpdate(false)"
               >
                 保存
               </a-button>
               <a-button
-                  class="mr-3"
-                  :saving="saving"
-                  v-if="projectDetail.isPrivate && projectDetail.isPublish"
-                  @click="handleProjectOffline()"
+                class="mr-3"
+                :saving="saving"
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                @click="handleProjectOffline()"
               >
                 下线
               </a-button>
               <a-button
-                  class="mr-3"
-                  danger
-                  v-if="projectDetail.isPrivate && projectDetail.isPublish"
-                  :saving="saving"
-                  @click="handleTransferModalShow"
+                class="mr-3"
+                danger
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                :saving="saving"
+                @click="handleTransferModalShow"
               >
                 转移项目
               </a-button>
@@ -233,133 +238,133 @@
       </div>
     </a-card>
     <a-modal
-        title="转移项目"
-        v-model:open="open"
-        width="300px"
-        @ok="handleProjectTransfer"
+      title="转移项目"
+      v-model:open="open"
+      width="300px"
+      @ok="handleProjectTransfer"
     >
       <div class="py-5">
         <a-input
-            v-model:value="transferMail"
-            placeholder="请输入新管理员邮箱"
+          v-model:value="transferMail"
+          placeholder="请输入新管理员邮箱"
         ></a-input>
       </div>
     </a-modal>
   </div>
   <FileModalView
-      ref="fileModalRef"
-      @selected="handleFileSelected"
+    ref="fileModalRef"
+    @selected="handleFileSelected"
   ></FileModalView>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import { SPECIES } from '@/constants/common'
+import { onMounted, ref } from "vue";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import { SPECIES } from "@/constants/common";
 import {
   getProjectDetail,
   offlineProject,
   transferProject,
   updateProject,
-} from '@/api/project.js'
-import { message, Modal } from 'ant-design-vue'
-import FileModalView from '@/views/File/ModalView.vue'
+} from "@/api/project.js";
+import { message, Modal } from "ant-design-vue";
+import FileModalView from "@/views/File/ModalView.vue";
 
 const props = defineProps({
   id: { required: true },
-})
+});
 
 const formState = ref({
-  title: '',
+  title: "",
   h5ad_id: null,
   species_id: undefined,
-  organ: '',
+  organ: "",
   tags: [],
   members: [],
-  description: '',
+  description: "",
   isPrivate: true,
-})
-const projectDetail = ref({})
+});
+const projectDetail = ref({});
 
-const transferMail = ref('')
+const transferMail = ref("");
 
-const open = ref(false)
-const loading = ref(false)
-const saving = ref(false)
-const formRef = ref()
-const fileModalRef = ref()
+const open = ref(false);
+const loading = ref(false);
+const saving = ref(false);
+const formRef = ref();
+const fileModalRef = ref();
 
 const rules = {
   title: [
     {
       required: true,
-      message: '项目名称不能为空',
-      trigger: 'blur',
+      message: "项目名称不能为空",
+      trigger: "blur",
     },
   ],
   description: [
     {
       required: true,
-      message: '项目描述不能为空',
-      trigger: 'blur',
+      message: "项目描述不能为空",
+      trigger: "blur",
     },
   ],
   organ: [
     {
       required: true,
-      message: 'Organ不能为空',
-      trigger: 'blur',
+      message: "Organ不能为空",
+      trigger: "blur",
     },
   ],
   species_id: [
     {
       required: true,
-      message: 'Species不能为空',
-      trigger: 'change',
+      message: "Species不能为空",
+      trigger: "change",
     },
   ],
-}
+};
 
 onMounted(() => {
-  handleProjectFetch()
-})
+  handleProjectFetch();
+});
 
 const handleProjectFetch = async () => {
   try {
-    loading.value = true
-    const data = await getProjectDetail(props.id)
+    loading.value = true;
+    const data = await getProjectDetail(props.id);
     const result = {
       title: data.title,
       species_id:
-      data.project_project_biosample_meta[0].project_biosample_biosample_meta
+        data.project_project_biosample_meta[0].project_biosample_biosample_meta
           .species_id,
       organ:
-      data.project_project_biosample_meta[0].project_biosample_biosample_meta
+        data.project_project_biosample_meta[0].project_biosample_biosample_meta
           .organ,
-      tags: data.tags ? data.tags.split(',') : [],
+      tags: data.tags ? data.tags.split(",") : [],
       members: data.project_project_user_meta
-          .filter(
-              (item) =>
-                  item.project_user_user_meta.id !== data.project_user_meta.id,
-          )
-          .map((item) => item.project_user_user_meta.email_address),
+        .filter(
+          (item) =>
+            item.project_user_user_meta.id !== data.project_user_meta.id,
+        )
+        .map((item) => item.project_user_user_meta.email_address),
       description: data.description,
       isPrivate: !!data.is_private,
       h5ad_id: data.project_analysis_meta[0].h5ad_id,
-    }
-    formState.value = result
+    };
+    formState.value = result;
     projectDetail.value = {
       ...result,
       isPublish: !!data.is_publish,
-    }
+    };
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const handleProjectUpdate = async (isPublish) => {
   try {
-    await formRef.value.validate()
+    await formRef.value.validate();
     const {
       title,
       species_id,
@@ -369,66 +374,66 @@ const handleProjectUpdate = async (isPublish) => {
       isPrivate,
       members,
       h5ad_id,
-    } = formState.value
-    saving.value = true
+    } = formState.value;
+    saving.value = true;
     await updateProject({
       project_id: props.id,
       title,
       species_id,
       organ,
       h5ad_id,
-      tags: tags.join(','),
+      tags: tags.join(","),
       is_private: isPrivate,
       is_publish: isPublish,
       members: isPrivate ? members : [],
       description,
-    })
+    });
 
     if (isPublish) {
-      message.success('保存并发布成功')
+      message.success("保存并发布成功");
     } else {
-      message.success('保存成功')
+      message.success("保存成功");
     }
-    await handleProjectFetch()
+    await handleProjectFetch();
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const handleTransferModalShow = () => {
-  open.value = true
-}
+  open.value = true;
+};
 
 const handleProjectTransfer = async () => {
   if (!transferMail.value) {
-    return message.error('邮箱不能为空')
+    return message.error("邮箱不能为空");
   }
   try {
-    saving.value = true
-    await transferProject(props.id, transferMail.value)
-    message.success('转移项目成功')
-    await handleProjectFetch()
-    open.value = false
+    saving.value = true;
+    await transferProject(props.id, transferMail.value);
+    message.success("转移项目成功");
+    await handleProjectFetch();
+    open.value = false;
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const handleProjectOffline = () => {
   Modal.confirm({
-    title: '下线确认?',
-    content: '您确认现在下线改项目吗？',
+    title: "下线确认?",
+    content: "您确认现在下线改项目吗？",
     onOk: async () => {
-      await offlineProject(props.id)
-      message.success('下线项目成功')
-      await handleProjectFetch()
+      await offlineProject(props.id);
+      message.success("下线项目成功");
+      await handleProjectFetch();
     },
-  })
-}
+  });
+};
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id
-}
+  formState.value[record.target] = record.file_id;
+};
 </script>
 
 <style lang="scss" scoped></style>
