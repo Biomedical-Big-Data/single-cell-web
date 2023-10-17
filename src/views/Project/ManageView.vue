@@ -170,7 +170,7 @@ const columns = [
   {
     title: "操作",
     dataIndex: "operation",
-    width: 40,
+    width: 200,
     align: "center",
   },
 ];
@@ -256,13 +256,11 @@ const handleToAdminProject = (record) => {
 };
 
 const handleToProject = (record) => {
+  console.log(record);
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.cell_proportion_analysis_meta.analysis_project_meta.id,
-    },
-    query: {
-      analysis_id: record.analysis_id,
+      id: record.id,
     },
   });
   // console.log(routeData)
