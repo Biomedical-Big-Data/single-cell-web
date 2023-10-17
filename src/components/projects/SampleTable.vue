@@ -48,48 +48,18 @@
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-if="column.dataIndex === 'projects'">
+      <template v-if="column.dataIndex === 'project'">
+        {{ record.project }}
+      </template>
+      <template v-if="column.dataIndex === 'action'">
         <a-button
           shape="circle"
-          :icon="h(OrderedListOutlined)"
-          @click="handleProjectsModalOpen(record)"
+          :icon="h(EyeOutlined)"
+          @click="handleToProject(record)"
         />
       </template>
     </template>
   </a-table>
-  <a-modal
-    v-model:open="open"
-    title="Relative Projects"
-    width="100%"
-    wrap-class-name="full-modal"
-    :footer="null"
-  >
-    <div class="py-5">
-      <a-table
-        :columns="projectColumns"
-        :data-source="projects"
-        :pagination="false"
-      >
-        <template #bodyCell="{ column, text, record }">
-          <template v-if="column.title === 'Tags'">
-            <a-tag
-              v-for="item in (text || '').split(',').filter((item) => !!item)"
-              :key="item"
-            >
-              {{ item }}
-            </a-tag>
-          </template>
-          <template v-if="column.dataIndex === 'action'">
-            <a-button
-              shape="circle"
-              :icon="h(EyeOutlined)"
-              @click="handleToProject(record)"
-            />
-          </template>
-        </template>
-      </a-table>
-    </div>
-  </a-modal>
 </template>
 
 <script setup>
@@ -102,16 +72,15 @@ import { computed, reactive, ref, h } from "vue";
 import {
   SettingOutlined,
   DownloadOutlined,
-  OrderedListOutlined,
   EyeOutlined,
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import { saveAs } from "file-saver";
+import _ from "lodash";
 
 const router = useRouter();
 const downloading = ref(false);
 const condition = ref({});
-const open = ref(false);
 
 const columns = [
   {
@@ -121,8 +90,8 @@ const columns = [
     width: "20px",
   },
   {
-    title: "Projects",
-    dataIndex: "projects",
+    title: "Project",
+    dataIndex: ["project", "project_biosample_project_meta", "title"],
     width: 80,
     align: "center",
   },
@@ -148,22 +117,6 @@ const columns = [
     dataIndex: ["biosample_donor_meta", "sex"],
   },
 ];
-const projectColumns = [
-  {
-    title: "Title",
-    dataIndex: ["project_biosample_project_meta", "title"],
-    width: 200,
-  },
-  {
-    title: "Description",
-    dataIndex: ["project_biosample_project_meta", "description"],
-  },
-  {
-    title: "Tags",
-    dataIndex: ["project_biosample_project_meta", "tags"],
-    width: 300,
-  },
-];
 
 const columnSettings = ref(columns.map((item) => item.title));
 
@@ -186,7 +139,7 @@ const count = reactive({
   sample: 0,
   cell: 0,
 });
-const projects = ref([]);
+
 const {
   data: dataSource,
   run,
@@ -201,7 +154,17 @@ const {
 });
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || [];
+  console.log(dataSource?.value?.project_list);
+  const data = dataSource?.value?.project_list || [];
+  const result = data.map((item) => {
+    const { biosample_project_biosample_meta, ...other } = item;
+    return biosample_project_biosample_meta.map((project) => ({
+      project,
+      ...other,
+    }));
+  });
+  console.log(_.flatten(result));
+  return _.flatten(result);
 });
 
 const pagination = computed(() => ({
@@ -259,16 +222,11 @@ const handleSearch = (conditions) => {
   });
 };
 
-const handleProjectsModalOpen = (records) => {
-  projects.value = records.biosample_project_biosample_meta;
-  open.value = true;
-};
-
 const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.project_id,
+      id: record.project.project_id,
     },
   });
   window.open(routeData.href, "_blank");
@@ -277,7 +235,7 @@ const handleToProject = (record) => {
 const handleListDownload = async () => {
   try {
     downloading.value = true;
-    const data = await downloadSampleProjectList(...getConditions());
+    const data = await downloadSampleProjectList(getConditions());
     saveAs(data, "sample_project_list.xlsx");
   } finally {
     downloading.value = false;

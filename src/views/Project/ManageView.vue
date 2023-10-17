@@ -82,12 +82,23 @@
             <a-button
               type="primary"
               size="small"
-              @click="handleToAdminProject(record)"
+              @click="handleToProject(record)"
             >
               <template #icon>
                 <EyeOutlined></EyeOutlined>
               </template>
               详情
+            </a-button>
+            <a-button
+              class="ml-2"
+              type="primary"
+              size="small"
+              @click="handleToAdminProject(record)"
+            >
+              <template #icon>
+                <EditOutlined></EditOutlined>
+              </template>
+              编辑
             </a-button>
           </template>
         </template>
@@ -98,7 +109,11 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons-vue";
+import {
+  SearchOutlined,
+  EyeOutlined,
+  EditOutlined,
+} from "@ant-design/icons-vue";
 import { usePagination } from "vue-request";
 import dayjs from "dayjs";
 import { getMyProjectList } from "@/api/project";
@@ -238,6 +253,20 @@ const handleToAdminProject = (record) => {
       id: record.id,
     },
   });
+};
+
+const handleToProject = (record) => {
+  const routeData = router.resolve({
+    name: "project_detail",
+    params: {
+      id: record.cell_proportion_analysis_meta.analysis_project_meta.id,
+    },
+    query: {
+      analysis_id: record.analysis_id,
+    },
+  });
+  // console.log(routeData)
+  window.open(routeData.href, "_blank");
 };
 </script>
 
