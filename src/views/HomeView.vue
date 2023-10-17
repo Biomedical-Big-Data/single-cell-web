@@ -73,7 +73,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { getHomeData } from "@/api/home.js";
 
 const species = ref([
   {
@@ -175,6 +176,15 @@ const samples = ref([
 ]);
 
 const partners = ref([]);
+
+onMounted(() => {
+  handleFetchHomeData();
+});
+
+const handleFetchHomeData = async () => {
+  const data = await getHomeData();
+  console.log(data);
+};
 </script>
 
 <style lang="scss" scoped>

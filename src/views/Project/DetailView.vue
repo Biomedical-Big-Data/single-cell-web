@@ -134,13 +134,13 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import BarChart from "@/components/charts/BarChart.vue";
-// import SimilarityChart from '@/components/charts/SimilarityChart.vue'
 import PathWayChart from "@/components/charts/PathWayChart.vue";
 import UMapChart from "@/components/charts/UMapChart.vue";
 import CellTypeMarkers from "@/components/CellTypeMarkers.vue";
 import { getProjectDetail } from "@/api/project";
 import dayjs from "dayjs";
 import { useRoute } from "vue-router";
+import { saveAs } from "file-saver";
 import { CloudDownloadOutlined } from "@ant-design/icons-vue";
 
 const route = useRoute();
@@ -181,9 +181,9 @@ const handleOpenCellxgene = (record) => {
 };
 
 const handleDownloadFile = (file_id) => {
-  window.open(
-    `${import.meta.env.VITE_BASE_API_URL}/project/view/file/${file_id}`,
-    "_blank",
+  saveAs(
+    `${import.meta.env.VITE_BASE_API_URL}/project/download/file/${file_id}`,
+    file_id,
   );
 };
 </script>

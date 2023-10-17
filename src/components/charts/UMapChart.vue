@@ -12,7 +12,7 @@
         ></a-select>
       </div>
       <div class="flex-1">
-        <img :src="umapUrl" v-show="!!umapUrl" class="w-full" alt="" />
+        <img :src="umapUrl" v-show="!!umapUrl" class="w-full umap" alt="" />
       </div>
     </a-spin>
   </div>
@@ -54,4 +54,8 @@ const handleFileFetch = async () => {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.umap {
+  max-width: 900px;
+}
+</style>
