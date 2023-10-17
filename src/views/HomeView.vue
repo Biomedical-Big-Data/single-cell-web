@@ -8,7 +8,7 @@
         <a-row justify="center">
           <a-col :span="4" v-for="item in species" class="item" :key="item.id">
             <div class="icon flex justify-center">
-              <img src="../assets/icons/body.svg" alt="" />
+              <img :src="item.icon" alt="" />
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -24,9 +24,9 @@
       <div class="title">Organ</div>
       <div class="items">
         <a-row justify="center">
-          <a-col :span="4" v-for="item in organs" class="item" :key="item.id">
+          <a-col :span="6" v-for="item in organs" class="item" :key="item.id">
             <div class="icon flex justify-center">
-              <img src="../assets/icons/body.svg" alt="" />
+              <img :src="item.icon" alt="" />
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -44,7 +44,7 @@
         <a-row justify="center">
           <a-col :span="4" v-for="item in samples" class="item" :key="item.id">
             <div class="icon flex justify-center">
-              <img src="../assets/icons/body.svg" alt="" />
+              <img :src="item.icon" alt="" />
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -56,126 +56,34 @@
         </a-row>
       </div>
     </div>
-    <div class="section">
-      <div class="title">合作伙伴</div>
-      <div class="items">
-        <div v-for="item in partners" :key="item.id">
-          <div>
-            <img src="" alt="" />
-          </div>
-          <div>
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
-    </div>
+    <!--    <div class="section">-->
+    <!--      <div class="title">合作伙伴</div>-->
+    <!--      <div class="items">-->
+    <!--        <div v-for="item in partners" :key="item.id">-->
+    <!--          <div>-->
+    <!--            <img src="" alt="" />-->
+    <!--          </div>-->
+    <!--          <div>-->
+    <!--            {{ item.name }}-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { getHomeData } from "@/api/home.js";
+import icons from "@/icons/index.js";
 
-const species = ref([
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-]);
+const species = ref([]);
 
-const organs = ref([
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-]);
+const organs = ref([]);
 
-const samples = ref([
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-  {
-    icon: "body",
-    name: "Human",
-    count: 100,
-  },
-]);
+const samples = ref([]);
 
-const partners = ref([]);
+// const partners = ref([]);
 
 onMounted(() => {
   handleFetchHomeData();
@@ -183,7 +91,36 @@ onMounted(() => {
 
 const handleFetchHomeData = async () => {
   const data = await getHomeData();
-  console.log(data);
+  console.log();
+
+  species.value = data.species_list.map((item) => {
+    console.log(icons[getStandardName(item.species)]);
+    return {
+      icon: icons[getStandardName(item.species)] || icons.global,
+      name: item.species,
+      count: item.count,
+    };
+  });
+
+  samples.value = data.sample_list.map((item) => {
+    return {
+      icon: icons[getStandardName(item.biosample_type)] || icons.global,
+      name: item.biosample_type || "Unknown",
+      count: item.count,
+    };
+  });
+
+  organs.value = data.organ_list.map((item) => {
+    return {
+      icon: icons[getStandardName(item.organ)] || icons.global,
+      name: item.organ,
+      count: item.count,
+    };
+  });
+};
+
+const getStandardName = (name) => {
+  return (name || "").replace(/[\s|-]/g, "_").toLowerCase();
 };
 </script>
 
