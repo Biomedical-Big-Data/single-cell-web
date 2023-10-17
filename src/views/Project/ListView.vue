@@ -206,8 +206,8 @@ const state = ref({
   geneSymbolFetching: false,
 });
 
-// const filter = ref('sample')
-const filter = ref("cell");
+const filter = ref("sample");
+// const filter = ref("cell");
 
 const sample = ref({
   species: undefined,
