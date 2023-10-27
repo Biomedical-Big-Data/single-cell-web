@@ -89,7 +89,7 @@ const handleNodeSelected = async (event) => {
 }
 
 const getLink = (cell_marker) => {
-  return `https://www.immunesinglecell.org/genepage/${cell_marker}`
+  return `https://www.ncbi.nlm.nih.gov/nuccore/${cell_marker}`
 }
 
 defineExpose({

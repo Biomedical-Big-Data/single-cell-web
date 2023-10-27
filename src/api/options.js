@@ -9,3 +9,12 @@ export function getGeneSymbolList({ gene_symbol, page = 1, page_size = 20 }) {
     },
   })
 }
+
+export function getSpecieList({ page = 1, page_size = 20 } = {}) {
+  return request.get("/project/species/list", {
+    params: {
+      page,
+      page_size,
+    },
+  })
+}

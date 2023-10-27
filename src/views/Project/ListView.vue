@@ -37,8 +37,9 @@
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="sample.species"
-                  :options="SPECIES"
+                  :options="options.species"
                   placeholder="Species"
+                  :field-names="{ label: 'species', value: 'id' }"
                   allow-clear
                 ></a-select>
               </a-form-item>
@@ -70,7 +71,8 @@
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="cell.species"
-                  :options="SPECIES"
+                  :options="options.species"
+                  :field-names="{ label: 'species', value: 'id' }"
                   placeholder="Species"
                   allow-clear
                 ></a-select>
@@ -104,6 +106,7 @@
                     <a-select
                       v-model:value="cell.positive"
                       mode="tags"
+                      :token-separators="[',']"
                       placeholder="Positive"
                       allow-clear
                     ></a-select>
@@ -112,6 +115,7 @@
                     <a-select
                       v-model:value="cell.negative"
                       mode="tags"
+                      :token-separators="[',']"
                       placeholder="Negative"
                       allow-clear
                     ></a-select>
@@ -125,7 +129,8 @@
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="gene.species"
-                  :options="SPECIES"
+                  :options="options.species"
+                  :field-names="{ label: 'species', value: 'id' }"
                   placeholder="Species"
                   allow-clear
                 ></a-select>
@@ -185,17 +190,17 @@
   ></CellNameModal>
 </template>
 <script setup>
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import { UndoOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { SPECIES } from "@/constants/common"
 import { getOrganList } from "@/api/project"
 import SampleTable from "@/components/projects/SampleTable.vue"
 import CellTable from "@/components/projects/CellTable.vue"
 import GeneTable from "@/components/projects/GeneTable.vue"
-import { getGeneSymbolList } from "@/api/options.js"
+import { getGeneSymbolList, getSpecieList } from "@/api/options.js"
 import CellNameModal from "@/components/projects/CellNameModal.vue"
 
 const options = ref({
+  species: [],
   organ: [],
   cell: [],
   geneSymbol: [],
@@ -319,6 +324,19 @@ const handleCellNameSearch = () => {
 const handleCellNameChange = (result) => {
   cell.value.name = result.name
   cell.value.cl_id = result.cl_id
+}
+
+onMounted(() => {
+  getOptions()
+})
+
+const getOptions = () => {
+  getSpecieOptions()
+}
+
+const getSpecieOptions = async () => {
+  const data = await getSpecieList()
+  options.value.species = data
 }
 </script>
 

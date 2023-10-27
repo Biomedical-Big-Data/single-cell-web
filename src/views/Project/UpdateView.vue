@@ -15,8 +15,35 @@
             <a-form-item label="项目名称" name="title" required>
               <a-input v-model:value="formState.title" placeholder="项目名称" />
             </a-form-item>
+            <a-form-item label="访问权限" name="public">
+              <div class="flex items-center">
+                <a-switch
+                  v-model:checked="formState.isPrivate"
+                  checked-children="私有"
+                  un-checked-children="公开"
+                />
+                <a-tooltip placement="right" class="ml-2">
+                  <template #title>
+                    <span>
+                      私有项目，仅受邀人可看，公开项目需要管理员审核后才可见
+                    </span>
+                  </template>
+                  <a-button
+                    type="text"
+                    size="small"
+                    shape="circle"
+                    :icon="h(QuestionCircleOutlined)"
+                  ></a-button>
+                </a-tooltip>
+              </div>
+            </a-form-item>
 
-            <a-form-item label="Species" name="species_id" required>
+            <a-form-item
+              v-if="!formState.isPrivate"
+              label="Species"
+              name="species_id"
+              required
+            >
               <a-select
                 v-model:value="formState.species_id"
                 :options="SPECIES"
@@ -24,7 +51,12 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="Organ" name="organ" required>
+            <a-form-item
+              v-if="!formState.isPrivate"
+              label="Organ"
+              name="organ"
+              required
+            >
               <a-input v-model:value="formState.organ" placeholder="Organ" />
             </a-form-item>
 
@@ -35,11 +67,6 @@
                 placeholder="标签"
                 :options="[]"
               ></a-select>
-            </a-form-item>
-
-            <a-form-item label="访问权限" name="public">
-              <a-switch v-model:checked="formState.isPrivate" />
-              私有，仅受邀人可看
             </a-form-item>
 
             <a-form-item
@@ -258,8 +285,12 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
+import { onMounted, ref, h } from "vue"
+import {
+  MinusOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons-vue"
 import { SPECIES } from "@/constants/common"
 import {
   getProjectDetail,
@@ -271,7 +302,7 @@ import { message, Modal } from "ant-design-vue"
 import FileModalView from "@/views/File/ModalView.vue"
 
 const props = defineProps({
-  id: { required: true },
+  id: { required: true, type: [Number, String] },
 })
 
 const formState = ref({

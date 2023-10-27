@@ -150,6 +150,7 @@ const projectDetail = ref(null)
 const props = defineProps({
   id: {
     required: true,
+    type: [Number, String],
   },
 })
 

@@ -187,7 +187,7 @@ const columnSettings = ref(columns.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
-    ...columns.value.filter((item) => {
+    ...columns.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
     {
