@@ -4,15 +4,15 @@
       <div class="flex items-center px-4 p-2">
         <span class="mr-4 font text-sm">Static UMAP group by</span>
         <a-select
-          class="w-28"
           v-model:value="umapType"
-          @change="handleFileFetch"
+          class="w-28"
           :options="options.umapType"
           size="small"
+          @change="handleFileFetch"
         ></a-select>
       </div>
       <div class="flex-1">
-        <img :src="umapUrl" v-show="!!umapUrl" class="w-full umap" alt="" />
+        <img v-show="!!umapUrl" :src="umapUrl" class="w-full umap" alt="" />
       </div>
     </a-spin>
   </div>

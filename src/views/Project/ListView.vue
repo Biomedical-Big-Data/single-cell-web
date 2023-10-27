@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 flex">
     <div class="conditions flex-none mr-4">
-      <a-card :bodyStyle="{ padding: '16px' }">
+      <a-card :body-style="{ padding: '16px' }">
         <div>Filters</div>
         <div class="mt-2">
           <a-radio-group v-model:value="filter" class="flex w-full">
@@ -18,15 +18,15 @@
         </div>
         <div class="mt-4">
           <div v-if="filter === 'sample'">
-            <a-form layout="vertical" :model="sample" ref="sampleFormRef">
+            <a-form ref="sampleFormRef" layout="vertical" :model="sample">
               <a-form-item label="Organ" name="organ">
                 <a-select
                   v-model:value="sample.organ"
                   show-search
                   placeholder="Organ"
                   :options="options.organ"
-                  @search="handleOrganSearch"
                   allow-clear
+                  @search="handleOrganSearch"
                 >
                   <template v-if="state.organFetching" #notFoundContent>
                     <a-spin size="small" />
@@ -66,7 +66,7 @@
             </a-form>
           </div>
           <div v-if="filter === 'cell'">
-            <a-form layout="vertical" :model="cell" ref="cellFormRef">
+            <a-form ref="cellFormRef" layout="vertical" :model="cell">
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="cell.species"
@@ -92,10 +92,10 @@
                 <div v-if="cell.searchBy === 'name'">
                   <a-form-item label="Name" name="name">
                     <a-input
+                      ref="cellNameInput"
                       v-model:value="cell.name"
                       placeholder="Click to search"
                       @focus="handleCellNameSearch"
-                      ref="cellNameInput"
                     />
                   </a-form-item>
                 </div>
@@ -121,7 +121,7 @@
             </a-form>
           </div>
           <div v-if="filter === 'gene'">
-            <a-form layout="vertical" :model="gene" ref="geneFormRef">
+            <a-form ref="geneFormRef" layout="vertical" :model="gene">
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="gene.species"
@@ -132,12 +132,12 @@
               </a-form-item>
               <a-form-item label="Search by gene symbol" name="symbol">
                 <a-select
-                  show-search
                   v-model:value="gene.symbol"
+                  show-search
                   placeholder="Gene Symbol"
                   :options="options.geneSymbol"
-                  @search="handleGeneSymbolSearch"
                   allow-clear
+                  @search="handleGeneSymbolSearch"
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
                     <a-spin size="small" />
@@ -170,11 +170,11 @@
     <div class="flex-1">
       <div class="bg-white rounded-lg">
         <SampleTable
-          ref="sampleTableRef"
           v-if="filter === 'sample'"
+          ref="sampleTableRef"
         ></SampleTable>
-        <CellTable ref="cellTableRef" v-if="filter === 'cell'"></CellTable>
-        <GeneTable ref="geneTableRef" v-if="filter === 'gene'"></GeneTable>
+        <CellTable v-if="filter === 'cell'" ref="cellTableRef"></CellTable>
+        <GeneTable v-if="filter === 'gene'" ref="geneTableRef"></GeneTable>
       </div>
     </div>
   </div>

@@ -4,11 +4,11 @@
       <div class="text-lg">重置密码</div>
       <div class="max-w-lg w-full mt-6">
         <a-form
+          ref="formRef"
           layout="vertical"
           :model="formState"
           class="w-full"
           :rules="rules"
-          ref="formRef"
         >
           <a-form-item label="重置密码" required name="password">
             <a-input-password
@@ -26,8 +26,8 @@
             <a-button
               type="primary"
               class="flex items-center"
-              @click="handleResetPassword"
               :loading="loading"
+              @click="handleResetPassword"
             >
               <template #icon>
                 <CheckOutlined />

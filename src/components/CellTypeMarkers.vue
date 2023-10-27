@@ -19,7 +19,7 @@
         </a-button>
       </a-popover>
 
-      <a-button :loading="downloading" @click="handleFileDownload" class="ml-4">
+      <a-button :loading="downloading" class="ml-4" @click="handleFileDownload">
         <template #icon>
           <DownloadOutlined />
         </template>

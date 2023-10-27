@@ -4,10 +4,10 @@
       <div class="flex items-center flex-col w-full">
         <div class="max-w-lg w-full mt-6">
           <a-form
+            ref="formRef"
             :model="userInfo"
             :label-col="{ span: 5 }"
             :rules="rules"
-            ref="formRef"
           >
             <a-form-item label="用户名">
               <a-input v-model:value="userInfo.user_name" disabled />
@@ -24,8 +24,8 @@
             <a-form-item :wrapper-col="{ span: 13, offset: 5 }">
               <a-button
                 type="primary"
-                @click="handleUpdateUser"
                 :loading="loading"
+                @click="handleUpdateUser"
               >
                 保存
               </a-button>

@@ -2,9 +2,9 @@
   <a-modal
     v-model:open="open"
     title="Search Cell Name"
-    @ok="confirm"
     :width="900"
     :mask-closable="false"
+    @ok="confirm"
   >
     <div class="p-4 flex">
       <div class="flex-1">
@@ -23,11 +23,11 @@
       <div class="flex-1 ml-3">
         <div v-if="current" class="flex relative">
           <a
+            v-for="item in relations"
+            :key="item.id"
             class="p-1"
             target="_blank"
             :href="getLink(item.cell_marker)"
-            v-for="item in relations"
-            :key="item.id"
           >
             {{ item.cell_marker }}
           </a>

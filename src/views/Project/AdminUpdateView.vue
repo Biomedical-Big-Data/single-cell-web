@@ -30,9 +30,9 @@
             </a-form-item>
 
             <a-form-item
+              v-if="!!formState.isPrivate"
               label="可访问人员"
               name="public"
-              v-if="!!formState.isPrivate"
             >
               <a-select
                 v-model:value="formState.members"
@@ -58,8 +58,8 @@
                 v-else
                 class="w-full flex items-center"
                 type="dashed"
-                @click="formState.h5ad_id = null"
                 danger
+                @click="formState.h5ad_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -84,8 +84,8 @@
                 v-else
                 class="w-full flex items-center"
                 type="dashed"
-                @click="formState.excel_id = null"
                 danger
+                @click="formState.excel_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -109,8 +109,8 @@
                 v-else
                 class="w-full flex items-center"
                 type="dashed"
-                @click="formState.umap_id = null"
                 danger
+                @click="formState.umap_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -134,8 +134,8 @@
                 v-else
                 class="w-full flex items-center"
                 type="dashed"
-                @click="formState.cell_marker_id = null"
                 danger
+                @click="formState.cell_marker_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -162,17 +162,17 @@
                 保存
               </a-button>
               <a-button
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 @click="handleProjectOffline()"
               >
                 下线
               </a-button>
               <a-button
+                v-if="projectDetail.isPublish"
                 class="mr-3"
                 danger
-                v-if="projectDetail.isPublish"
                 :saving="saving"
                 @click="handleTransferModalShow"
               >
@@ -184,8 +184,8 @@
       </div>
     </a-card>
     <a-modal
-      title="转移项目"
       v-model:open="open"
+      title="转移项目"
       width="300px"
       @ok="handleProjectTransfer"
     >

@@ -17,18 +17,18 @@
       </div>
       <div class="mt-4">
         <a-button
-          class="mr-3"
           v-for="item in analysis"
+          :key="item.id"
+          class="mr-3"
           type="primary"
           @click="handleOpenCellxgene(item)"
-          :key="item.id"
         >
           {{ item.h5ad_id }} viewer
         </a-button>
       </div>
     </div>
     <div class="mt-4 px-4 flex-1">
-      <div class="h-full" v-if="projectDetail">
+      <div v-if="projectDetail" class="h-full">
         <a-tabs
           v-model:activeKey="activeKey"
           tab-position="left"
@@ -68,9 +68,9 @@
           </a-tab-pane>
           <a-tab-pane key="download" tab="Download">
             <a-button
+              v-if="projectDetail?.project_analysis_meta?.[0]?.h5ad_id"
               class="mr-4"
               type="primary"
-              v-if="projectDetail?.project_analysis_meta?.[0]?.h5ad_id"
               @click="
                 handleDownloadFile(
                   projectDetail.project_analysis_meta[0].h5ad_id,
@@ -83,9 +83,9 @@
               H5AD File
             </a-button>
             <a-button
+              v-if="projectDetail?.project_analysis_meta?.[0]?.umap_id"
               class="mr-4"
               type="primary"
-              v-if="projectDetail?.project_analysis_meta?.[0]?.umap_id"
               @click="
                 handleDownloadFile(
                   projectDetail.project_analysis_meta[0].umap_id,
@@ -98,9 +98,9 @@
               Umap File
             </a-button>
             <a-button
+              v-if="projectDetail?.project_analysis_meta?.[0]?.cell_marker_id"
               class="mr-4"
               type="primary"
-              v-if="projectDetail?.project_analysis_meta?.[0]?.cell_marker_id"
               @click="
                 handleDownloadFile(
                   projectDetail.project_analysis_meta[0].cell_marker_id,

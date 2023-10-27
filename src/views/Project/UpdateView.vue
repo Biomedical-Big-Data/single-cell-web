@@ -4,8 +4,8 @@
       <div class="flex items-center flex-col w-full">
         <div class="max-w-lg w-full mt-6">
           <a-form
-            :disabled="!projectDetail.isPrivate"
             ref="formRef"
+            :disabled="!projectDetail.isPrivate"
             :model="formState"
             name="basic"
             :rules="rules"
@@ -43,9 +43,9 @@
             </a-form-item>
 
             <a-form-item
+              v-if="!!formState.isPrivate"
               label="可访问人员"
               name="public"
-              v-if="!!formState.isPrivate"
             >
               <a-select
                 v-model:value="formState.members"
@@ -57,10 +57,10 @@
 
             <a-form-item label="H5AD文件" name="h5ad_id" required>
               <a-button
+                v-if="!formState.h5ad_id"
                 class="w-full flex items-center"
                 type="dashed"
                 @click="fileModalRef?.open('h5ad_id')"
-                v-if="!formState.h5ad_id"
               >
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
@@ -71,8 +71,8 @@
                 v-else
                 class="w-full flex items-center"
                 type="dashed"
-                @click="formState.h5ad_id = null"
                 danger
+                @click="formState.h5ad_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -83,10 +83,10 @@
             <a-form-item label="UMap文件" name="umap_id">
               <div>
                 <a-button
+                  v-if="!formState.umap_id"
                   class="w-full flex items-center"
                   type="dashed"
                   @click="fileModalRef?.open('umap_id')"
-                  v-if="!formState.umap_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -97,8 +97,8 @@
                   v-else
                   class="w-full flex items-center"
                   type="dashed"
-                  @click="formState.umap_id = null"
                   danger
+                  @click="formState.umap_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -119,10 +119,10 @@
             <a-form-item label="CellMarker文件" name="cell_marker_id">
               <div>
                 <a-button
+                  v-if="!formState.cell_marker_id"
                   class="w-full flex items-center"
                   type="dashed"
                   @click="fileModalRef?.open('cell_marker_id')"
-                  v-if="!formState.cell_marker_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -133,8 +133,8 @@
                   v-else
                   class="w-full flex items-center"
                   type="dashed"
-                  @click="formState.cell_marker_id = null"
                   danger
+                  @click="formState.cell_marker_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -155,10 +155,10 @@
             <a-form-item label="Pathway文件" name="pathway_id">
               <div>
                 <a-button
+                  v-if="!formState.pathway_id"
                   class="w-full flex items-center"
                   type="dashed"
                   @click="fileModalRef?.open('pathway_id')"
-                  v-if="!formState.pathway_id"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -169,8 +169,8 @@
                   v-else
                   class="w-full flex items-center"
                   type="dashed"
-                  @click="formState.pathway_id = null"
                   danger
+                  @click="formState.pathway_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -199,34 +199,34 @@
 
             <a-form-item :wrapper-col="{ offset: 5 }">
               <a-button
+                v-if="!projectDetail.isPublish"
                 type="primary"
                 class="mr-3"
                 :saving="saving"
-                v-if="!projectDetail.isPublish"
                 @click="handleProjectUpdate(true)"
               >
                 发布
               </a-button>
               <a-button
+                v-if="projectDetail.isPrivate"
                 class="mr-3"
                 :saving="saving"
-                v-if="projectDetail.isPrivate"
                 @click="handleProjectUpdate(false)"
               >
                 保存
               </a-button>
               <a-button
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 @click="handleProjectOffline()"
               >
                 下线
               </a-button>
               <a-button
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 danger
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 :saving="saving"
                 @click="handleTransferModalShow"
               >
@@ -238,8 +238,8 @@
       </div>
     </a-card>
     <a-modal
-      title="转移项目"
       v-model:open="open"
+      title="转移项目"
       width="300px"
       @ok="handleProjectTransfer"
     >

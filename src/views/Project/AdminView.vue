@@ -4,8 +4,8 @@
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="项目名称" name="project_name">
           <a-input
-            class="w-28"
             v-model:value="conditions.title"
+            class="w-28"
             placeholder="项目名称"
           ></a-input>
         </a-form-item>

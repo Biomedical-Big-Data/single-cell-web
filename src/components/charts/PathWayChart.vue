@@ -2,16 +2,16 @@
   <div class="h-full flex flex-col">
     <div class="flex items-center px-4 p-2">
       <a-select
-        class="w-50"
         v-model:value="pathType"
+        class="w-50"
         :options="pathTypeList"
         placeholder="Select pathway type"
         size="small"
         @change="handlePathTypeChange"
       ></a-select>
       <a-select
-        class="w-40 ml-4"
         v-model:value="pathWay"
+        class="w-40 ml-4"
         :options="pathWayList"
         size="small"
         placeholder="Select pathway"

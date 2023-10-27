@@ -1,7 +1,7 @@
 <template>
   <a-modal
-    title="选择文件"
     v-model:open="open"
+    title="选择文件"
     :footer="null"
     width="500"
     :centered="true"
@@ -10,8 +10,8 @@
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="文件名称" name="file_name">
           <a-input
-            class="w-56"
             v-model:value="conditions.file_name"
+            class="w-56"
             placeholder="文件名称"
           ></a-input>
         </a-form-item>
@@ -19,8 +19,8 @@
           <a-button
             type="primary"
             class="flex items-center"
-            @click="handleSearch"
             :loading="loading"
+            @click="handleSearch"
           >
             <template #icon>
               <SearchOutlined></SearchOutlined>
@@ -32,15 +32,15 @@
           <a-button
             type="primary"
             class="flex items-center"
-            @click="fileRef.click()"
             :loading="uploading"
+            @click="fileRef.click()"
           >
             <template #icon>
               <CloudUploadOutlined></CloudUploadOutlined>
             </template>
             上传
           </a-button>
-          <input type="file" hidden ref="fileRef" @change="handleUpload" />
+          <input ref="fileRef" type="file" hidden @change="handleUpload" />
         </a-form-item>
       </a-form>
     </div>
@@ -72,13 +72,22 @@
       title="Uploading"
       :footer="null"
       :closable="false"
-      :maskClosable="false"
+      :mask-closable="false"
       :centered="true"
     >
       <div class="p-2">
         <div>{{ uploadFileName }}</div>
         <div class="mt-2">
           <a-progress class="w-full" :percent="uploadProgress" />
+        </div>
+        <div>
+          <a-button
+            type="primary"
+            :loading="canceling"
+            @click="handleCancelUpload"
+          >
+            取消上传
+          </a-button>
         </div>
       </div>
     </a-modal>
@@ -101,9 +110,11 @@ const uploadFileName = ref("")
 const uploadProgress = ref(0)
 const open = ref(false)
 const uploading = ref(false)
+const canceling = ref(false)
 const conditions = ref({
   file_name: "",
 })
+const controller = ref(null)
 
 const columns = [
   {
@@ -201,20 +212,28 @@ const handleUpload = async (event) => {
   if (files.length) {
     try {
       uploading.value = true
+      controller.value = new AbortController()
       const file = files[0]
       uploadFileName.value = file.name
       await uploadProjectFile(file, {
+        signal: controller.value.signal,
         onUploadProgress: ({ progress }) => {
           updateProgress(progress)
         },
       })
       message.success("上传成功")
       handleSearch()
-      fileRef.value.value = null
     } finally {
+      fileRef.value.value = null
       uploading.value = false
+      canceling.value = false
     }
   }
+}
+
+const handleCancelUpload = async () => {
+  controller.value?.abort()
+  canceling.value = true
 }
 
 const handleFileSelected = (record) => {

@@ -13,8 +13,8 @@
       <a-tab-pane key="login" tab="Login">
         <div class="mt-4">
           <a-input
-            placeholder="输入登录邮箱"
             v-model:value="loginForm.email_address"
+            placeholder="输入登录邮箱"
           >
             <template #prefix>
               <user-outlined :style="{ color: '#1890FF' }" />
@@ -23,8 +23,8 @@
         </div>
         <div class="mt-6">
           <a-input-password
-            placeholder="输入密码"
             v-model:value="loginForm.user_password"
+            placeholder="输入密码"
           >
             <template #prefix>
               <lock-outlined :style="{ color: '#1890FF' }" />
@@ -38,7 +38,7 @@
           </router-link>
         </div>
         <div class="mt-6">
-          <a-button type="primary" @click="userLogin" :loading="logining">
+          <a-button type="primary" :loading="logining" @click="userLogin">
             Sign In
           </a-button>
         </div>
@@ -46,8 +46,8 @@
       <a-tab-pane key="register" tab="Sign Up">
         <div class="mt-4">
           <a-input
-            placeholder="输入用户名"
             v-model:value="registerForm.user_name"
+            placeholder="输入用户名"
           >
             <template #prefix>
               <user-outlined :style="{ color: '#1890FF' }" />
@@ -56,8 +56,8 @@
         </div>
         <div class="mt-6">
           <a-input
-            placeholder="输入邮箱"
             v-model:value="registerForm.email_address"
+            placeholder="输入邮箱"
           >
             <template #prefix>
               <mail-outlined :style="{ color: '#1890FF' }" />
@@ -66,8 +66,8 @@
         </div>
         <div class="mt-6">
           <a-input
-            placeholder="输入您的组织"
             v-model:value="registerForm.organization"
+            placeholder="输入您的组织"
           >
             <template #prefix>
               <team-outlined :style="{ color: '#1890FF' }" />
@@ -76,8 +76,8 @@
         </div>
         <div class="mt-6">
           <a-input-password
-            placeholder="输入密码"
             v-model:value="registerForm.user_password"
+            placeholder="输入密码"
           >
             <template #prefix>
               <lock-outlined :style="{ color: '#1890FF' }" />
@@ -86,8 +86,8 @@
         </div>
         <div class="mt-6">
           <a-input-password
-            placeholder="请再次输入密码"
             v-model:value="registerForm.user_verify_password"
+            placeholder="请再次输入密码"
           >
             <template #prefix>
               <lock-outlined :style="{ color: '#1890FF' }" />
@@ -95,7 +95,7 @@
           </a-input-password>
         </div>
         <div class="mt-6">
-          <a-button type="primary" @click="userRegister" :loading="registering">
+          <a-button type="primary" :loading="registering" @click="userRegister">
             Sign Up
           </a-button>
         </div>

@@ -6,7 +6,7 @@
       <div class="title">Species</div>
       <div class="items">
         <a-row justify="center">
-          <a-col :span="4" v-for="item in species" class="item" :key="item.id">
+          <a-col v-for="item in species" :key="item.id" :span="4" class="item">
             <div class="icon flex justify-center">
               <img :src="item.icon" alt="" />
             </div>
@@ -24,7 +24,7 @@
       <div class="title">Organ</div>
       <div class="items">
         <a-row justify="center">
-          <a-col :span="6" v-for="item in organs" class="item" :key="item.id">
+          <a-col v-for="item in organs" :key="item.id" :span="6" class="item">
             <div class="icon flex justify-center">
               <img :src="item.icon" alt="" />
             </div>
@@ -42,7 +42,7 @@
       <div class="title">Samples</div>
       <div class="items">
         <a-row justify="center">
-          <a-col :span="4" v-for="item in samples" class="item" :key="item.id">
+          <a-col v-for="item in samples" :key="item.id" :span="4" class="item">
             <div class="icon flex justify-center">
               <img :src="item.icon" alt="" />
             </div>

@@ -33,8 +33,8 @@
           </a-popover>
           <a-button
             class="ml-4"
-            @click="handleListDownload"
             :loading="downloading"
+            @click="handleListDownload"
           >
             <template #icon>
               <DownloadOutlined />

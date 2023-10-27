@@ -15,8 +15,8 @@
         <RouterLink to="/projects/create">Create Project</RouterLink>
       </a-menu-item>
       <a-sub-menu
-        key="user"
         v-if="userStore?.getIsAuthenticated"
+        key="user"
         class="ml-auto"
       >
         <template #title>

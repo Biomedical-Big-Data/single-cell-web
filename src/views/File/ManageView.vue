@@ -4,8 +4,8 @@
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="文件名称" name="file_name">
           <a-input
-            class="w-56"
             v-model:value="conditions.file_name"
+            class="w-56"
             placeholder="文件名称"
           ></a-input>
         </a-form-item>
@@ -13,8 +13,8 @@
           <a-button
             type="primary"
             class="flex items-center"
-            @click="handleSearch"
             :loading="loading"
+            @click="handleSearch"
           >
             <template #icon>
               <SearchOutlined></SearchOutlined>
@@ -26,15 +26,15 @@
           <a-button
             type="primary"
             class="flex items-center"
-            @click="fileRef.click()"
             :loading="uploading"
+            @click="fileRef.click()"
           >
             <template #icon>
               <CloudUploadOutlined></CloudUploadOutlined>
             </template>
             上传
           </a-button>
-          <input type="file" hidden ref="fileRef" @change="handleUpload" />
+          <input ref="fileRef" type="file" hidden @change="handleUpload" />
         </a-form-item>
       </a-form>
     </div>
@@ -62,7 +62,7 @@
       title="Uploading"
       :footer="null"
       :closable="false"
-      :maskClosable="false"
+      :mask-closable="false"
     >
       <div class="p-2">
         <div>{{ uploadFileName }}</div>
@@ -72,8 +72,8 @@
         <div>
           <a-button
             type="primary"
-            @click="handleCancelUpload"
             :loading="canceling"
+            @click="handleCancelUpload"
           >
             取消上传
           </a-button>

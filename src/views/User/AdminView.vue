@@ -4,22 +4,22 @@
       <a-form :model="conditions" layout="inline" autocomplete="off">
         <a-form-item label="用户名" name="user_name">
           <a-input
-            class="w-28"
             v-model:value="conditions.user_name"
+            class="w-28"
             placeholder="用户名"
           ></a-input>
         </a-form-item>
         <a-form-item label="组织" name="organization">
           <a-input
-            class="w-28"
             v-model:value="conditions.organization"
+            class="w-28"
             placeholder="组织"
           ></a-input>
         </a-form-item>
         <a-form-item label="邮箱" name="email_address">
           <a-input
-            class="w-28"
             v-model:value="conditions.email_address"
+            class="w-28"
             placeholder="邮箱"
           ></a-input>
         </a-form-item>
@@ -106,10 +106,10 @@
   <a-modal
     v-model:open="open"
     title="重置密码"
-    @ok="handleUpdateUserPassword"
-    @cancel="handleClearCurrentUser"
     :ok-button-props="{ size: 'small' }"
     :cancel-button-props="{ size: 'small' }"
+    @ok="handleUpdateUserPassword"
+    @cancel="handleClearCurrentUser"
   >
     <div class="py-4">
       <a-input-password
