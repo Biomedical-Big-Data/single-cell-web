@@ -4,11 +4,11 @@
       <div class="text-lg">重置密码</div>
       <div class="max-w-lg w-full mt-6">
         <a-form
+          ref="formRef"
           layout="vertical"
           :model="formState"
           class="w-full"
           :rules="rules"
-          ref="formRef"
         >
           <a-form-item label="用户邮箱" required name="mail">
             <a-input

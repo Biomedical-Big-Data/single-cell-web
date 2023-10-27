@@ -69,6 +69,15 @@
         <div class="mt-2">
           <a-progress class="w-full" :percent="uploadProgress" />
         </div>
+        <div>
+          <a-button
+            type="primary"
+            @click="handleCancelUpload"
+            :loading="canceling"
+          >
+            取消上传
+          </a-button>
+        </div>
       </div>
     </a-modal>
   </div>
@@ -84,11 +93,13 @@ import dayjs from "dayjs"
 
 const fileRef = ref()
 const uploading = ref(false)
+const canceling = ref(false)
 const uploadFileName = ref("")
 const uploadProgress = ref(0)
 const conditions = ref({
   file_name: "",
 })
+const controller = ref(null)
 
 const columns = [
   {
@@ -172,21 +183,29 @@ const handleUpload = async (event) => {
   const files = event.target.files
   if (files.length) {
     try {
+      controller.value = new AbortController()
       uploading.value = true
       const file = files[0]
       uploadFileName.value = file.name
       await uploadProjectFile(file, {
+        signal: controller.value.signal,
         onUploadProgress: ({ progress }) => {
           updateProgress(progress)
         },
       })
       message.success("上传成功")
       handleSearch()
-      fileRef.value.value = null
     } finally {
+      fileRef.value.value = null
       uploading.value = false
+      canceling.value = false
     }
   }
+}
+
+const handleCancelUpload = async () => {
+  controller.value?.abort()
+  canceling.value = true
 }
 
 const updateProgress = (progress) => {
