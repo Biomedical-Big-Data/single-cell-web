@@ -46,8 +46,9 @@
             >
               <a-select
                 v-model:value="formState.species_id"
-                :options="SPECIES"
+                :options="options.species"
                 placeholder="Species"
+                :field-names="{ label: 'species', value: 'id' }"
               ></a-select>
             </a-form-item>
 
@@ -254,17 +255,17 @@
 </template>
 
 <script setup>
-import { ref, h } from "vue"
+import { ref, h, onMounted } from "vue"
 import {
   PlusOutlined,
   MinusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons-vue"
-import { SPECIES } from "@/constants/common"
 import { createProject } from "@/api/project.js"
 import { message } from "ant-design-vue"
 import router from "@/router/index.js"
 import FileModalView from "@/views/File/ModalView.vue"
+import { getSpecieList } from "@/api/options.js"
 
 const formState = ref({
   title: "",
@@ -283,6 +284,11 @@ const formState = ref({
 const loading = ref(false)
 const formRef = ref()
 const fileModalRef = ref()
+
+const options = ref({
+  species: [],
+})
+
 const rules = {
   title: [
     {
@@ -313,6 +319,10 @@ const rules = {
     },
   ],
 }
+
+onMounted(() => {
+  getSpecieOptions()
+})
 
 const handleFileSelected = (record) => {
   formState.value[record.target] = record.file_id
@@ -362,6 +372,11 @@ const handleProjectCreate = async (isPublish) => {
   } finally {
     loading.value = false
   }
+}
+
+const getSpecieOptions = async () => {
+  const data = await getSpecieList()
+  options.value.species = data
 }
 </script>
 

@@ -10,3 +10,7 @@ export function getUmap(file_id, group_by) {
     responseType: "arraybuffer",
   })
 }
+
+export function getDownloadToken(id) {
+  return request.get(`/project/view/file/token/${id}`)
+}

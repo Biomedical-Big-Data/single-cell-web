@@ -46,7 +46,8 @@
             >
               <a-select
                 v-model:value="formState.species_id"
-                :options="SPECIES"
+                :options="options.species"
+                :field-names="{ label: 'species', value: 'id' }"
                 placeholder="Species"
               ></a-select>
             </a-form-item>
@@ -291,7 +292,7 @@ import {
   PlusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons-vue"
-import { SPECIES } from "@/constants/common"
+import { getSpecieList } from "@/api/options.js"
 import {
   getProjectDetail,
   offlineProject,
@@ -325,6 +326,10 @@ const saving = ref(false)
 const formRef = ref()
 const fileModalRef = ref()
 
+const options = ref({
+  species: [],
+})
+
 const rules = {
   title: [
     {
@@ -357,7 +362,7 @@ const rules = {
 }
 
 onMounted(() => {
-  handleProjectFetch()
+  getSpecieOptions().then(handleProjectFetch)
 })
 
 const handleProjectFetch = async () => {
@@ -464,6 +469,11 @@ const handleProjectOffline = () => {
 
 const handleFileSelected = (record) => {
   formState.value[record.target] = record.file_id
+}
+
+const getSpecieOptions = async () => {
+  const data = await getSpecieList()
+  options.value.species = data
 }
 </script>
 
