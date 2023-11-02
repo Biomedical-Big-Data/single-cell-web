@@ -48,11 +48,11 @@
 </template>
 
 <script setup>
-import { getFile } from "@/api/file.js"
 import { computed, onMounted, ref } from "vue"
 import * as csv from "csvtojson"
 import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue"
 import { saveAs } from "file-saver"
+import { getCellMarkerFile } from "../api/file"
 
 const props = defineProps({
   fileId: {
@@ -91,7 +91,7 @@ const columnResult = computed(() => {
 })
 
 const handleCellTypeMarkersFetch = async () => {
-  const data = await getFile(props.fileId)
+  const data = await getCellMarkerFile(props.fileId)
   dataSource.value = await csv({ output: "json" })
     .on("header", (header) => {
       columnSettings.value = header
@@ -114,7 +114,7 @@ const handleCellTypeMarkersFetch = async () => {
 const handleFileDownload = async () => {
   try {
     downloading.value = true
-    const data = await getFile(props.fileId)
+    const data = await getCellMarkerFile(props.fileId)
     const blob = new Blob([data], { type: "text/csv;charset=utf-8" })
     saveAs(blob, "cell_type_markers.csv")
   } finally {

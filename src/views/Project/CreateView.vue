@@ -137,11 +137,7 @@
               </div>
               <div class="mt-2">
                 请按以下格式上传:
-                <a
-                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
-                >
-                  umap.csv
-                </a>
+                <a href="./umap.csv">umap.csv</a>
               </div>
             </a-form-item>
 
@@ -173,11 +169,7 @@
               </div>
               <div class="mt-2">
                 请按以下格式上传:
-                <a
-                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
-                >
-                  cell_marker.csv
-                </a>
+                <a href="./cell_marker.csv">cell_marker.csv</a>
               </div>
             </a-form-item>
 
@@ -209,11 +201,7 @@
               </div>
               <div class="mt-2">
                 请按以下格式上传:
-                <a
-                  href="https://www.kegg.jp/kegg-bin/show_pathway?map=hsa04010&show_description=show"
-                >
-                  pathway_score.csv
-                </a>
+                <a href="./pathway_score.xlsx">pathway_score.xlsx</a>
               </div>
             </a-form-item>
 

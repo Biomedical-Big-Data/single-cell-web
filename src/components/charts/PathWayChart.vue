@@ -39,7 +39,8 @@ const pathWay = ref(undefined)
 const props = defineProps({
   pathways: {
     required: true,
-    type: [Number, String],
+    type: Array,
+    default: () => [],
   },
 })
 

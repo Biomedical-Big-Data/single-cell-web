@@ -45,9 +45,9 @@
           <!--            </div>-->
           <!--          </a-tab-pane>-->
           <a-tab-pane
+            v-if="!projectDetail.is_private"
             key="barplot"
             tab="Barplot of cell number in each type"
-            class="abc"
           >
             <BarChart
               :analysis-id="projectDetail.project_analysis_meta[0].id"
@@ -58,13 +58,8 @@
               :file-id="projectDetail.project_analysis_meta[0].cell_marker_id"
             />
           </a-tab-pane>
-          <a-tab-pane key="score" tab="Score of pathway">
-            <PathWayChart
-              :pathways="
-                projectDetail.project_analysis_meta[0]
-                  .analysis_pathway_score_meta
-              "
-            ></PathWayChart>
+          <a-tab-pane v-if="pathWayVisiable" key="score" tab="Score of pathway">
+            <PathWayChart :pathways="pathwayData"></PathWayChart>
           </a-tab-pane>
           <a-tab-pane key="download" tab="Download">
             <a-button
@@ -157,11 +152,13 @@ import dayjs from "dayjs"
 import { useRoute } from "vue-router"
 import { saveAs } from "file-saver"
 import { CloudDownloadOutlined } from "@ant-design/icons-vue"
-import { getDownloadFileToken } from "@/api/file.js"
+import { getDownloadFileToken, getCellPathwayFile } from "@/api/file.js"
+import * as csv from "csvtojson"
 
 const route = useRoute()
 // const activeKey = ref('score')
 const activeKey = ref("umap")
+const pathWayFileData = ref([])
 const projectDetail = ref(null)
 const props = defineProps({
   id: {
@@ -172,6 +169,24 @@ const props = defineProps({
 
 onMounted(() => {
   handleProjectDetailFetch()
+})
+
+const pathWayVisiable = computed(() => {
+  const { is_private, project_analysis_meta } = projectDetail.value
+  if (!is_private) {
+    return true
+  } else {
+    return !!project_analysis_meta?.[0]?.pathway_id
+  }
+})
+
+const pathwayData = computed(() => {
+  if (projectDetail.value?.is_private) {
+    return pathWayFileData.value
+  } else {
+    return projectDetail.value?.project_analysis_meta[0]
+      ?.analysis_pathway_score_meta
+  }
 })
 
 const analysis = computed(() => {
@@ -188,6 +203,12 @@ const analysis = computed(() => {
 const handleProjectDetailFetch = async () => {
   const data = await getProjectDetail(props.id)
   projectDetail.value = data
+  if (data.is_private && data.project_analysis_meta?.[0]?.pathway_id) {
+    const pathway = await getCellPathwayFile(
+      data.project_analysis_meta?.[0]?.pathway_id,
+    )
+    pathWayFileData.value = await csv({ output: "json" }).fromString(pathway)
+  }
 }
 
 const handleOpenCellxgene = (record) => {
