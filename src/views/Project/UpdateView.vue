@@ -227,7 +227,7 @@
                 v-if="projectDetail.isPrivate"
                 class="mr-3"
                 :saving="saving"
-                @click="handleProjectUpdate(formState.isPublish)"
+                @click="handleProjectUpdate(false)"
               >
                 保存
               </a-button>
