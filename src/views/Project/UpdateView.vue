@@ -239,7 +239,7 @@
                 v-if="projectDetail.isPrivate"
                 class="mr-3"
                 :saving="saving"
-                @click="handleProjectUpdate(false)"
+                @click="handleProjectUpdate(formState.isPublish)"
               >
                 保存
               </a-button>
@@ -254,9 +254,17 @@
               <a-button
                 v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
+                :saving="saving"
+                @click="handleTransferModalShow('copy')"
+              >
+                拷贝项目
+              </a-button>
+              <a-button
+                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                class="mr-3"
                 danger
                 :saving="saving"
-                @click="handleTransferModalShow"
+                @click="handleTransferModalShow('transfer')"
               >
                 转移项目
               </a-button>
@@ -267,14 +275,15 @@
     </a-card>
     <a-modal
       v-model:open="open"
-      title="转移项目"
+      :title="modelTitle"
       width="300px"
+      :confirm-loading="saving"
       @ok="handleProjectTransfer"
     >
       <div class="py-5">
         <a-input
           v-model:value="transferMail"
-          placeholder="请输入新管理员邮箱"
+          :placeholder="modelPlaceholder"
         ></a-input>
       </div>
     </a-modal>
@@ -286,7 +295,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, h } from "vue"
+import { onMounted, ref, h, computed } from "vue"
 import {
   MinusOutlined,
   PlusOutlined,
@@ -297,6 +306,7 @@ import {
   getProjectDetail,
   offlineProject,
   transferProject,
+  copyProject,
   updateProject,
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
@@ -321,6 +331,7 @@ const projectDetail = ref({})
 const transferMail = ref("")
 
 const open = ref(false)
+const transferMethod = ref("transfer")
 const loading = ref(false)
 const saving = ref(false)
 const formRef = ref()
@@ -361,6 +372,21 @@ const rules = {
   ],
 }
 
+const modelTitle = computed(() => {
+  return {
+    transfer: "转移项目",
+    copy: "拷贝项目",
+  }[transferMethod.value]
+})
+
+const modelPlaceholder = computed(() => {
+  console.log(transferMethod.value)
+  return {
+    transfer: "请输入新管理员邮箱",
+    copy: "请输入接受人邮箱",
+  }[transferMethod.value]
+})
+
 onMounted(() => {
   getSpecieOptions().then(handleProjectFetch)
 })
@@ -372,10 +398,10 @@ const handleProjectFetch = async () => {
     const result = {
       title: data.title,
       species_id:
-        data.project_project_biosample_meta[0].project_biosample_biosample_meta
+        data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
           .species_id,
       organ:
-        data.project_project_biosample_meta[0].project_biosample_biosample_meta
+        data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
           .organ,
       tags: data.tags ? data.tags.split(",") : [],
       members: data.project_project_user_meta
@@ -386,7 +412,11 @@ const handleProjectFetch = async () => {
         .map((item) => item.project_user_user_meta.email_address),
       description: data.description,
       isPrivate: !!data.is_private,
+      isPublish: data.is_publish,
       h5ad_id: data.project_analysis_meta[0].h5ad_id,
+      umap_id: data.project_analysis_meta[0].umap_id,
+      cell_marker_id: data.project_analysis_meta[0].cell_marker_id,
+      pathway_id: data.project_analysis_meta[0].pathway_id,
     }
     formState.value = result
     projectDetail.value = {
@@ -410,6 +440,9 @@ const handleProjectUpdate = async (isPublish) => {
       isPrivate,
       members,
       h5ad_id,
+      cell_marker_id,
+      pathway_id,
+      umap_id,
     } = formState.value
     saving.value = true
     await updateProject({
@@ -418,6 +451,9 @@ const handleProjectUpdate = async (isPublish) => {
       species_id,
       organ,
       h5ad_id,
+      cell_marker_id,
+      pathway_id,
+      umap_id,
       tags: tags.join(","),
       is_private: isPrivate,
       is_publish: isPublish,
@@ -436,7 +472,8 @@ const handleProjectUpdate = async (isPublish) => {
   }
 }
 
-const handleTransferModalShow = () => {
+const handleTransferModalShow = (method) => {
+  transferMethod.value = method
   open.value = true
 }
 
@@ -446,8 +483,13 @@ const handleProjectTransfer = async () => {
   }
   try {
     saving.value = true
-    await transferProject(props.id, transferMail.value)
-    message.success("转移项目成功")
+    if (transferMethod.value === "transfer") {
+      await transferProject(props.id, transferMail.value)
+      message.success("转移项目成功")
+    } else if (transferMethod.value === "copy") {
+      await copyProject(props.id, transferMail.value)
+      message.success("拷贝项目成功")
+    }
     await handleProjectFetch()
     open.value = false
   } finally {

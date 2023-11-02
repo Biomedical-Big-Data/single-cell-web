@@ -340,6 +340,9 @@ const handleProjectCreate = async (isPublish) => {
       isPrivate,
       members,
       h5ad_id,
+      umap_id,
+      cell_marker_id,
+      pathway_id,
     } = formState.value
     loading.value = true
     const data = await createProject({
@@ -351,6 +354,9 @@ const handleProjectCreate = async (isPublish) => {
       is_private: isPrivate,
       is_publish: isPublish,
       members: isPrivate ? members : [],
+      umap_id,
+      cell_marker_id,
+      pathway_id,
       description,
     })
     if (isPublish) {

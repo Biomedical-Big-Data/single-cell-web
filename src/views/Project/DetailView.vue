@@ -112,6 +112,21 @@
               </template>
               Cell Marker File
             </a-button>
+            <a-button
+              v-if="projectDetail?.project_analysis_meta?.[0]?.pathway_id"
+              class="mr-4"
+              type="primary"
+              @click="
+                handleDownloadFile(
+                  projectDetail.project_analysis_meta[0].pathway_id,
+                )
+              "
+            >
+              <template #icon>
+                <CloudDownloadOutlined />
+              </template>
+              Pathway File
+            </a-button>
           </a-tab-pane>
           <!--          <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>-->
         </a-tabs>
@@ -142,6 +157,7 @@ import dayjs from "dayjs"
 import { useRoute } from "vue-router"
 import { saveAs } from "file-saver"
 import { CloudDownloadOutlined } from "@ant-design/icons-vue"
+import { getDownloadFileToken } from "@/api/file.js"
 
 const route = useRoute()
 // const activeKey = ref('score')
@@ -181,9 +197,14 @@ const handleOpenCellxgene = (record) => {
   )
 }
 
-const handleDownloadFile = (file_id) => {
+const handleDownloadFile = async (file_id) => {
+  const data = await getDownloadFileToken(file_id)
   saveAs(
-    `${import.meta.env.VITE_BASE_API_URL}/project/download/file/${file_id}`,
+    `${
+      import.meta.env.VITE_BASE_API_URL
+    }/project/download/file/${file_id}?download_file_token=${
+      data.download_file_token
+    }`,
     file_id,
   )
 }

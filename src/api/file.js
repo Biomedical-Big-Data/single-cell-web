@@ -11,6 +11,7 @@ export function getUmap(file_id, group_by) {
   })
 }
 
-export function getDownloadToken(id) {
-  return request.get(`/project/view/file/token/${id}`)
+export function getDownloadFileToken(id) {
+  return request.get(`/project/download/file/${id}/token`)
 }
+

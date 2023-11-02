@@ -93,6 +93,12 @@ export function transferProject(id, mail) {
   })
 }
 
+export function copyProject(id, mail) {
+  return request.post(`/project/${id}/copy`, {
+    copy_to_email_address: mail,
+  })
+}
+
 export function getProjectGeneChartData({ gene_symbol, species_id }) {
   return request.get(`/project/list/by/gene/graph`, {
     params: { gene_symbol, species_id },
