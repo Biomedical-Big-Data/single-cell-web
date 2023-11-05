@@ -2,42 +2,18 @@
   <div class="p-5">
     <div class="bg-white py-2 px-4 rounded-lg">
       <a-form :model="conditions" layout="inline" autocomplete="off">
-        <a-form-item label="项目名称" name="project_name">
+        <a-form-item label="名称" name="name">
           <a-input
-            v-model:value="conditions.title"
+            v-model:value="conditions.name"
             class="w-28"
-            placeholder="项目名称"
-          ></a-input>
-        </a-form-item>
-        <a-form-item label="状态" name="is_publish">
-          <a-select
-            v-model:value="conditions.is_publish"
-            :options="PROJECT_STATUS_DESC"
-            placeholder="项目状态"
-            class="w-28"
-            allow-clear
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="是否公开" name="is_private">
-          <a-select
-            v-model:value="conditions.is_private"
-            :options="IS_PRIVATE_DESC"
-            placeholder="是否公开"
-            class="w-28"
-            allow-clear
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="标签" name="tag">
-          <a-input
-            v-model:value="conditions.tag"
-            class="w-28"
-            placeholder="项目标签"
+            placeholder="名称"
           ></a-input>
         </a-form-item>
         <a-form-item>
           <a-button
             type="primary"
             class="flex items-center"
+            :loading="loading"
             @click="handleSearch"
           >
             <template #icon>
@@ -45,6 +21,26 @@
             </template>
             查询
           </a-button>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            type="primary"
+            class="flex items-center"
+            :loading="uploading"
+            @click="handleUpdateFileSelect"
+          >
+            <template #icon>
+              <UploadOutlined></UploadOutlined>
+            </template>
+            上传更新文件
+          </a-button>
+          <input ref="fileInputRef" type="file" hidden @change="handleUpdate" />
+        </a-form-item>
+        <a-form-item>
+          示例文件:
+          <a href="./species_meta.xlsx" target="_blank">
+            species_meta.xlsx
+          </a>
         </a-form-item>
       </a-form>
     </div>
@@ -58,37 +54,8 @@
         :loading="loading"
         @change="handleTableChange"
       >
-        <template #bodyCell="{ column: { dataIndex }, text, record }">
-          <template
-            v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
-          >
-            {{ dayjs(text).format("YYYY-MM-DD") }}
-          </template>
-          <template v-if="dataIndex === 'is_publish'">
-            {{ getPublishState(text) }}
-          </template>
-          <template v-if="dataIndex === 'is_private'">
-            {{ getPrivateState(text) }}
-          </template>
-          <template v-if="dataIndex === 'tags'">
-            <a-tag
-              v-for="item in (text || '').split(',').filter((a) => !!a)"
-              :key="item"
-            >
-              {{ item }}
-            </a-tag>
-          </template>
+        <template #bodyCell="{ column: { dataIndex }, record }">
           <template v-if="dataIndex === 'operation'">
-            <a-button
-              type="primary"
-              size="small"
-              @click="handleToProject(record)"
-            >
-              <template #icon>
-                <EyeOutlined></EyeOutlined>
-              </template>
-              详情
-            </a-button>
             <a-button
               class="ml-2"
               type="primary"
@@ -111,68 +78,43 @@
 import { computed, ref } from "vue"
 import {
   SearchOutlined,
-  EyeOutlined,
   EditOutlined,
+  UploadOutlined,
 } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
-import dayjs from "dayjs"
-import { getMyProjectList } from "@/api/project"
-import { useRouter } from "vue-router"
-import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js"
+import { getSpecialList, updateMetaByFile } from "@/api/meta"
+import { message } from "ant-design-vue"
 
-const router = useRouter()
 const conditions = ref({
-  title: "",
-  tag: "",
-  is_publish: undefined,
-  is_private: undefined,
+  name: "",
 })
 
-const getPublishState = function (state) {
-  return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
-}
-const getPrivateState = function (state) {
-  return IS_PRIVATE_DESC.find((item) => item.value === state)?.label
-}
+const fileInputRef = ref(null)
+const uploading = ref(false)
 
 const columns = [
   {
-    title: "项目名称",
-    dataIndex: "title",
-  },
-  {
-    title: "是否私有",
-    dataIndex: "is_private",
-    width: 100,
+    title: "id",
+    dataIndex: "id",
+    width: 40,
     align: "center",
   },
   {
-    title: "是否发布",
-    dataIndex: "is_publish",
-    width: 100,
+    title: "species",
+    dataIndex: "species",
     align: "center",
   },
   {
-    title: "标签",
-    dataIndex: "tags",
-    width: 300,
-  },
-  {
-    title: "创建时间",
-    dataIndex: "create_at",
-    width: 120,
-  },
-  {
-    title: "更新时间",
-    dataIndex: "update_at",
-    width: 120,
-  },
-  {
-    title: "操作",
-    dataIndex: "operation",
-    width: 200,
+    title: "species_ontology_label",
+    dataIndex: "species_ontology_label",
     align: "center",
   },
+  // {
+  //   title: "操作",
+  //   dataIndex: "operation",
+  //   width: 200,
+  //   align: "center",
+  // },
 ]
 
 const {
@@ -182,7 +124,7 @@ const {
   current,
   pageSize,
   total,
-} = usePagination(getMyProjectList, {
+} = usePagination(getSpecialList, {
   defaultParams: [
     {
       page_size: 20,
@@ -195,28 +137,16 @@ const {
 })
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
+  return dataSource?.value?.species_list || []
 })
 
 const getConditions = function () {
   const result = {}
-  const { is_private, is_publish, title, tag } = conditions.value
+  const { name } = conditions.value
 
-  if (title) {
-    result.title = title
+  if (name) {
+    result.species = name
   }
-
-  if (tag) {
-    result.tag = tag
-  }
-
-  if (!isNaN(is_private)) {
-    result.is_private = is_private
-  }
-  if (!isNaN(is_publish)) {
-    result.is_publish = is_publish
-  }
-
   return result
 }
 
@@ -246,25 +176,24 @@ const handleSearch = () => {
   })
 }
 
-const handleToAdminProject = (record) => {
-  router.push({
-    name: "project_detail_update",
-    params: {
-      id: record.id,
-    },
-  })
+const handleUpdateFileSelect = () => {
+  fileInputRef.value?.click()
 }
 
-const handleToProject = (record) => {
-  console.log(record)
-  const routeData = router.resolve({
-    name: "project_detail",
-    params: {
-      id: record.id,
-    },
-  })
-  // console.log(routeData)
-  window.open(routeData.href, "_blank")
+const handleUpdate = async (event) => {
+  const files = event.target.files
+  if (files.length > 0) {
+    try {
+      uploading.value = true
+      await updateMetaByFile("species", files[0])
+      message.success("上传更新文件成功，结果将以邮件形式通知")
+    } finally {
+      fileInputRef.value.value = null
+      uploading.value = false
+    }
+  } else {
+    message.error("请选择文件")
+  }
 }
 </script>
 

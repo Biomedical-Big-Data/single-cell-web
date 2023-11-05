@@ -121,6 +121,8 @@ export const asyncRoutes = [
   },
   {
     path: "/meta",
+    component: () => import("../views/Meta/MainView.vue"),
+    redirect: "/meta/species",
     children: [
       {
         path: "species",

@@ -47,6 +47,9 @@
           <a-menu-item key="process_admin">
             <RouterLink to="/process/admin">进程管理</RouterLink>
           </a-menu-item>
+          <a-menu-item key="meta_admin">
+            <RouterLink to="/meta">Meta管理</RouterLink>
+          </a-menu-item>
         </a-sub-menu>
         <a-menu-item key="logout" @click="logout()">登出</a-menu-item>
       </a-sub-menu>
