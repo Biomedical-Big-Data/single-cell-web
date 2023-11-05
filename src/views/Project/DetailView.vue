@@ -122,6 +122,19 @@
               </template>
               Pathway File
             </a-button>
+
+            <a-button
+              v-for="item in otherFiles"
+              :key="item"
+              class="mr-4"
+              type="primary"
+              @click="handleDownloadFile(item)"
+            >
+              <template #icon>
+                <CloudDownloadOutlined />
+              </template>
+              {{ item }}
+            </a-button>
           </a-tab-pane>
           <!--          <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>-->
         </a-tabs>
@@ -169,6 +182,14 @@ const props = defineProps({
 
 onMounted(() => {
   handleProjectDetailFetch()
+})
+
+const otherFiles = computed(() => {
+  return projectDetail.value?.is_private
+    ? projectDetail.value?.project_analysis_meta[0].other_file_ids
+        .split(",")
+        .filter((item) => item)
+    : []
 })
 
 const pathWayVisiable = computed(() => {

@@ -204,6 +204,36 @@
               </div>
             </a-form-item>
 
+            <a-form-item label="其他文件" name="other_file_ids">
+              <div>
+                <a-button
+                  v-for="(item, index) in formState.other_file_ids"
+                  :key="item"
+                  class="w-full flex items-center mb-2"
+                  type="dashed"
+                  danger
+                  @click="handleRemoveOtherFile(item, index)"
+                >
+                  <template #icon>
+                    <MinusOutlined></MinusOutlined>
+                  </template>
+                  {{ item }}
+                </a-button>
+                <a-button
+                  v-if="formState.other_file_ids.length < 5"
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="fileModalRef?.open('other_file_ids')"
+                >
+                  <template #icon>
+                    <PlusOutlined></PlusOutlined>
+                  </template>
+                  其他文件
+                </a-button>
+              </div>
+              <div class="mt-2">最多上传5个文件</div>
+            </a-form-item>
+
             <a-form-item label="项目描述" name="description" required>
               <a-textarea
                 v-model:value="formState.description"
@@ -313,6 +343,10 @@ const formState = ref({
   members: [],
   description: "",
   isPrivate: true,
+  other_file_ids: [],
+  umap_id: null,
+  cell_marker_id: null,
+  pathway_id: null,
 })
 const projectDetail = ref({})
 
@@ -404,6 +438,9 @@ const handleProjectFetch = async () => {
       h5ad_id: data.project_analysis_meta[0].h5ad_id,
       umap_id: data.project_analysis_meta[0].umap_id,
       cell_marker_id: data.project_analysis_meta[0].cell_marker_id,
+      other_file_ids: (data.project_analysis_meta[0].other_file_ids || "")
+        .split(",")
+        .filter((item) => item),
       pathway_id: data.project_analysis_meta[0].pathway_id,
     }
     formState.value = result
@@ -431,6 +468,7 @@ const handleProjectUpdate = async (isPublish) => {
       cell_marker_id,
       pathway_id,
       umap_id,
+      other_file_ids,
     } = formState.value
     saving.value = true
     await updateProject({
@@ -446,6 +484,7 @@ const handleProjectUpdate = async (isPublish) => {
       is_private: isPrivate,
       is_publish: isPublish,
       members: isPrivate ? members : [],
+      other_file_ids: other_file_ids.join(","),
       description,
     })
 
@@ -498,12 +537,20 @@ const handleProjectOffline = () => {
 }
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id
+  if (Array.isArray(formState.value[record.target])) {
+    formState.value[record.target].push(record.file_id)
+  } else {
+    formState.value[record.target] = record.file_id
+  }
 }
 
 const getSpecieOptions = async () => {
   const data = await getSpecieList()
   options.value.species = data
+}
+
+const handleRemoveOtherFile = (file_id, index) => {
+  formState.value.other_file_ids.splice(index, 1)
 }
 </script>
 

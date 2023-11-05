@@ -87,6 +87,12 @@ export function offlineProject(id) {
   return request.post(`/project/${id}/offline`)
 }
 
+export function approveProject(id) {
+  return request.post(`/admin/project/${id}/status/update`, {
+    is_audit: 1,
+  })
+}
+
 export function transferProject(id, mail) {
   return request.post(`/project/${id}/transfer`, {
     transfer_to_email_address: mail,

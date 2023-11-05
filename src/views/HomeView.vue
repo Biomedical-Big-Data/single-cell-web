@@ -93,7 +93,7 @@
                 {{ item.description }}
               </div>
               <div class="date text-center">
-                {{ dayjs(item.update_at).format("YYYY-MM-DD") }}
+                {{ dayjs(item.create_at).format("YYYY-MM-DD") }}
               </div>
             </a-col>
           </a-row>

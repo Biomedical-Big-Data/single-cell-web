@@ -205,6 +205,36 @@
               </div>
             </a-form-item>
 
+            <a-form-item label="其他文件" name="other_file_ids">
+              <div>
+                <a-button
+                  v-for="(item, index) in formState.other_file_ids"
+                  :key="item"
+                  class="w-full flex items-center mb-2"
+                  type="dashed"
+                  danger
+                  @click="handleRemoveOtherFile(item, index)"
+                >
+                  <template #icon>
+                    <MinusOutlined></MinusOutlined>
+                  </template>
+                  {{ item }}
+                </a-button>
+                <a-button
+                  v-if="formState.other_file_ids.length < 5"
+                  class="w-full flex items-center"
+                  type="dashed"
+                  @click="fileModalRef?.open('other_file_ids')"
+                >
+                  <template #icon>
+                    <PlusOutlined></PlusOutlined>
+                  </template>
+                  其他文件
+                </a-button>
+              </div>
+              <div class="mt-2">最多上传5个文件</div>
+            </a-form-item>
+
             <a-form-item label="项目描述" name="description" required>
               <a-textarea
                 v-model:value="formState.description"
@@ -265,6 +295,7 @@ const formState = ref({
   h5ad_id: null,
   cell_marker_id: null,
   umap_id: null,
+  other_file_ids: [],
   pathway_id: null,
   isPrivate: true,
 })
@@ -313,7 +344,11 @@ onMounted(() => {
 })
 
 const handleFileSelected = (record) => {
-  formState.value[record.target] = record.file_id
+  if (Array.isArray(formState.value[record.target])) {
+    formState.value[record.target].push(record.file_id)
+  } else {
+    formState.value[record.target] = record.file_id
+  }
 }
 
 const handleProjectCreate = async (isPublish) => {
@@ -331,6 +366,7 @@ const handleProjectCreate = async (isPublish) => {
       umap_id,
       cell_marker_id,
       pathway_id,
+      other_file_ids,
     } = formState.value
     loading.value = true
     const data = await createProject({
@@ -346,6 +382,7 @@ const handleProjectCreate = async (isPublish) => {
       cell_marker_id,
       pathway_id,
       description,
+      other_file_ids: other_file_ids.join(","),
     })
     if (isPublish) {
       await router.replace({
@@ -371,6 +408,10 @@ const handleProjectCreate = async (isPublish) => {
 const getSpecieOptions = async () => {
   const data = await getSpecieList()
   options.value.species = data
+}
+
+const handleRemoveOtherFile = (file_id, index) => {
+  formState.value.other_file_ids.splice(index, 1)
 }
 </script>
 

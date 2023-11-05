@@ -180,6 +180,14 @@
                 保存
               </a-button>
               <a-button
+                v-if="!formState.isPrivate && !projectDetail.isAudit"
+                class="mr-3"
+                :saving="saving"
+                @click="handleProjectAduit()"
+              >
+                审核通过
+              </a-button>
+              <a-button
                 v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
@@ -231,6 +239,7 @@ import {
 import {
   getAdminProjectDetail,
   offlineProject,
+  approveProject,
   transferProject,
   updateAdminProject,
 } from "@/api/project.js"
@@ -323,6 +332,7 @@ const handleProjectFetch = async () => {
     projectDetail.value = {
       ...result,
       isPublish: !!data.is_publish,
+      isAudit: !!data.is_audit,
     }
   } finally {
     loading.value = false
@@ -401,6 +411,18 @@ const handleProjectOffline = () => {
     onOk: async () => {
       await offlineProject(props.id)
       message.success("下线项目成功")
+      await handleProjectFetch()
+    },
+  })
+}
+
+const handleProjectAduit = () => {
+  Modal.confirm({
+    title: "审核通过确认?",
+    content: "您确认现在审核通过改项目吗？",
+    onOk: async () => {
+      await approveProject(props.id)
+      message.success("审核通过项目成功")
       await handleProjectFetch()
     },
   })
