@@ -198,6 +198,9 @@ import CellTable from "@/components/projects/CellTable.vue"
 import GeneTable from "@/components/projects/GeneTable.vue"
 import { getGeneSymbolList, getSpecieList } from "@/api/options.js"
 import CellNameModal from "@/components/projects/CellNameModal.vue"
+import { useRoute } from "vue-router"
+
+const route = useRoute()
 
 const options = ref({
   species: [],
@@ -327,11 +330,21 @@ const handleCellNameChange = (result) => {
 }
 
 onMounted(() => {
-  getOptions()
+  
+  getOptions().then(()=>{
+    const {organ,species}  = route.query
+    Object.assign(sample.value,{
+      organ,
+      species:species?Number(species):undefined
+    })
+    handleSearch()
+  })
 })
 
 const getOptions = () => {
-  getSpecieOptions()
+  return Promise.all([
+    getSpecieOptions(),
+  ])
 }
 
 const getSpecieOptions = async () => {

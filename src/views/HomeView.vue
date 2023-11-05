@@ -2,73 +2,104 @@
   <div class="home-container bg-white">
     <div class="banner">welcome to my amazing scRNA-seq database</div>
 
-    <div class="section">
-      <div class="title">Species</div>
-      <div class="items">
-        <a-row justify="center">
-          <a-col v-for="item in species" :key="item.id" :span="4" class="item">
-            <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
-            </div>
-            <div class="name text-center">
-              {{ item.name }}
-            </div>
-            <div class="count text-center">
-              {{ item.count }}
-            </div>
-          </a-col>
-        </a-row>
+    <div class="content">
+      <div class="section">
+        <div class="title">Species</div>
+        <div class="items">
+          <a-row justify="center">
+            <a-col
+              v-for="item in species"
+              :key="item.id"
+              :span="4"
+              class="item"
+              @click="toSpecies(item)"
+            >
+              <div class="icon flex justify-center">
+                <img :src="item.icon" alt="" />
+              </div>
+              <div class="name text-center">
+                {{ item.name }}
+              </div>
+              <div class="count text-center">
+                {{ item.count }}
+              </div>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+      <div class="section">
+        <div class="title">Organ</div>
+        <div class="items">
+          <a-row justify="center">
+            <a-col
+              v-for="item in organs"
+              :key="item.id"
+              :span="6"
+              class="item"
+              @click="toOrgan(item)"
+            >
+              <div class="icon flex justify-center">
+                <img :src="item.icon" alt="" />
+              </div>
+              <div class="name text-center">
+                {{ item.name }}
+              </div>
+              <div class="count text-center">
+                {{ item.count }}
+              </div>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+      <div class="section">
+        <div class="title">Samples</div>
+        <div class="items">
+          <a-row justify="center">
+            <a-col
+              v-for="item in samples"
+              :key="item.id"
+              :span="4"
+              class="item"
+              @click="toSample(item)"
+            >
+              <div class="icon flex justify-center">
+                <img :src="item.icon" alt="" />
+              </div>
+              <div class="name text-center">
+                {{ item.name }}
+              </div>
+              <div class="count text-center">
+                {{ item.count }}
+              </div>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+      <div class="section">
+        <div class="title">Latest Project</div>
+        <div class="items">
+          <a-row justify="center" :gutter="[24, 16]">
+            <a-col
+              v-for="item in projects"
+              :key="item.id"
+              :span="6"
+              class="project"
+              @click="toProject(item)"
+            >
+              <div class="text-center title">
+                {{ item.title }}
+              </div>
+              <div class="text-center desc">
+                {{ item.description }}
+              </div>
+              <div class="date text-center">
+                {{ dayjs(item.update_at).format("YYYY-MM-DD") }}
+              </div>
+            </a-col>
+          </a-row>
+        </div>
       </div>
     </div>
-    <div class="section">
-      <div class="title">Organ</div>
-      <div class="items">
-        <a-row justify="center">
-          <a-col v-for="item in organs" :key="item.id" :span="6" class="item">
-            <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
-            </div>
-            <div class="name text-center">
-              {{ item.name }}
-            </div>
-            <div class="count text-center">
-              {{ item.count }}
-            </div>
-          </a-col>
-        </a-row>
-      </div>
-    </div>
-    <div class="section">
-      <div class="title">Samples</div>
-      <div class="items">
-        <a-row justify="center">
-          <a-col v-for="item in samples" :key="item.id" :span="4" class="item">
-            <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
-            </div>
-            <div class="name text-center">
-              {{ item.name }}
-            </div>
-            <div class="count text-center">
-              {{ item.count }}
-            </div>
-          </a-col>
-        </a-row>
-      </div>
-    </div>
-    <!--    <div class="section">-->
-    <!--      <div class="title">合作伙伴</div>-->
-    <!--      <div class="items">-->
-    <!--        <div v-for="item in partners" :key="item.id">-->
-    <!--          <div>-->
-    <!--            <img src="" alt="" />-->
-    <!--          </div>-->
-    <!--          <div>-->
-    <!--            {{ item.name }}-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -76,12 +107,18 @@
 import { onMounted, ref } from "vue"
 import { getHomeData } from "@/api/home.js"
 import icons from "@/icons/index.js"
+import { useRouter } from "vue-router"
+import dayjs from "dayjs"
+
+const router = useRouter()
 
 const species = ref([])
 
 const organs = ref([])
 
 const samples = ref([])
+
+const projects = ref([])
 
 // const partners = ref([]);
 
@@ -97,6 +134,7 @@ const handleFetchHomeData = async () => {
       icon: icons[getStandardName(item.species)] || icons.global,
       name: item.species,
       count: item.count,
+      id: item.id,
     }
   })
 
@@ -115,10 +153,43 @@ const handleFetchHomeData = async () => {
       count: item.count,
     }
   })
+
+  projects.value = data.project_list
 }
 
 const getStandardName = (name) => {
   return (name || "").replace(/[\s|-]/g, "_").toLowerCase()
+}
+
+const toOrgan = (organ) => {
+  router.push({
+    name: "projects",
+    query: {
+      organ: organ.name,
+    },
+  })
+}
+
+const toSpecies = (species) => {
+  router.push({
+    name: "projects",
+    query: {
+      species: species.id,
+    },
+  })
+}
+
+const toSample = (sample) => {
+  console.log(sample)
+}
+
+const toProject = (project) => {
+  router.push({
+    name: "project_detail",
+    params: {
+      id: project.id,
+    },
+  })
 }
 </script>
 
@@ -150,7 +221,28 @@ const getStandardName = (name) => {
     .items {
       margin-top: 1.5rem;
 
+      .project {
+        border-radius: 0.5rem;
+        margin: 1rem;
+        cursor: pointer;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        .title {
+          font-size: 1.125rem;
+          font-weight: bold;
+        }
+
+        .desc {
+          margin-top: 0.5rem;
+        }
+
+        .date {
+          margin-top: 0.5rem;
+        }
+      }
+
       .item {
+        cursor: pointer;
         margin-bottom: 1.5rem;
 
         .icon {
@@ -175,5 +267,9 @@ const getStandardName = (name) => {
       }
     }
   }
+}
+
+.content {
+  padding-bottom: 5rem;
 }
 </style>
