@@ -179,7 +179,6 @@ const columns = [
     title: "操作",
     dataIndex: "operation",
     width: 200,
-    align: "center",
   },
 ]
 
