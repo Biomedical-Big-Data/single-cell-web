@@ -49,7 +49,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue"
-import * as csv from "csvtojson"
+import csvtojson from "csvtojson"
 import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue"
 import { saveAs } from "file-saver"
 import { getCellMarkerFile } from "../api/file"
@@ -92,7 +92,7 @@ const columnResult = computed(() => {
 
 const handleCellTypeMarkersFetch = async () => {
   const data = await getCellMarkerFile(props.fileId)
-  dataSource.value = await csv({ output: "json" })
+  dataSource.value = await csvtojson({ output: "json" })
     .on("header", (header) => {
       columnSettings.value = header
       columns.value = header.map((item) => {

@@ -166,7 +166,7 @@ import { useRoute } from "vue-router"
 import { saveAs } from "file-saver"
 import { CloudDownloadOutlined } from "@ant-design/icons-vue"
 import { getDownloadFileToken, getCellPathwayFile } from "@/api/file.js"
-import * as csv from "csvtojson"
+import csvtojson from "csvtojson"
 
 const route = useRoute()
 // const activeKey = ref('score')
@@ -228,7 +228,9 @@ const handleProjectDetailFetch = async () => {
     const pathway = await getCellPathwayFile(
       data.project_analysis_meta?.[0]?.pathway_id,
     )
-    pathWayFileData.value = await csv({ output: "json" }).fromString(pathway)
+    pathWayFileData.value = await csvtojson({ output: "json" }).fromString(
+      pathway,
+    )
   }
 }
 
