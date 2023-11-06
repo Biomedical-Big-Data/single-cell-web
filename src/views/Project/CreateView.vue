@@ -2,7 +2,7 @@
   <div class="p-5 page">
     <a-card title="创建项目" :bordered="false">
       <div class="flex items-center flex-col w-full">
-        <div class="max-w-lg w-full mt-6">
+        <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
             :model="formState"
@@ -30,7 +30,6 @@
                   </template>
                   <a-button
                     type="text"
-                    
                     shape="circle"
                     :icon="h(QuestionCircleOutlined)"
                   ></a-button>
@@ -173,7 +172,11 @@
               </div>
             </a-form-item>
 
-            <a-form-item v-if="formState.isPrivate" label="Pathway文件" name="pathway_id" >
+            <a-form-item
+              v-if="formState.isPrivate"
+              label="Pathway文件"
+              name="pathway_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.pathway_id"
@@ -250,14 +253,14 @@
                 :loading="loading"
                 @click="handleProjectCreate(true)"
               >
-                发布
+                {{ formState.isPrivate ? "保存并发布" : "申请公开项目" }}
               </a-button>
               <a-button
                 class="ml-3"
                 :loading="loading"
                 @click="handleProjectCreate(false)"
               >
-                保存
+                保存为草稿
               </a-button>
               <a-button class="ml-3" :loading="loading">取消</a-button>
             </a-form-item>

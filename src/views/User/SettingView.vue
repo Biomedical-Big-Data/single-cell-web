@@ -2,7 +2,7 @@
   <div class="p-5">
     <a-card title="修改个人信息" bordered>
       <div class="flex items-center flex-col w-full">
-        <div class="max-w-lg w-full mt-6">
+        <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
             :model="userInfo"

@@ -2,7 +2,7 @@
   <div class="p-5">
     <div class="flex items-center flex-col w-full bg-white py-5">
       <div class="text-lg">重置密码</div>
-      <div class="max-w-lg w-full mt-6">
+      <div class="max-w-screen-lg w-full mt-6">
         <a-form
           ref="formRef"
           layout="vertical"

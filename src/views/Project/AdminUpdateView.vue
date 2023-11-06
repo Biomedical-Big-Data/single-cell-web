@@ -2,7 +2,7 @@
   <div class="p-5 page">
     <a-card :title="projectDetail.title" :bordered="false">
       <div class="flex items-center flex-col w-full">
-        <div class="max-w-lg w-full mt-6">
+        <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
             :model="formState"
@@ -24,7 +24,7 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="访问权限" name="public">
+            <!-- <a-form-item label="访问权限" name="public">
               <div class="flex items-center">
                 <a-switch
                   v-model:checked="formState.isPrivate"
@@ -45,7 +45,7 @@
                   ></a-button>
                 </a-tooltip>
               </div>
-            </a-form-item>
+            </a-form-item> -->
 
             <a-form-item
               v-if="!!formState.isPrivate"
@@ -180,15 +180,15 @@
                 保存
               </a-button>
               <a-button
-                v-if="!formState.isPrivate && !projectDetail.isAudit"
+                v-if="!projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
-                @click="handleProjectAduit()"
+                @click="handleProjectUpdate(true)"
               >
-                审核通过
+                保存并发布
               </a-button>
               <a-button
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                v-if="projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
                 @click="handleProjectOffline()"
@@ -230,16 +230,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref, h } from "vue"
-import {
-  MinusOutlined,
-  PlusOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons-vue"
+import { onMounted, ref } from "vue"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import {
   getAdminProjectDetail,
   offlineProject,
-  approveProject,
   transferProject,
   updateAdminProject,
 } from "@/api/project.js"
@@ -416,17 +411,17 @@ const handleProjectOffline = () => {
   })
 }
 
-const handleProjectAduit = () => {
-  Modal.confirm({
-    title: "审核通过确认?",
-    content: "您确认现在审核通过改项目吗？",
-    onOk: async () => {
-      await approveProject(props.id)
-      message.success("审核通过项目成功")
-      await handleProjectFetch()
-    },
-  })
-}
+// const handleProjectAduit = () => {
+//   Modal.confirm({
+//     title: "审核通过确认?",
+//     content: "您确认现在审核通过改项目吗？",
+//     onOk: async () => {
+//       await approveProject(props.id)
+//       message.success("审核通过项目成功")
+//       await handleProjectFetch()
+//     },
+//   })
+// }
 
 const handleFileSelected = (record) => {
   formState.value[record.target] = record.file_id

@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container bg-white">
+  <div class="home-container bg-white overflow-x-hidden">
     <div class="banner">welcome to my amazing scRNA-seq database</div>
 
     <div class="content">
@@ -10,7 +10,7 @@
             <a-col
               v-for="item in species"
               :key="item.id"
-              :span="4"
+              :span="3"
               class="item"
               @click="toSpecies(item)"
             >
@@ -34,7 +34,7 @@
             <a-col
               v-for="item in organs"
               :key="item.id"
-              :span="6"
+              :span="3"
               class="item"
               @click="toOrgan(item)"
             >
@@ -85,6 +85,7 @@ import { getHomeData } from "@/api/home.js"
 import icons from "@/icons/index.js"
 import { useRouter } from "vue-router"
 import dayjs from "dayjs"
+import { titleCase, snakeCase } from "text-case"
 
 const router = useRouter()
 
@@ -105,59 +106,49 @@ onMounted(() => {
 const handleFetchHomeData = async () => {
   const data = await getHomeData()
 
-  species.value = data.species_list.map((item) => {
+  species.value = Object.entries(icons.species).map(([key, icon]) => {
+    const result = data.species_list.find((a) => snakeCase(a.species) === key)
     return {
-      icon: icons[getStandardName(item.species)] || icons.global,
-      name: item.species,
-      count: item.count,
-      id: item.id,
+      icon: icon,
+      name: titleCase(key.replace(/_/g, " ")),
+      count: result?.count || 0,
+      key: result?.species || key,
+      id: result?.id,
     }
   })
 
-  // samples.value = data.sample_list.map((item) => {
-  //   return {
-  //     icon: icons[getStandardName(item.biosample_type)] || icons.global,
-  //     name: item.biosample_type || "Unknown",
-  //     count: item.count,
-  //   }
-  // })
-
-  organs.value = data.organ_list.map((item) => {
+  organs.value = Object.entries(icons.organ).map(([key, icon]) => {
+    const result = data.organ_list.find((a) => snakeCase(a.organ) === key)
     return {
-      icon: icons[getStandardName(item.organ)] || icons.global,
-      name: item.organ,
-      count: item.count,
+      icon: icon,
+      name: titleCase(key.replace(/_/g, " ")),
+      key: result?.organ || key,
+      count: result?.count || 0,
     }
   })
 
   projects.value = data.project_list
 }
 
-const getStandardName = (name) => {
-  return (name || "").replace(/[\s|-]/g, "_").toLowerCase()
-}
-
 const toOrgan = (organ) => {
   router.push({
     name: "projects",
     query: {
-      organ: organ.name,
+      organ: organ.key,
     },
   })
 }
 
 const toSpecies = (species) => {
-  router.push({
-    name: "projects",
-    query: {
-      species: species.id,
-    },
-  })
+  if (species.id) {
+    router.push({
+      name: "projects",
+      query: {
+        species: species.id,
+      },
+    })
+  }
 }
-
-// const toSample = (sample) => {
-//   console.log(sample)
-// }
 
 const toProject = (project) => {
   router.push({
@@ -179,7 +170,7 @@ const toProject = (project) => {
     font-weight: 500;
     line-height: 2rem;
     text-transform: capitalize;
-    height: 18.75rem;
+    height: 24rem;
     display: flex;
     align-items: center;
     justify-content: center;

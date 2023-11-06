@@ -2,7 +2,7 @@
   <div class="p-5 page">
     <a-card :title="projectDetail.title" :bordered="false">
       <div class="flex items-center flex-col w-full">
-        <div class="max-w-lg w-full mt-6">
+        <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
             :disabled="!projectDetail.isPrivate"
@@ -15,7 +15,7 @@
             <a-form-item label="项目名称" name="title" required>
               <a-input v-model:value="formState.title" placeholder="项目名称" />
             </a-form-item>
-            <a-form-item label="访问权限" name="public">
+            <!-- <a-form-item label="访问权限" name="public">
               <div class="flex items-center">
                 <a-switch
                   v-model:checked="formState.isPrivate"
@@ -36,7 +36,7 @@
                   ></a-button>
                 </a-tooltip>
               </div>
-            </a-form-item>
+            </a-form-item> -->
 
             <a-form-item
               v-if="!formState.isPrivate"
@@ -172,7 +172,11 @@
               </div>
             </a-form-item>
 
-            <a-form-item v-if="formState.isPrivate" label="Pathway文件" name="pathway_id">
+            <a-form-item
+              v-if="formState.isPrivate"
+              label="Pathway文件"
+              name="pathway_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.pathway_id"
@@ -251,7 +255,7 @@
                 :saving="saving"
                 @click="handleProjectUpdate(true)"
               >
-                发布
+                保存并发布
               </a-button>
               <a-button
                 v-if="projectDetail.isPrivate"
@@ -262,15 +266,14 @@
                 保存
               </a-button>
               <a-button
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
+                v-if="projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
                 @click="handleProjectOffline()"
               >
-                下线
+                下线项目
               </a-button>
               <a-button
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 :saving="saving"
                 @click="handleTransferModalShow('copy')"
@@ -278,13 +281,20 @@
                 拷贝项目
               </a-button>
               <a-button
-                v-if="projectDetail.isPrivate && projectDetail.isPublish"
                 class="mr-3"
                 danger
                 :saving="saving"
                 @click="handleTransferModalShow('transfer')"
               >
                 转移项目
+              </a-button>
+              <a-button
+                class="mr-3"
+                danger
+                :saving="saving"
+                @click="handleTransferToPublic()"
+              >
+                申请为公开项目
               </a-button>
             </a-form-item>
           </a-form>
@@ -313,12 +323,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, h, computed } from "vue"
-import {
-  MinusOutlined,
-  PlusOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons-vue"
+import { onMounted, ref, computed } from "vue"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import { getSpecieList } from "@/api/options.js"
 import {
   getProjectDetail,
@@ -551,6 +557,22 @@ const getSpecieOptions = async () => {
 
 const handleRemoveOtherFile = (file_id, index) => {
   formState.value.other_file_ids.splice(index, 1)
+}
+
+const handleTransferToPublic = () => {
+  Modal.confirm({
+    title: "申请公开项目确认?",
+    content: "您确认申请公开项目吗？申请后管理员会联系您获取更多项目信息",
+    onOk: async () => {
+      await updateProject({
+        ...projectDetail.value,
+        is_publish: true,
+        is_private: false,
+      })
+      message.success("申请公开项目成功")
+      await handleProjectFetch()
+    },
+  })
 }
 </script>
 
