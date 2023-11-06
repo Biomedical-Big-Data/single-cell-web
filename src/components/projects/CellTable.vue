@@ -9,9 +9,9 @@
     <template #title>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <span class="mr-4">Project: {{ count.project }}</span>
+          <!-- <span class="mr-4">Project: {{ count.project }}</span>
           <span class="mr-4">Samples: {{ count.sample }}</span>
-          <span>Cells: {{ count.cell }}</span>
+          <span>Cells: {{ count.cell }}</span> -->
         </div>
         <div>
           <div>
@@ -90,7 +90,7 @@
 <script setup>
 import { usePagination } from "vue-request"
 import { downloadCellProjectList, getCellProjectList } from "@/api/project.js"
-import { computed, h, reactive, ref } from "vue"
+import { computed, h,  ref } from "vue"
 import {
   DownloadOutlined,
   EyeOutlined,
@@ -108,7 +108,6 @@ const columns = [
     title: "Result",
     dataIndex: "index",
     align: "center",
-    width: "20px",
   },
   {
     title: "Project",
@@ -117,6 +116,7 @@ const columns = [
       "analysis_project_meta",
       "title",
     ],
+    width: '50%'
   },
   {
     title: "Proportion Of Cell",
@@ -158,11 +158,11 @@ const columnResult = computed(() => {
   ]
 })
 
-const count = reactive({
-  project: 0,
-  sample: 0,
-  cell: 0,
-})
+// const count = reactive({
+//   project: 0,
+//   sample: 0,
+//   cell: 0,
+// })
 
 const {
   data: dataSource,

@@ -151,34 +151,29 @@ const columns = [
   {
     title: "是否私有",
     dataIndex: "is_private",
-    width: 100,
     align: "center",
   },
   {
     title: "是否发布",
     dataIndex: "is_publish",
-    width: 100,
     align: "center",
   },
   {
     title: "标签",
     dataIndex: "tags",
-    width: 300,
   },
   {
     title: "创建时间",
     dataIndex: "create_at",
-    width: 120,
   },
   {
     title: "更新时间",
     dataIndex: "update_at",
-    width: 120,
   },
   {
     title: "操作",
     dataIndex: "operation",
-    width: 200,
+    width: "230px",
   },
 ]
 

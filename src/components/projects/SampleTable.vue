@@ -9,9 +9,9 @@
     <template #title>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <span class="mr-4">Project: {{ count.project }}</span>
+          <!-- <span class="mr-4">Project: {{ count.project }}</span>
           <span class="mr-4">Samples: {{ count.sample }}</span>
-          <span>Cells: {{ count.cell }}</span>
+          <span>Cells: {{ count.cell }}</span> -->
         </div>
         <div>
           <a-popover trigger="click" placement="bottom">
@@ -68,7 +68,7 @@ import {
   downloadSampleProjectList,
   getSampleProjectList,
 } from "@/api/project.js"
-import { computed, reactive, ref, h } from "vue"
+import { computed, ref, h } from "vue"
 import {
   SettingOutlined,
   DownloadOutlined,
@@ -87,12 +87,11 @@ const columns = [
     title: "Result",
     dataIndex: "index",
     align: "center",
-    width: "20px",
   },
   {
     title: "Project",
     dataIndex: ["project", "project_biosample_project_meta", "title"],
-    align: "center",
+    width: "50%",
   },
   {
     title: "Disease",
@@ -133,11 +132,11 @@ const columnResult = computed(() => {
   ]
 })
 
-const count = reactive({
-  project: 0,
-  sample: 0,
-  cell: 0,
-})
+// const count = reactive({
+//   project: 0,
+//   sample: 0,
+//   cell: 0,
+// })
 
 const {
   data: dataSource,
@@ -170,7 +169,6 @@ const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
-
 }))
 
 const getTrueIndex = (index) => {

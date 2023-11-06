@@ -52,6 +52,7 @@
         :data-source="list"
         :pagination="pagination"
         :loading="loading"
+        :scroll="{ x: 1500 }"
         @change="handleTableChange"
       >
         <template #bodyCell="{ column: { dataIndex }, record }">
@@ -59,7 +60,6 @@
             <a-button
               class="ml-2"
               type="primary"
-              
               @click="handleToAdminProject(record)"
             >
               <template #icon>
@@ -156,7 +156,6 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-
 }))
 
 const handleTableChange = (pag, filters, sorter) => {

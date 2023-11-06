@@ -9,9 +9,9 @@
     <template #title>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <span class="mr-4">Project: {{ count.project }}</span>
+          <!-- <span class="mr-4">Project: {{ count.project }}</span>
           <span class="mr-4">Samples: {{ count.sample }}</span>
-          <span>Cells: {{ count.cell }}</span>
+          <span>Cells: {{ count.cell }}</span> -->
         </div>
         <div>
           <div>
@@ -101,7 +101,7 @@ import {
   getGeneProjectList,
   getProjectGeneChartData,
 } from "@/api/project.js"
-import { computed, h, reactive, ref } from "vue"
+import { computed, h, ref } from "vue"
 import {
   DotChartOutlined,
   DownloadOutlined,
@@ -125,7 +125,6 @@ const columns = [
     title: "Result",
     dataIndex: "index",
     align: "center",
-    width: "20px",
   },
   {
     title: "CellType",
@@ -135,7 +134,6 @@ const columns = [
       "cell_type_name",
     ],
     align: "center",
-    width: 150,
   },
   {
     title: "Project",
@@ -145,7 +143,7 @@ const columns = [
       "analysis_project_meta",
       "title",
     ],
-    width: 200,
+    width: "50%",
   },
   {
     title: "Disease",
@@ -199,11 +197,11 @@ const columnResult = computed(() => {
   ]
 })
 
-const count = reactive({
-  project: 0,
-  sample: 0,
-  cell: 0,
-})
+// const count = reactive({
+//   project: 0,
+//   sample: 0,
+//   cell: 0,
+// })
 
 const getConditions = () => {
   const { species, symbol } = condition.value
@@ -246,7 +244,6 @@ const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
-
 }))
 
 const handleTableChange = (pag, filters, sorter) => {

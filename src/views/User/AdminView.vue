@@ -175,17 +175,17 @@ const columns = [
   {
     title: "状态",
     dataIndex: "state",
-    width: 100,
+    width: "120px",
   },
   {
     title: "创建时间",
     dataIndex: "create_at",
-    width: 120,
+    width: "120px",
   },
   {
     title: "操作",
     dataIndex: "operation",
-    width: 160,
+    width: "230px",
   },
 ]
 
