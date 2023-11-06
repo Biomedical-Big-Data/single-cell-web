@@ -52,30 +52,6 @@
         </div>
       </div>
       <div class="section">
-        <div class="title">Samples</div>
-        <div class="items">
-          <a-row justify="center">
-            <a-col
-              v-for="item in samples"
-              :key="item.id"
-              :span="4"
-              class="item"
-              @click="toSample(item)"
-            >
-              <div class="icon flex justify-center">
-                <img :src="item.icon" alt="" />
-              </div>
-              <div class="name text-center">
-                {{ item.name }}
-              </div>
-              <div class="count text-center">
-                {{ item.count }}
-              </div>
-            </a-col>
-          </a-row>
-        </div>
-      </div>
-      <div class="section">
         <div class="title">Latest Project</div>
         <div class="items">
           <a-row justify="center" :gutter="[24, 16]">
@@ -116,7 +92,7 @@ const species = ref([])
 
 const organs = ref([])
 
-const samples = ref([])
+// const samples = ref([])
 
 const projects = ref([])
 
@@ -138,13 +114,13 @@ const handleFetchHomeData = async () => {
     }
   })
 
-  samples.value = data.sample_list.map((item) => {
-    return {
-      icon: icons[getStandardName(item.biosample_type)] || icons.global,
-      name: item.biosample_type || "Unknown",
-      count: item.count,
-    }
-  })
+  // samples.value = data.sample_list.map((item) => {
+  //   return {
+  //     icon: icons[getStandardName(item.biosample_type)] || icons.global,
+  //     name: item.biosample_type || "Unknown",
+  //     count: item.count,
+  //   }
+  // })
 
   organs.value = data.organ_list.map((item) => {
     return {
@@ -179,9 +155,9 @@ const toSpecies = (species) => {
   })
 }
 
-const toSample = (sample) => {
-  console.log(sample)
-}
+// const toSample = (sample) => {
+//   console.log(sample)
+// }
 
 const toProject = (project) => {
   router.push({
