@@ -264,14 +264,12 @@ const handleToAdminProject = (record) => {
 }
 
 const handleToProject = (record) => {
-  console.log(record)
   const routeData = router.resolve({
     name: "project_detail",
     params: {
       id: record.id,
     },
   })
-  // console.log(routeData)
   window.open(routeData.href, "_blank")
 }
 </script>
