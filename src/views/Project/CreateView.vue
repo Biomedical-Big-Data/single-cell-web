@@ -173,7 +173,7 @@
               </div>
             </a-form-item>
 
-            <a-form-item label="Pathway文件" name="pathway_id">
+            <a-form-item v-if="formState.isPrivate" label="Pathway文件" name="pathway_id" >
               <div>
                 <a-button
                   v-if="!formState.pathway_id"
@@ -201,7 +201,7 @@
               </div>
               <div class="mt-2">
                 请按以下格式上传:
-                <a href="./pathway_score.xlsx">pathway_score.xlsx</a>
+                <a href="./pathway_score.csv">pathway_score.csv</a>
               </div>
             </a-form-item>
 
