@@ -59,7 +59,7 @@
             {{ dayjs(text).format("YYYY-MM-DD") }}
           </template>
           <template v-if="dataIndex === 'action'">
-            <a-button size="small" @click="handleFileSelected(record)">
+            <a-button  @click="handleFileSelected(record)">
               选择
             </a-button>
           </template>
@@ -179,7 +179,7 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: "small",
+
 }))
 
 const handleTableChange = (pag, filters, sorter) => {

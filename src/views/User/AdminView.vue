@@ -73,7 +73,7 @@
           <template v-if="dataIndex === 'operation'">
             <a-button
               type="primary"
-              size="small"
+              
               @click="handleUpdateUserPasswordModalOpen(record)"
             >
               重设密码
@@ -82,7 +82,7 @@
               v-if="record.state === 1"
               type="primary"
               danger
-              size="small"
+              
               class="ml-2"
               @click="handleUpdateUserState(record, -1)"
             >
@@ -92,7 +92,7 @@
               v-if="record.state === -1"
               type="primary"
               danger
-              size="small"
+              
               class="ml-2"
               @click="handleUpdateUserState(record, 1)"
             >
@@ -106,8 +106,6 @@
   <a-modal
     v-model:open="open"
     title="重置密码"
-    :ok-button-props="{ size: 'small' }"
-    :cancel-button-props="{ size: 'small' }"
     @ok="handleUpdateUserPassword"
     @cancel="handleClearCurrentUser"
   >
@@ -241,7 +239,7 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: "small",
+
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
@@ -297,10 +295,10 @@ const handleUpdateUserState = (record, nextState) => {
         ? "该操作会禁止用户登录和项目操作"
         : "该操作会允许用户登录和项目操作",
     okButtonProps: {
-      size: "small",
+    
     },
     cancelButtonProps: {
-      size: "small",
+    
     },
     onOk: async () => {
       try {

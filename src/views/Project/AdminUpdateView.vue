@@ -39,7 +39,7 @@
                   </template>
                   <a-button
                     type="text"
-                    size="small"
+                    
                     shape="circle"
                     :icon="h(QuestionCircleOutlined)"
                   ></a-button>

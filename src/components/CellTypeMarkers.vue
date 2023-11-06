@@ -36,7 +36,7 @@
           <div>{{ title }}</div>
           <div class="mt-2">
             <a-input
-              size="small"
+              
               @click.stop
               @change="filterBy(title, $event)"
             ></a-input>

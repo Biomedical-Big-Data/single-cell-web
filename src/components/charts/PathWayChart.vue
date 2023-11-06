@@ -6,14 +6,14 @@
         class="w-50"
         :options="pathTypeList"
         placeholder="Select pathway type"
-        size="small"
+        
         @change="handlePathTypeChange"
       ></a-select>
       <a-select
         v-model:value="pathWay"
         class="w-40 ml-4"
         :options="pathWayList"
-        size="small"
+        
         placeholder="Select pathway"
       ></a-select>
     </div>

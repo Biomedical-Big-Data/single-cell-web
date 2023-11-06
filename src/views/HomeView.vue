@@ -173,6 +173,7 @@ const toProject = (project) => {
 .home-container {
   .banner {
     background-image: url("../assets/images/home/banner.png");
+    background-size: cover;
     font-size: 2.25rem;
     font-style: normal;
     font-weight: 500;

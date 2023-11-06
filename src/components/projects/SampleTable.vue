@@ -170,7 +170,7 @@ const pagination = computed(() => ({
   total: 0,
   current: current.value,
   pageSize: pageSize.value,
-  size: "small",
+
 }))
 
 const getTrueIndex = (index) => {

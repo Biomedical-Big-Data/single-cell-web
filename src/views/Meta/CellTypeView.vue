@@ -59,7 +59,7 @@
             <a-button
               class="ml-2"
               type="primary"
-              size="small"
+              
               @click="handleToAdminProject(record)"
             >
               <template #icon>
@@ -156,7 +156,7 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  size: "small",
+
 }))
 
 const handleTableChange = (pag, filters, sorter) => {

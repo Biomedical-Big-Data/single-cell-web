@@ -29,7 +29,7 @@
                   @search="handleOrganSearch"
                 >
                   <template v-if="state.organFetching" #notFoundContent>
-                    <a-spin size="small" />
+                    <a-spin  />
                   </template>
                 </a-select>
               </a-form-item>
@@ -145,7 +145,7 @@
                   @search="handleGeneSymbolSearch"
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
-                    <a-spin size="small" />
+                    <a-spin  />
                   </template>
                 </a-select>
               </a-form-item>

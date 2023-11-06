@@ -7,7 +7,7 @@
           v-model:value="umapType"
           class="w-28"
           :options="options.umapType"
-          size="small"
+          
           @change="handleFileFetch"
         ></a-select>
       </div>

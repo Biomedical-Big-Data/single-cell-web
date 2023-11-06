@@ -13,7 +13,7 @@
             <ul>
               <li v-for="(item, index) in record.entry_list" :key="index">
                 {{ item.name }}
-                <a-button size="small" @click="handleTerminateProcess(item)">
+                <a-button  @click="handleTerminateProcess(item)">
                   终止
                 </a-button>
               </li>
