@@ -90,6 +90,7 @@
               详情
             </a-button>
             <a-button
+              v-if="isOwner(record)"
               class="ml-2"
               type="primary"
               size="small"
@@ -119,6 +120,9 @@ import dayjs from "dayjs"
 import { getMyProjectList } from "@/api/project"
 import { useRouter } from "vue-router"
 import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js"
+import { useUserStore } from "@/stores/user"
+
+const userStore = useUserStore()
 
 const router = useRouter()
 const conditions = ref({
@@ -127,6 +131,10 @@ const conditions = ref({
   is_publish: undefined,
   is_private: undefined,
 })
+
+const isOwner = function (record) {
+  return record.owner === userStore.getUser.id
+}
 
 const getPublishState = function (state) {
   return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
