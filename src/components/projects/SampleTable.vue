@@ -92,7 +92,6 @@ const columns = [
   {
     title: "Project",
     dataIndex: ["project", "project_biosample_project_meta", "title"],
-    width: 80,
     align: "center",
   },
   {
