@@ -335,6 +335,7 @@ import {
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
 import FileModalView from "@/views/File/ModalView.vue"
+import { routerKey } from "vue-router"
 
 const props = defineProps({
   id: { required: true, type: [Number, String] },
@@ -423,6 +424,7 @@ const handleProjectFetch = async () => {
     loading.value = true
     const data = await getProjectDetail(props.id)
     const result = {
+      project_id: data.id,
       title: data.title,
       species_id:
         data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
@@ -559,17 +561,22 @@ const handleRemoveOtherFile = (file_id, index) => {
 }
 
 const handleTransferToPublic = () => {
+  const project = projectDetail.value
   Modal.confirm({
     title: "申请公开项目确认?",
     content: "您确认申请公开项目吗？申请后管理员会联系您获取更多项目信息",
     onOk: async () => {
       await updateProject({
-        ...projectDetail.value,
+        ...project,
         is_publish: true,
         is_private: false,
+        other_file_ids: project.other_file_ids.join(),
+        tags: project.tags.join(),
       })
       message.success("申请公开项目成功")
-      await handleProjectFetch()
+      router.replace({
+        name: "projects_manage",
+      })
     },
   })
 }
