@@ -62,10 +62,10 @@
               class="project"
               @click="toProject(item)"
             >
-              <div class="text-center title">
+              <div class="text-center title line-clamp-2">
                 {{ item.title }}
               </div>
-              <div class="text-center desc">
+              <div class="text-center desc line-clamp-3 leading-normal">
                 {{ item.description }}
               </div>
               <div class="date text-center">
@@ -107,7 +107,9 @@ const handleFetchHomeData = async () => {
   const data = await getHomeData()
 
   species.value = Object.entries(icons.species).map(([key, icon]) => {
-    const result = data.species_list.find((a) => snakeCase(a.species) === key)
+    const result = data.species_list.find(
+      (a) => snakeCase(a.species || "") === key,
+    )
     return {
       icon: icon,
       name: titleCase(key.replace(/_/g, " ")),
@@ -118,7 +120,7 @@ const handleFetchHomeData = async () => {
   })
 
   organs.value = Object.entries(icons.organ).map(([key, icon]) => {
-    const result = data.organ_list.find((a) => snakeCase(a.organ) === key)
+    const result = data.organ_list.find((a) => snakeCase(a.organ || "") === key)
     return {
       icon: icon,
       name: titleCase(key.replace(/_/g, " ")),
@@ -181,13 +183,13 @@ const toProject = (project) => {
     margin-top: 2.24rem;
 
     .title {
-      font-size: 1.125rem;
+      font-size: 1.5rem;
       line-height: 2rem; /* 177.778% */
       text-align: center;
     }
 
     .items {
-      margin-top: 1.5rem;
+      margin-top: 2rem;
 
       .project {
         border-radius: 0.5rem;
@@ -221,7 +223,7 @@ const toProject = (project) => {
         }
 
         .name {
-          font-size: 1rem;
+          font-size: 1.125rem;
           line-height: 2rem;
           margin-top: 0.5rem;
           text-transform: capitalize;

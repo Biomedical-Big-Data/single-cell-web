@@ -160,7 +160,7 @@ const pagination = computed(() => ({
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
-    results: pag.pageSize,
+    page_size: pag.pageSize,
     page: pag?.current,
     sortField: sorter.field,
     sortOrder: sorter.order,

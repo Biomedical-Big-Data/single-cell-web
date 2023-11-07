@@ -90,7 +90,7 @@
 <script setup>
 import { usePagination } from "vue-request"
 import { downloadCellProjectList, getCellProjectList } from "@/api/project.js"
-import { computed, h,  ref } from "vue"
+import { computed, h, ref } from "vue"
 import {
   DownloadOutlined,
   EyeOutlined,
@@ -116,7 +116,7 @@ const columns = [
       "analysis_project_meta",
       "title",
     ],
-    width: '50%'
+    width: "50%",
   },
   {
     title: "Proportion Of Cell",
@@ -167,6 +167,7 @@ const columnResult = computed(() => {
 const {
   data: dataSource,
   run,
+  total,
   loading,
   current,
   pageSize,
@@ -174,6 +175,7 @@ const {
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
@@ -182,7 +184,7 @@ const list = computed(() => {
 })
 
 const pagination = computed(() => ({
-  total: 0,
+  total: total.value,
   current: current.value,
   pageSize: pageSize.value,
 }))
@@ -193,7 +195,7 @@ const getTrueIndex = (index) => {
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
-    results: pag.pageSize,
+    page_size: pag.pageSize,
     page: pag?.current,
     sortField: sorter.field,
     sortOrder: sorter.order,

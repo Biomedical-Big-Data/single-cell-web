@@ -226,6 +226,7 @@ const queryData = (params) => {
 const {
   data: dataSource,
   run,
+  total,
   loading,
   current,
   pageSize,
@@ -233,6 +234,7 @@ const {
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
@@ -241,14 +243,14 @@ const list = computed(() => {
 })
 
 const pagination = computed(() => ({
-  total: 0,
+  total: total.value,
   current: current.value,
   pageSize: pageSize.value,
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
-    results: pag.pageSize,
+    page_size: pag.pageSize,
     page: pag?.current,
     sortField: sorter.field,
     sortOrder: sorter.order,

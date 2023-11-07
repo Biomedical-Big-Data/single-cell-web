@@ -408,7 +408,6 @@ const modelTitle = computed(() => {
 })
 
 const modelPlaceholder = computed(() => {
-  console.log(transferMethod.value)
   return {
     transfer: "请输入新管理员邮箱",
     copy: "请输入接受人邮箱",

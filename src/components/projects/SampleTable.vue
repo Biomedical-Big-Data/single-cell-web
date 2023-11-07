@@ -141,6 +141,7 @@ const columnResult = computed(() => {
 const {
   data: dataSource,
   run,
+  total,
   loading,
   current,
   pageSize,
@@ -148,11 +149,11 @@ const {
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
 const list = computed(() => {
-  console.log(dataSource?.value?.project_list)
   const data = dataSource?.value?.project_list || []
   const result = data.map((item) => {
     const { biosample_project_biosample_meta, ...other } = item
@@ -161,12 +162,11 @@ const list = computed(() => {
       ...other,
     }))
   })
-  console.log(_.flatten(result))
   return _.flatten(result)
 })
 
 const pagination = computed(() => ({
-  total: 0,
+  total: total.value,
   current: current.value,
   pageSize: pageSize.value,
 }))
@@ -177,7 +177,7 @@ const getTrueIndex = (index) => {
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
-    results: pag.pageSize,
+    page_size: pag?.pageSize,
     page: pag?.current,
     sortField: sorter.field,
     sortOrder: sorter.order,
@@ -213,8 +213,8 @@ const getConditions = () => {
 const handleSearch = (conditions) => {
   condition.value = conditions
   run({
-    page: current,
-    page_size: pageSize,
+    page: pagination.value.current,
+    page_size: pagination.value.pageSize,
     ...getConditions(),
   })
 }

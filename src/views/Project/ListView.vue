@@ -29,7 +29,7 @@
                   @search="handleOrganSearch"
                 >
                   <template v-if="state.organFetching" #notFoundContent>
-                    <a-spin  />
+                    <a-spin />
                   </template>
                 </a-select>
               </a-form-item>
@@ -145,7 +145,7 @@
                   @search="handleGeneSymbolSearch"
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
-                    <a-spin  />
+                    <a-spin />
                   </template>
                 </a-select>
               </a-form-item>
@@ -330,21 +330,20 @@ const handleCellNameChange = (result) => {
 }
 
 onMounted(() => {
-  
-  getOptions().then(()=>{
-    const {organ,species}  = route.query
-    Object.assign(sample.value,{
+  getOptions().then(() => {
+    const { organ, species } = route.query
+    Object.assign(sample.value, {
       organ,
-      species:species?Number(species):undefined
+      species: species ? Number(species) : undefined,
     })
-    handleSearch()
+    if (organ || species) {
+      handleSearch()
+    }
   })
 })
 
 const getOptions = () => {
-  return Promise.all([
-    getSpecieOptions(),
-  ])
+  return Promise.all([getSpecieOptions()])
 }
 
 const getSpecieOptions = async () => {
