@@ -51,7 +51,7 @@
         :data-source="list"
         :pagination="pagination"
         :loading="loading"
-        :scroll="{ x: 1500, y: 1200 }"
+        :scroll="{ x: 1500 }"
         @change="handleTableChange"
       >
         <template #bodyCell="{ column: { dataIndex }, record }">

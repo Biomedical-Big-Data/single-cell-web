@@ -1,10 +1,13 @@
 <template>
+  <div v-if="loading" class="py-4 px-6 bg-white">
+    <a-skeleton active />
+  </div>
   <div v-if="projectDetail" class="project-detail-container">
     <div class="py-4 px-6 bg-white">
       <div class="summary">
         {{ projectDetail.title }}
       </div>
-      <div class="mt-4">{{ projectDetail.description }}</div>
+      <div class="mt-4 leading-normal">{{ projectDetail.description }}</div>
       <div class="mt-4">
         <a-tag
           v-for="item in (projectDetail.tags || '')
@@ -39,11 +42,6 @@
               :file-id="projectDetail.project_analysis_meta[0].umap_id"
             />
           </a-tab-pane>
-          <!--          <a-tab-pane key="similarity" tab="Cell cell similarity">-->
-          <!--            <div>-->
-          <!--              <SimilarityChart></SimilarityChart>-->
-          <!--            </div>-->
-          <!--          </a-tab-pane>-->
           <a-tab-pane
             v-if="!projectDetail.is_private"
             key="barplot"
@@ -59,7 +57,7 @@
             />
           </a-tab-pane>
           <a-tab-pane v-if="pathWayVisiable" key="score" tab="Score of pathway">
-            <PathWayChart :pathways="pathwayData"></PathWayChart>
+            <PathWayChart :project="projectDetail"></PathWayChart>
           </a-tab-pane>
           <a-tab-pane key="download" tab="Download">
             <a-button
@@ -165,13 +163,12 @@ import dayjs from "dayjs"
 import { useRoute } from "vue-router"
 import { saveAs } from "file-saver"
 import { CloudDownloadOutlined } from "@ant-design/icons-vue"
-import { getDownloadFileToken, getCellPathwayFile } from "@/api/file.js"
-import csvtojson from "csvtojson"
+import { getDownloadFileToken } from "@/api/file.js"
 
 const route = useRoute()
 // const activeKey = ref('score')
+const loading = ref(true)
 const activeKey = ref("umap")
-const pathWayFileData = ref([])
 const projectDetail = ref(null)
 const props = defineProps({
   id: {
@@ -201,14 +198,14 @@ const pathWayVisiable = computed(() => {
   }
 })
 
-const pathwayData = computed(() => {
-  if (projectDetail.value?.is_private) {
-    return pathWayFileData.value
-  } else {
-    return projectDetail.value?.project_analysis_meta[0]
-      ?.analysis_pathway_score_meta
-  }
-})
+// const pathwayData = computed(() => {
+//   if (projectDetail.value?.is_private) {
+//     return pathWayFileData.value
+//   } else {
+//     return projectDetail.value?.project_analysis_meta[0]
+//       ?.analysis_pathway_score_meta
+//   }
+// })
 
 const analysis = computed(() => {
   const { analysis_id } = route.query
@@ -222,15 +219,12 @@ const analysis = computed(() => {
 })
 
 const handleProjectDetailFetch = async () => {
-  const data = await getProjectDetail(props.id)
-  projectDetail.value = data
-  if (data.is_private && data.project_analysis_meta?.[0]?.pathway_id) {
-    const pathway = await getCellPathwayFile(
-      data.project_analysis_meta?.[0]?.pathway_id,
-    )
-    pathWayFileData.value = await csvtojson({ output: "json" }).fromString(
-      pathway,
-    )
+  try {
+    loading.value = true
+    const data = await getProjectDetail(props.id)
+    projectDetail.value = data
+  } finally {
+    loading.value = false
   }
 }
 
@@ -256,7 +250,7 @@ const handleDownloadFile = async (file_id) => {
 <style scoped lang="scss">
 .summary {
   color: var(--character-title-85, rgba(0, 0, 0, 0.85));
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   line-height: 1.75rem;
 }
 

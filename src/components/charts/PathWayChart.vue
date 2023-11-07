@@ -6,14 +6,12 @@
         class="w-50"
         :options="pathTypeList"
         placeholder="Select pathway type"
-        
         @change="handlePathTypeChange"
       ></a-select>
       <a-select
         v-model:value="pathWay"
         class="w-40 ml-4"
         :options="pathWayList"
-        
         placeholder="Select pathway"
       ></a-select>
     </div>
@@ -30,23 +28,33 @@
 
 <script setup>
 import { VuePlotly } from "vue3-plotly"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import _ from "lodash"
+import { getCellPathwayFile } from "@/api/file"
+import csvtojson from "csvtojson"
 
 const pathType = ref(undefined)
 const pathWay = ref(undefined)
+const pathWayFileData = ref([])
 
 const props = defineProps({
-  pathways: {
+  project: {
     required: true,
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: () => {},
   },
 })
 
+const pathways = computed(() => {
+  if (props.project?.is_private) {
+    return pathWayFileData.value
+  } else {
+    return props.project?.project_analysis_meta[0]?.analysis_pathway_score_meta
+  }
+})
+
 const pathTypeList = computed(() => {
-  const { pathways } = props
-  return [...new Set(pathways.map((item) => item.pathway_name))].map(
+  return [...new Set(pathways.value.map((item) => item.pathway_name))].map(
     (item) => ({
       label: item,
       value: item,
@@ -55,10 +63,9 @@ const pathTypeList = computed(() => {
 })
 
 const pathWayList = computed(() => {
-  const { pathways } = props
   return [
     ...new Set(
-      pathways
+      pathways.value
         .filter((item) => item.pathway_name === pathType.value)
         .map((item) => item.pathway_source),
     ),
@@ -69,8 +76,7 @@ const pathWayList = computed(() => {
 })
 
 const chartData = computed(() => {
-  const { pathways } = props
-  return _.chain(pathways)
+  return _.chain(pathways.value)
     .filter({ pathway_name: pathType.value, pathway_source: pathWay.value })
     .groupBy("cell_type_name")
     .toPairs()
@@ -100,6 +106,18 @@ const config = { responsive: true, scrollZoom: true }
 const handlePathTypeChange = () => {
   pathWay.value = undefined
 }
+
+onMounted(async () => {
+  const { project } = props
+  if (project.is_private && project.project_analysis_meta?.[0]?.pathway_id) {
+    const pathway = await getCellPathwayFile(
+      project.project_analysis_meta?.[0]?.pathway_id,
+    )
+    pathWayFileData.value = await csvtojson({ output: "json" }).fromString(
+      pathway,
+    )
+  }
+})
 </script>
 
 <style scoped lang="scss"></style>
