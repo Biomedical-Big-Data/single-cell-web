@@ -1,79 +1,107 @@
 <template>
-  <div class="home-container bg-white overflow-x-hidden">
-    <div class="banner">welcome to my amazing scRNA-seq database</div>
+  <video autoplay loop muted class="background">
+    <source src="/background.mp4" type="video/mp4" />
+  </video>
+  <div class="flex items-center justify-between menu">
+    <div>
+      <router-link class="project no-underline" :to="{ name: 'projects' }">
+        <img src="@/assets/images/home/icon_project.svg" alt="" />
+        <span class="flex-1 text-center">Project</span>
+      </router-link>
+    </div>
+    <div class="flex items-center">
+      <router-link class="login no-underline" :to="{ name: 'login' }">
+        Login
+      </router-link>
+      <router-link class="sign-up no-underline" :to="{ name: 'register' }">
+        Sign up
+      </router-link>
+    </div>
+  </div>
+  <div class="h-screen relative">
+    <div class="sologn">
+      <div>Welcome to My Amazing scRNA-seq Database !</div>
+      <div class="flex items-center justify-center">
+        <div class="more animate-bounce" @click="handleScroll">
+          <img src="@/assets/images/home/icon_more.svg" alt="" />
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="content">
-      <div class="section">
-        <div class="title">Species</div>
-        <div class="items">
-          <a-row justify="center">
-            <a-col
-              v-for="item in species"
-              :key="item.id"
-              :span="3"
-              class="item"
-              @click="toSpecies(item)"
-            >
-              <div class="icon flex justify-center">
-                <img :src="item.icon" alt="" />
-              </div>
-              <div class="name text-center">
-                {{ item.name }}
-              </div>
-              <div class="count text-center">
-                {{ item.count }}
-              </div>
-            </a-col>
-          </a-row>
-        </div>
+  <div class="content">
+    <div class="section">
+      <div class="title">Species</div>
+      <div class="items">
+        <a-row justify="center">
+          <a-col
+            v-for="item in species"
+            :key="item.id"
+            :span="3"
+            class="item"
+            @click="toSpecies(item)"
+          >
+            <div class="icon flex justify-center">
+              <img :src="item.icon" alt="" />
+            </div>
+            <div class="count text-center">
+              <span v-if="item.count">{{ item.count }}</span>
+              <span v-else class="coming">coming</span>
+            </div>
+            <div class="name text-center">
+              {{ item.name }}
+            </div>
+          </a-col>
+        </a-row>
       </div>
-      <div class="section">
-        <div class="title">Organ</div>
-        <div class="items">
-          <a-row justify="center">
-            <a-col
-              v-for="item in organs"
-              :key="item.id"
-              :span="3"
-              class="item"
-              @click="toOrgan(item)"
-            >
-              <div class="icon flex justify-center">
-                <img :src="item.icon" alt="" />
-              </div>
-              <div class="name text-center">
-                {{ item.name }}
-              </div>
-              <div class="count text-center">
-                {{ item.count }}
-              </div>
-            </a-col>
-          </a-row>
-        </div>
+    </div>
+    <div class="section">
+      <div class="title">Organ</div>
+      <div class="items">
+        <a-row justify="center" :gutter="[0, 48]">
+          <a-col
+            v-for="item in organs"
+            :key="item.id"
+            :span="3"
+            class="item"
+            @click="toOrgan(item)"
+          >
+            <div class="icon flex justify-center">
+              <img :src="item.icon" alt="" />
+            </div>
+            <div class="count text-center">
+              <span v-if="item.count">{{ item.count }}</span>
+              <span v-else class="coming">coming</span>
+            </div>
+            <div class="name text-center">
+              {{ item.name }}
+            </div>
+          </a-col>
+        </a-row>
       </div>
-      <div class="section">
-        <div class="title">Latest Project</div>
-        <div class="items">
-          <a-row justify="center" :gutter="[24, 16]">
-            <a-col
-              v-for="item in projects"
-              :key="item.id"
-              :span="6"
-              class="project"
-              @click="toProject(item)"
-            >
-              <div class="text-center title line-clamp-2">
-                {{ item.title }}
-              </div>
-              <div class="text-center desc line-clamp-3 leading-normal">
-                {{ item.description }}
-              </div>
-              <div class="date text-center">
-                {{ dayjs(item.create_at).format("YYYY-MM-DD") }}
-              </div>
-            </a-col>
-          </a-row>
-        </div>
+    </div>
+    <div class="section">
+      <div class="title">New projects</div>
+      <div class="items">
+        <a-row justify="center" class="flex-nowrap">
+          <a-col
+            v-for="item in projects"
+            :key="item.id"
+            :span="8"
+            class="project"
+            @click="toProject(item)"
+          >
+            <div class="text-center title line-clamp-2">
+              {{ item.title }}
+            </div>
+            <div class="text-center desc line-clamp-3">
+              {{ item.description }}
+            </div>
+            <div class="date text-center">
+              {{ dayjs(item.create_at).format("YYYY-MM-DD") }}
+            </div>
+          </a-col>
+        </a-row>
       </div>
     </div>
   </div>
@@ -93,11 +121,7 @@ const species = ref([])
 
 const organs = ref([])
 
-// const samples = ref([])
-
 const projects = ref([])
-
-// const partners = ref([]);
 
 onMounted(() => {
   handleFetchHomeData()
@@ -160,86 +184,216 @@ const toProject = (project) => {
     },
   })
 }
+
+const handleScroll = () => {
+  window.scrollTo({
+    top: window.innerHeight - 120,
+    behavior: "smooth",
+  })
+}
 </script>
 
 <style lang="scss" scoped>
-.home-container {
-  .banner {
-    background-image: url("../assets/images/home/banner.png");
-    background-size: cover;
-    font-size: 2.25rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 2rem;
-    text-transform: capitalize;
-    height: 24rem;
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.menu {
+  background: white;
+  padding: 0.62rem 1.25rem;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 99;
+
+  button {
+    cursor: pointer;
+  }
+
+  .project {
+    border: none;
+    display: flex;
+    width: 11.25rem;
+    height: 2.25rem;
+    padding: 0rem 1.25rem;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 2.9375rem;
+    background: #ff7555;
+    backdrop-filter: blur(7px);
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .login {
+    background: transparent;
+    display: flex;
+    width: 7.5rem;
+    height: 2.25rem;
+    padding: 0rem 0.625rem 0.125rem 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 2.9375rem;
+    border: 2px solid #0062ff;
+    color: #0062ff;
+    font-size: 1rem;
+  }
+
+  .sign-up {
+    margin-left: 0.75rem;
+    border: none;
+    display: flex;
+    width: 7.5rem;
+    height: 2.25rem;
+    padding: 0rem 0.625rem 0.125rem 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 2.9375rem;
+    background: #0062ff;
+    color: #fff;
+    font-size: 1rem;
+  }
+}
+
+.sologn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  font-family: Source Serif Pro;
+  font-size: 4rem;
+  font-weight: bold;
+  backdrop-filter: blur(1.5px);
+
+  .more {
+    cursor: pointer;
+    margin-top: 2.5rem;
+    display: inline-block;
+    width: 3.5rem;
+    height: 3.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 100%;
+    backdrop-filter: blur(17px);
   }
-
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   .section {
-    margin-top: 2.24rem;
+    width: 100%;
+    max-width: 62.5rem;
+    padding: 2.5rem 3.125rem 3.75rem 3.125rem;
+    gap: 2.5rem;
+    border-radius: 0.625rem;
+    background: #fff;
+    backdrop-filter: blur(42px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
 
     .title {
-      font-size: 1.5rem;
-      line-height: 2rem; /* 177.778% */
-      text-align: center;
+      color: rgba(0, 0, 0, 0.88);
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 2rem;
+      text-transform: uppercase;
     }
 
     .items {
-      margin-top: 2rem;
-
-      .project {
-        border-radius: 0.5rem;
-        margin: 1rem;
-        cursor: pointer;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        padding: 1rem;
-        .title {
-          font-size: 1.125rem;
-          font-weight: bold;
-        }
-
-        .desc {
-          margin-top: 0.5rem;
-        }
-
-        .date {
-          margin-top: 0.5rem;
-        }
-      }
-
+      width: 100%;
       .item {
         cursor: pointer;
-        margin-bottom: 1.5rem;
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
         .icon {
           img {
-            width: 3rem;
-            height: 3rem;
+            width: 3.5rem;
+            height: 3.5rem;
+          }
+        }
+
+        .count {
+          color: rgba(0, 0, 0, 0.88);
+          font-size: 1.25rem;
+          font-weight: 500;
+          line-height: 1.5rem; /* 160% */
+          text-transform: capitalize;
+
+          .coming {
+            color: rgba(0, 0, 0, 0.17);
+            font-size: 1.125rem;
+            font-weight: 400;
           }
         }
 
         .name {
-          font-size: 1.125rem;
-          line-height: 2rem;
-          margin-top: 0.5rem;
-          text-transform: capitalize;
+          color: rgba(0, 0, 0, 0.65);
+          font-size: 1rem;
+          margin-top: -0.46rem;
+        }
+      }
+
+      .project {
+        display: flex;
+        padding: 1.25rem;
+        box-sizing: border-box;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 0.75rem;
+        align-self: stretch;
+        border-radius: 0.5rem;
+        background: #f4f4f4;
+        margin: 0 8px;
+        .title {
+          color: rgba(0, 0, 0, 0.88);
+          font-size: 1.25rem;
+          font-weight: 600;
         }
 
-        .count {
+        .desc {
+          color: #7e7e7e;
           font-size: 1rem;
-          line-height: 2rem;
-          text-transform: capitalize;
+          font-weight: 400;
+        }
+
+        .date {
+          color: #7e7e7e;
+          font-size: 1rem;
+          font-weight: 400;
         }
       }
     }
   }
-}
-
-.content {
-  padding-bottom: 5rem;
 }
 </style>
