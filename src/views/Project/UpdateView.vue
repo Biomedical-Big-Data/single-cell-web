@@ -335,7 +335,9 @@ import {
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
 import FileModalView from "@/views/File/ModalView.vue"
-import { routerKey } from "vue-router"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
 
 const props = defineProps({
   id: { required: true, type: [Number, String] },
@@ -489,7 +491,7 @@ const handleProjectUpdate = async (isPublish) => {
       umap_id,
       tags: tags.join(","),
       is_private: isPrivate,
-      is_publish: isPublish,
+      is_publish: isPublish ? true : projectDetail.value.isPublish,
       members: isPrivate ? members : [],
       other_file_ids: other_file_ids.join(","),
       description,
@@ -568,7 +570,7 @@ const handleTransferToPublic = () => {
     onOk: async () => {
       await updateProject({
         ...project,
-        is_publish: true,
+        is_publish: false,
         is_private: false,
         other_file_ids: project.other_file_ids.join(),
         tags: project.tags.join(),

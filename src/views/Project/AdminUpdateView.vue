@@ -359,7 +359,7 @@ const handleProjectUpdate = async (isPublish) => {
       organ,
       tags: tags.join(","),
       is_private: isPrivate,
-      is_publish: isPublish,
+      is_publish: isPublish ? true : projectDetail.value.isPublish,
       members: isPrivate ? members : [],
       description,
       excel_id,
