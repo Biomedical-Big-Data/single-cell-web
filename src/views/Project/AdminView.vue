@@ -27,15 +27,6 @@
             allow-clear
           ></a-select>
         </a-form-item>
-        <a-form-item label="审核状态" name="is_audit">
-          <a-select
-            v-model:value="conditions.is_audit"
-            :options="AUDIT_STATUS_DESC"
-            placeholder="审核状态"
-            class="w-28"
-            allow-clear
-          ></a-select>
-        </a-form-item>
         <a-form-item>
           <a-button
             type="primary"
@@ -68,9 +59,6 @@
           </template>
           <template v-if="dataIndex === 'is_publish'">
             {{ getPublishState(text) }}
-          </template>
-          <template v-if="dataIndex === 'is_audit'">
-            {{ getAuditState(text) }}
           </template>
           <template v-if="dataIndex === 'is_private'">
             {{ getPrivateState(text) }}
@@ -111,14 +99,12 @@ import { useRouter } from "vue-router"
 import {
   IS_PRIVATE_DESC,
   PROJECT_STATUS_DESC,
-  AUDIT_STATUS_DESC,
 } from "@/constants/common.js"
 
 const router = useRouter()
 const conditions = ref({
   title: "",
   is_publish: undefined,
-  is_audit: undefined,
   is_private: undefined,
 })
 
@@ -126,9 +112,6 @@ const getPublishState = function (state) {
   return PROJECT_STATUS_DESC.find((item) => item.value === state)?.label
 }
 
-const getAuditState = (state) => {
-  return AUDIT_STATUS_DESC.find((item) => item.value === state)?.label
-}
 const getPrivateState = function (state) {
   return IS_PRIVATE_DESC.find((item) => item.value === state)?.label
 }
@@ -155,12 +138,6 @@ const columns = [
   {
     title: "是否发布",
     dataIndex: "is_publish",
-    width: 100,
-    align: "center",
-  },
-  {
-    title: "审核状态",
-    dataIndex: "is_audit",
     width: 100,
     align: "center",
   },
@@ -217,7 +194,7 @@ const list = computed(() => {
 
 const getConditions = function () {
   const result = {}
-  const { is_publish, is_private, is_audit, title } = conditions.value
+  const { is_publish, is_private, title } = conditions.value
 
   if (title) {
     result.title = title
@@ -229,10 +206,6 @@ const getConditions = function () {
 
   if (!isNaN(is_private)) {
     result.is_private = is_private
-  }
-
-  if (!isNaN(is_audit)) {
-    result.is_audit = is_audit
   }
 
   return result

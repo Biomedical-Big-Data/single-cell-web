@@ -48,7 +48,7 @@
             </a-form-item> -->
 
             <a-form-item
-              v-if="!!formState.isPrivate"
+              v-if="projectDetail.isPrivate"
               label="可访问人员"
               name="public"
             >
@@ -86,7 +86,12 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label="Excel文件" name="excel_id" required>
+            <a-form-item
+              v-if="!projectDetail.isPrivate"
+              label="Excel文件"
+              name="excel_id"
+              required
+            >
               <a-button
                 v-if="!formState.excel_id"
                 class="w-full flex items-center"
@@ -136,7 +141,7 @@
                 {{ formState.umap_id }}
               </a-button>
             </a-form-item>
-            <a-form-item label="Cell Type" name="cell_marker_id">
+            <a-form-item label="CellMarker文件" name="cell_marker_id">
               <a-button
                 v-if="!formState.cell_marker_id"
                 class="w-full flex items-center"
@@ -146,7 +151,7 @@
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
                 </template>
-                Cell Type Marker 文件
+                CellMarker文件
               </a-button>
               <a-button
                 v-else
@@ -321,13 +326,16 @@ const handleProjectFetch = async () => {
       excel_id: data.project_analysis_meta[0].excel_id,
       umap_id: data.project_analysis_meta[0].umap_id,
       cell_marker_id: data.project_analysis_meta[0].cell_marker_id,
+      other_file_ids: (data.project_analysis_meta[0].other_file_ids || "")
+        .split(",")
+        .filter((item) => item),
+      pathway_id: data.project_analysis_meta[0].pathway_id,
       analysis_id: data.project_analysis_meta[0].id,
     }
     formState.value = result
     projectDetail.value = {
       ...result,
       isPublish: !!data.is_publish,
-      isAudit: !!data.is_audit,
     }
   } finally {
     loading.value = false
@@ -347,7 +355,9 @@ const handleProjectUpdate = async (isPublish) => {
       members,
       excel_id,
       umap_id,
+      pathway_id,
       h5ad_id,
+      other_file_ids,
       cell_marker_id,
       analysis_id,
     } = formState.value
@@ -363,7 +373,9 @@ const handleProjectUpdate = async (isPublish) => {
       members: isPrivate ? members : [],
       description,
       excel_id,
+      pathway_id,
       umap_id,
+      other_file_ids,
       h5ad_id,
       cell_marker_id,
       analysis_id,
