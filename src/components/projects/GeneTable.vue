@@ -5,6 +5,7 @@
     :pagination="pagination"
     :loading="loading"
     @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -120,72 +121,74 @@ const geneChartData = ref([])
 
 const router = useRouter()
 
-const columns = [
-  {
-    title: "Result",
-    dataIndex: "index",
-    align: "center",
-  },
-  {
-    title: "CellType",
-    dataIndex: [
-      "gene_expression_proportion_meta",
-      "proportion_cell_type_meta",
-      "cell_type_name",
-    ],
-    align: "center",
-  },
-  {
-    title: "Project",
-    dataIndex: [
-      "gene_expression_proportion_meta",
-      "cell_proportion_analysis_meta",
-      "analysis_project_meta",
-      "title",
-    ],
-    width: "50%",
-  },
-  {
-    title: "Disease",
-    dataIndex: [
-      "gene_expression_proportion_meta",
-      "cell_proportion_analysis_meta",
-      "analysis_biosample_analysis_meta",
-      "0",
-      "biosample_analysis_biosample_meta",
-      "disease",
-    ],
-  },
-  {
-    title: "Organ",
-    dataIndex: [
-      "gene_expression_proportion_meta",
-      "cell_proportion_analysis_meta",
-      "analysis_biosample_analysis_meta",
-      "0",
-      "biosample_analysis_biosample_meta",
-      "organ",
-    ],
-  },
-  {
-    title: "Sex",
-    dataIndex: [
-      "gene_expression_proportion_meta",
-      "cell_proportion_analysis_meta",
-      "analysis_biosample_analysis_meta",
-      "0",
-      "biosample_analysis_biosample_meta",
-      "biosample_donor_meta",
-      "sex",
-    ],
-  },
-]
+const columns = ref(
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+    },
+    {
+      title: "CellType",
+      dataIndex: [
+        "gene_expression_proportion_meta",
+        "proportion_cell_type_meta",
+        "cell_type_name",
+      ],
+      align: "center",
+    },
+    {
+      title: "Project",
+      dataIndex: [
+        "gene_expression_proportion_meta",
+        "cell_proportion_analysis_meta",
+        "analysis_project_meta",
+        "title",
+      ],
+      width: "50%",
+    },
+    {
+      title: "Disease",
+      dataIndex: [
+        "gene_expression_proportion_meta",
+        "cell_proportion_analysis_meta",
+        "analysis_biosample_analysis_meta",
+        "0",
+        "biosample_analysis_biosample_meta",
+        "disease",
+      ],
+    },
+    {
+      title: "Organ",
+      dataIndex: [
+        "gene_expression_proportion_meta",
+        "cell_proportion_analysis_meta",
+        "analysis_biosample_analysis_meta",
+        "0",
+        "biosample_analysis_biosample_meta",
+        "organ",
+      ],
+    },
+    {
+      title: "Sex",
+      dataIndex: [
+        "gene_expression_proportion_meta",
+        "cell_proportion_analysis_meta",
+        "analysis_biosample_analysis_meta",
+        "0",
+        "biosample_analysis_biosample_meta",
+        "biosample_donor_meta",
+        "sex",
+      ],
+    },
+  ].map((item) => ({ ...item, resizable: true })),
+)
 
-const columnSettings = ref(columns.map((item) => item.title))
+const columnSettings = ref(columns.value.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
-    ...columns.filter((item) => {
+    ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
     {
@@ -295,6 +298,10 @@ const handleListDownload = async () => {
   } finally {
     downloading.value = false
   }
+}
+
+const handleResizeColumn = (w, col) => {
+  col.width = w
 }
 
 defineExpose({

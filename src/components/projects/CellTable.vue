@@ -5,6 +5,7 @@
     :pagination="pagination"
     :loading="loading"
     @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -103,50 +104,52 @@ const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
-const columns = [
-  {
-    title: "Result",
-    dataIndex: "index",
-    align: "center",
-  },
-  {
-    title: "Project",
-    dataIndex: [
-      "cell_proportion_analysis_meta",
-      "analysis_project_meta",
-      "title",
-    ],
-    width: "50%",
-  },
-  {
-    title: "Proportion Of Cell",
-    dataIndex: "cell_proportion",
-    align: "center",
-  },
-  {
-    title: "Cell Number",
-    dataIndex: "cell_number",
-    align: "center",
-  },
-  {
-    title: "Disease",
-    dataIndex: "disease",
-  },
-  {
-    title: "Organ",
-    dataIndex: "organ",
-  },
-  {
-    title: "Sex",
-    dataIndex: "sex",
-  },
-]
+const columns = ref(
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+    },
+    {
+      title: "Project",
+      dataIndex: [
+        "cell_proportion_analysis_meta",
+        "analysis_project_meta",
+        "title",
+      ],
+      width: "50%",
+    },
+    {
+      title: "Proportion Of Cell",
+      dataIndex: "cell_proportion",
+      align: "center",
+    },
+    {
+      title: "Cell Number",
+      dataIndex: "cell_number",
+      align: "center",
+    },
+    {
+      title: "Disease",
+      dataIndex: "disease",
+    },
+    {
+      title: "Organ",
+      dataIndex: "organ",
+    },
+    {
+      title: "Sex",
+      dataIndex: "sex",
+    },
+  ].map((item) => ({ ...item, resizable: true })),
+)
 
-const columnSettings = ref(columns.map((item) => item.title))
+const columnSettings = ref(columns.value.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
-    ...columns.filter((item) => {
+    ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
     {
@@ -261,6 +264,10 @@ const handleListDownload = async () => {
   } finally {
     downloading.value = false
   }
+}
+
+const handleResizeColumn = (w, col) => {
+  col.width = w
 }
 
 defineExpose({
