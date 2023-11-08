@@ -140,8 +140,7 @@ const columns = ref(
     {
       title: "Project",
       dataIndex: [
-        "gene_expression_proportion_meta",
-        "cell_proportion_analysis_meta",
+        "gene_expression_analysis_meta",
         "analysis_project_meta",
         "title",
       ],
