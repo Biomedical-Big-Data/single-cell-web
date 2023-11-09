@@ -4,6 +4,7 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
+    :scroll="{ x: 2000 }"
     @change="handleTableChange"
     @resize-column="handleResizeColumn"
   >
@@ -49,9 +50,6 @@
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-if="column.dataIndex === 'project'">
-        {{ record.project }}
-      </template>
       <template v-if="column.dataIndex === 'action'">
         <a-button
           shape="circle"
@@ -77,7 +75,6 @@ import {
 } from "@ant-design/icons-vue"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
-import _ from "lodash"
 
 const router = useRouter()
 const downloading = ref(false)
@@ -92,17 +89,17 @@ const columns = ref(
     },
     {
       title: "Project",
-      dataIndex: ["project", "project_biosample_project_meta", "title"],
+      dataIndex: ["project_meta", "title"],
       width: "50%",
       resizable: true,
     },
     {
       title: "Disease",
-      dataIndex: "disease",
+      dataIndex: ["biosample_meta", "disease"],
     },
     {
       title: "Platform",
-      dataIndex: "sequencing_instrument_manufacturer_model",
+      dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
     },
     {
       title: "Species",
@@ -110,12 +107,11 @@ const columns = ref(
     },
     {
       title: "Organ",
-      dataIndex: "organ",
+      dataIndex: ["biosample_meta", "organ"],
     },
-
     {
       title: "Sex",
-      dataIndex: ["biosample_donor_meta", "sex"],
+      dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
     },
   ].map((item) => ({ ...item, resizable: true })),
 )
@@ -150,6 +146,7 @@ const {
   current,
   pageSize,
 } = usePagination(getSampleProjectList, {
+  manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
@@ -158,15 +155,7 @@ const {
 })
 
 const list = computed(() => {
-  const data = dataSource?.value?.project_list || []
-  const result = data.map((item) => {
-    const { biosample_project_biosample_meta, ...other } = item
-    return biosample_project_biosample_meta.map((project) => ({
-      project,
-      ...other,
-    }))
-  })
-  return _.flatten(result)
+  return dataSource?.value?.project_list || []
 })
 
 const pagination = computed(() => ({

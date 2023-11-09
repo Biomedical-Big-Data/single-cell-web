@@ -61,29 +61,6 @@
           @click="handleToProject(record)"
         />
       </template>
-      <template v-if="column.dataIndex === 'disease'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["disease"]
-        }}
-      </template>
-      <template v-if="column.dataIndex === 'organ'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["organ"]
-        }}
-      </template>
-      <template v-if="column.dataIndex === 'sex'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["biosample_donor_meta"][
-            "sex"
-          ]
-        }}
-      </template>
     </template>
   </a-table>
 </template>
@@ -113,34 +90,30 @@ const columns = ref(
     },
     {
       title: "Project",
-      dataIndex: [
-        "cell_proportion_analysis_meta",
-        "analysis_project_meta",
-        "title",
-      ],
+      dataIndex: ["project_meta", "title"],
       width: "50%",
     },
     {
       title: "Proportion Of Cell",
-      dataIndex: "cell_proportion",
+      dataIndex: ["cell_proportion_meta", "cell_proportion"],
       align: "center",
     },
     {
       title: "Cell Number",
-      dataIndex: "cell_number",
+      dataIndex: ["cell_proportion_meta", "cell_number"],
       align: "center",
     },
     {
       title: "Disease",
-      dataIndex: "disease",
+      dataIndex: ["biosample_meta", "disease"],
     },
     {
       title: "Organ",
-      dataIndex: "organ",
+      dataIndex: ["biosample_meta", "organ"],
     },
     {
       title: "Sex",
-      dataIndex: "sex",
+      dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
     },
   ].map((item) => ({ ...item, resizable: true })),
 )
@@ -175,6 +148,7 @@ const {
   current,
   pageSize,
 } = usePagination(getCellProjectList, {
+  manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",

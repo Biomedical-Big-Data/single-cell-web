@@ -114,6 +114,7 @@ import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
 
 const downloading = ref(false)
+const chartLoading = ref(false)
 const condition = ref({})
 const open = ref(false)
 const geneChartType = ref("percent")
@@ -130,56 +131,34 @@ const columns = ref(
     },
     {
       title: "CellType",
-      dataIndex: [
-        "gene_expression_proportion_meta",
-        "proportion_cell_type_meta",
-        "cell_type_name",
-      ],
+      dataIndex: ["gene_expression_meta", "cell_type_name"],
       align: "center",
     },
     {
       title: "Project",
-      dataIndex: [
-        "gene_expression_analysis_meta",
-        "analysis_project_meta",
-        "title",
-      ],
+      dataIndex: ["project_meta", "title"],
       width: "50%",
     },
     {
-      title: "Disease",
+      title: "Proportion Expression",
       dataIndex: [
-        "gene_expression_proportion_meta",
-        "cell_proportion_analysis_meta",
-        "analysis_biosample_analysis_meta",
-        "0",
-        "biosample_analysis_biosample_meta",
-        "disease",
+        "gene_expression_meta",
+        "cell_proportion_expression_the_gene",
       ],
+    },
+    {
+      title: "Disease",
+      dataIndex: ["biosample_meta", "disease"],
     },
     {
       title: "Organ",
-      dataIndex: [
-        "gene_expression_proportion_meta",
-        "cell_proportion_analysis_meta",
-        "analysis_biosample_analysis_meta",
-        "0",
-        "biosample_analysis_biosample_meta",
-        "organ",
-      ],
+      dataIndex: ["biosample_meta", "organ"],
     },
     {
       title: "Sex",
-      dataIndex: [
-        "gene_expression_proportion_meta",
-        "cell_proportion_analysis_meta",
-        "analysis_biosample_analysis_meta",
-        "0",
-        "biosample_analysis_biosample_meta",
-        "biosample_donor_meta",
-        "sex",
-      ],
+      dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
     },
+    7,
   ].map((item) => ({ ...item, resizable: true })),
 )
 
@@ -218,11 +197,16 @@ const getTrueIndex = (index) => {
 }
 
 const handleGeneChartDataFetch = async () => {
-  geneChartData.value = await getProjectGeneChartData(getConditions())
+  try {
+    chartLoading.value = true
+    geneChartData.value = await getProjectGeneChartData(getConditions())
+  } finally {
+    chartLoading.value = false
+  }
 }
 
 const queryData = (params) => {
-  return handleGeneChartDataFetch().then(() => getGeneProjectList(params))
+  return getGeneProjectList(params)
 }
 
 const {
@@ -233,6 +217,7 @@ const {
   current,
   pageSize,
 } = usePagination(queryData, {
+  manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
@@ -272,6 +257,7 @@ const handleSearch = (conditions) => {
 
 const handleChartModalOpen = () => {
   open.value = true
+  handleGeneChartDataFetch()
 }
 
 const handleToProject = (record) => {
