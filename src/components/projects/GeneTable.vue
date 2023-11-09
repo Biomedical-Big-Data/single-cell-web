@@ -4,6 +4,7 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
+    :scroll="tableScroll"
     @change="handleTableChange"
     @resize-column="handleResizeColumn"
   >
@@ -24,16 +25,18 @@
             </a-button>
             <a-popover trigger="click" placement="bottom">
               <template #content>
-                <a-checkbox-group
-                  v-model:value="columnSettings"
-                  class="flex-col"
-                >
-                  <div v-for="item in columns" :key="item.title" class="p-2">
-                    <a-checkbox :value="item.title">
-                      {{ item.title }}
-                    </a-checkbox>
-                  </div>
-                </a-checkbox-group>
+                <div class="overflow-y-auto table-column-setting">
+                  <a-checkbox-group
+                    v-model:value="columnSettings"
+                    class="flex-col"
+                  >
+                    <div v-for="item in columns" :key="item.title" class="p-2">
+                      <a-checkbox :value="item.title">
+                        {{ item.title }}
+                      </a-checkbox>
+                    </div>
+                  </a-checkbox-group>
+                </div>
               </template>
               <a-button class="ml-4">
                 <template #icon>
@@ -109,9 +112,11 @@ import {
   EyeOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue"
+import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
 import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
+import _ from "lodash"
 
 const downloading = ref(false)
 const chartLoading = ref(false)
@@ -137,7 +142,7 @@ const columns = ref(
     {
       title: "Project",
       dataIndex: ["project_meta", "title"],
-      width: "50%",
+      width: 300,
     },
     {
       title: "Proportion Expression",
@@ -158,8 +163,8 @@ const columns = ref(
       title: "Sex",
       dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
     },
-    7,
-  ].map((item) => ({ ...item, resizable: true })),
+    ...BIOSAMPLES_CLOUMNS,
+  ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -172,10 +177,17 @@ const columnResult = computed(() => {
     {
       title: "",
       dataIndex: "action",
+      fixed: "right",
       align: "center",
       width: 100,
     },
   ]
+})
+
+const tableScroll = computed(() => {
+  return {
+    x: _.sumBy(columns.value, (item) => item.width),
+  }
 })
 
 // const count = reactive({
@@ -226,7 +238,21 @@ const {
 })
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
+  const cellTypeList = dataSource.value?.cell_type_list || []
+  console.log(cellTypeList)
+  return (dataSource.value?.project_list || []).map((item) => {
+    const { gene_expression_meta, ...other } = item
+    const cell_type = cellTypeList.find(
+      (cell) => cell.cell_type_id === gene_expression_meta.cell_type_id,
+    )
+    return {
+      ...other,
+      gene_expression_meta: {
+        ...gene_expression_meta,
+        cell_type_name: cell_type?.cell_type_name,
+      },
+    }
+  })
 })
 
 const pagination = computed(() => ({
@@ -294,4 +320,8 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table-column-setting {
+  max-height: 75vh;
+}
+</style>

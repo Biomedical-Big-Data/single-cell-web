@@ -4,6 +4,7 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
+    :scroll="tableScroll"
     @change="handleTableChange"
     @resize-column="handleResizeColumn"
   >
@@ -18,16 +19,18 @@
           <div>
             <a-popover trigger="click" placement="bottom">
               <template #content>
-                <a-checkbox-group
-                  v-model:value="columnSettings"
-                  class="flex-col"
-                >
-                  <div v-for="item in columns" :key="item.title" class="p-2">
-                    <a-checkbox :value="item.title">
-                      {{ item.title }}
-                    </a-checkbox>
-                  </div>
-                </a-checkbox-group>
+                <div class="overflow-y-auto table-column-setting">
+                  <a-checkbox-group
+                    v-model:value="columnSettings"
+                    class="flex-col"
+                  >
+                    <div v-for="item in columns" :key="item.title" class="p-2">
+                      <a-checkbox :value="item.title">
+                        {{ item.title }}
+                      </a-checkbox>
+                    </div>
+                  </a-checkbox-group>
+                </div>
               </template>
               <a-button>
                 <template #icon>
@@ -74,8 +77,10 @@ import {
   EyeOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue"
+import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
+import _ from "lodash"
 
 const router = useRouter()
 const downloading = ref(false)
@@ -91,7 +96,7 @@ const columns = ref(
     {
       title: "Project",
       dataIndex: ["project_meta", "title"],
-      width: "50%",
+      width: 300,
     },
     {
       title: "Proportion Of Cell",
@@ -115,7 +120,8 @@ const columns = ref(
       title: "Sex",
       dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
     },
-  ].map((item) => ({ ...item, resizable: true })),
+    ...BIOSAMPLES_CLOUMNS,
+  ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -128,10 +134,17 @@ const columnResult = computed(() => {
     {
       title: "",
       dataIndex: "action",
+      fixed: "right",
       align: "center",
       width: 100,
     },
   ]
+})
+
+const tableScroll = computed(() => {
+  return {
+    x: _.sumBy(columns.value, (item) => item.width),
+  }
 })
 
 // const count = reactive({
@@ -249,4 +262,8 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table-column-setting {
+  max-height: 75vh;
+}
+</style>

@@ -172,7 +172,7 @@
         </div>
       </a-card>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 w-0">
       <div class="bg-white rounded-lg">
         <SampleTable
           v-if="filter === 'sample'"
