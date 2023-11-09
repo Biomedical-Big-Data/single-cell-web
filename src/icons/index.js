@@ -19,6 +19,9 @@ import blood from "./blood.png"
 import brain from "./brain.png"
 // import breast_milk from "./breast_milk.png"
 // import covid19 from "./covid19.png"
+
+import rat from "./rat.png"
+import zebrafish from "./zebrafish.png"
 import eye from "./eye.png"
 import gingiva from "./gingiva.png"
 import human from "./human.png"
@@ -31,6 +34,10 @@ import skeletal_muscle from "./skeletal_muscle.png"
 import stomach from "./stomach.png"
 import thymus from "./thymus.png"
 
+import cell_type from "./cell_type.png"
+import cell from "./cell.png"
+import sample from "./sample.png"
+import project from "./project.png"
 
 
 export default {
@@ -42,6 +49,8 @@ export default {
     // homo_sapiens: human,
     human,
     rabbit,
+    rat,
+    zebrafish
   },
   organ: {
     adipose,
@@ -70,5 +79,11 @@ export default {
     testis,
     thymus,
     tonsil
+  },
+  statical: {
+    project,
+    sample,
+    cell,
+    cell_type
   }
 }

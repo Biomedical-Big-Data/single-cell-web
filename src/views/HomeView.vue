@@ -52,6 +52,29 @@
         </div>
       </div>
       <div class="section">
+        <div class="title">Statical</div>
+        <div class="items">
+          <a-row justify="center">
+            <a-col
+              v-for="item in statical"
+              :key="item.id"
+              :span="3"
+              class="item"
+            >
+              <div class="icon flex justify-center">
+                <img :src="item.icon" alt="" />
+              </div>
+              <div class="name text-center">
+                {{ item.name }}
+              </div>
+              <div class="count text-center">
+                {{ item.count }}
+              </div>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+      <div class="section">
         <div class="title">Latest Project</div>
         <div class="items">
           <a-row justify="center" :gutter="[24, 16]">
@@ -93,6 +116,8 @@ const species = ref([])
 
 const organs = ref([])
 
+const statical = ref([])
+
 // const samples = ref([])
 
 const projects = ref([])
@@ -108,7 +133,9 @@ const handleFetchHomeData = async () => {
 
   species.value = Object.entries(icons.species).map(([key, icon]) => {
     const result = data.species_list.find(
-      (a) => snakeCase(a.species || "") === key,
+      (a) =>
+        snakeCase(a.species || "") === key ||
+        snakeCase(a.species_label || "") === key,
     )
     return {
       icon: icon,
@@ -121,6 +148,18 @@ const handleFetchHomeData = async () => {
 
   organs.value = Object.entries(icons.organ).map(([key, icon]) => {
     const result = data.organ_list.find((a) => snakeCase(a.organ || "") === key)
+    return {
+      icon: icon,
+      name: titleCase(key.replace(/_/g, " ")),
+      key: result?.organ || key,
+      count: result?.count || 0,
+    }
+  })
+
+  statical.value = Object.entries(icons.statical).map(([key, icon]) => {
+    const result = (data.statical_list || []).find(
+      (a) => snakeCase(a.organ || "") === key,
+    )
     return {
       icon: icon,
       name: titleCase(key.replace(/_/g, " ")),
