@@ -114,10 +114,12 @@ const columns = ref(
     {
       title: "Organ",
       dataIndex: ["biosample_meta", "organ"],
+      sorter: true,
     },
     {
       title: "Sex",
       dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
+      sorter: true,
     },
     ...BIOSAMPLES_CLOUMNS,
   ].map((item) => ({ width: 100, ...item, resizable: true })),
@@ -186,7 +188,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    sortField: sorter.field,
+    sortField: sorter.field.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
