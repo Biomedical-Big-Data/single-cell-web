@@ -118,7 +118,7 @@ const columns = ref(
     },
     {
       title: "Sex",
-      dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
+      dataIndex: ["donor_meta", "sex"],
     },
     ...BIOSAMPLES_CLOUMNS,
   ].map((item) => ({ width: 100, ...item, resizable: true })),

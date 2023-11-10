@@ -118,7 +118,7 @@ const columns = ref(
     },
     {
       title: "Sex",
-      dataIndex: ["biosample_meta", "biosample_donor_meta", "sex"],
+      dataIndex: ["donor_meta", "sex"],
       sorter: true,
     },
     ...BIOSAMPLES_CLOUMNS,
