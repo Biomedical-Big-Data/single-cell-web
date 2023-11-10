@@ -44,10 +44,13 @@ const handleCellNumberFetch = async () => {
   const temp = _.chain(data)
     .groupBy("cell_type_id")
     .toPairs()
-    .map(([_, values]) => ({
-      name: values[0].proportion_cell_type_meta.cell_type_name,
-      total: _.sumBy(values, "cell_number"),
-    }))
+    .map(([a, values]) => {
+      console.log(a)
+      return {
+        name: values[0].proportion_cell_type_meta.cell_type_name,
+        total: _.sumBy(values, "cell_number"),
+      }
+    })
     .value()
   chartData.value = [
     {
