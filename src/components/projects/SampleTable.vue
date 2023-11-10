@@ -233,7 +233,10 @@ const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.project.project_id,
+      id: record.project_meta.id,
+    },
+    query: {
+      analysis_id: record.analysis_meta.id,
     },
   })
   window.open(routeData.href, "_blank")

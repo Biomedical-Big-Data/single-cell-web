@@ -233,10 +233,11 @@ const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.cell_proportion_analysis_meta.analysis_project_meta.id,
+      id: record.project_meta.id,
     },
     query: {
-      analysis_id: record.analysis_id,
+      analysis_id:
+        record.analysis_meta.id,
     },
   })
   // console.log(routeData)

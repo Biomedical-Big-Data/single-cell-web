@@ -265,7 +265,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join('.'),
+    sortField: sorter.field?.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -290,12 +290,11 @@ const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.gene_expression_proportion_meta.cell_proportion_analysis_meta
-        .project_id,
+      id: record.project_meta.id,
     },
     query: {
       analysis_id:
-        record.gene_expression_proportion_meta.cell_proportion_analysis_meta.id,
+        record.analysis_meta.id,
     },
   })
   window.open(routeData.href, "_blank")
