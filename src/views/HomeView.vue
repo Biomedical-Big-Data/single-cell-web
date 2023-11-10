@@ -158,12 +158,12 @@ const handleFetchHomeData = async () => {
 
   statical.value = Object.entries(icons.statical).map(([key, icon]) => {
     const result = (data.statical_list || []).find(
-      (a) => snakeCase(a.organ || "") === key,
+      (a) => snakeCase(a.statical || "") === key,
     )
     return {
       icon: icon,
       name: titleCase(key.replace(/_/g, " ")),
-      key: result?.organ || key,
+      key: result?.statical || key,
       count: result?.count || 0,
     }
   })
