@@ -185,10 +185,11 @@ const getTrueIndex = (index) => {
 }
 
 const handleTableChange = (pag, filters, sorter) => {
+  console.log(pag)
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    sortField: sorter.field.join("."),
+    sortField: sorter.field?.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,

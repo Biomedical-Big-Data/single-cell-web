@@ -265,7 +265,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field,
+    sortField: sorter.field?.join('.'),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
