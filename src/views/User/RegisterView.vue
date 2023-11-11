@@ -70,7 +70,9 @@
           <router-link :to="{name:'login'}" class="ml-2.5">Sign in</router-link>
         </div>
       </div>
-
+    </div>
+    <div class="footer-fixed">
+      scRNA-seq Database © 2023
     </div>
   </div>
 </template>

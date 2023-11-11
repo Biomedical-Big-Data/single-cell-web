@@ -17,6 +17,24 @@ body {
   flex-direction: column;
 }
 
+.footer {
+  mix-blend-mode: difference;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+
+  &-fixed {
+    mix-blend-mode: difference;
+    color: #989898;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+}
 
 .text-basic {
   font-size: 1rem;

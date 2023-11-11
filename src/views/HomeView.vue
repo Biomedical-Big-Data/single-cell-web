@@ -129,6 +129,9 @@
       </div>
     </div>
   </div>
+  <div class="footer">
+    scRNA-seq Database © 2023
+  </div>
 </template>
 
 <script setup>

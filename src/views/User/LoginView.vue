@@ -48,7 +48,9 @@
           <router-link :to="{name:'register'}" class="ml-2.5">Sign up</router-link>
         </div>
       </div>
-
+    </div>
+    <div class="footer-fixed">
+      scRNA-seq Database © 2023
     </div>
   </div>
 
