@@ -88,7 +88,7 @@
               v-for="item in statical"
               :key="item.id"
               :span="3"
-              class="item"
+              class="item none"
           >
             <div class="icon flex justify-center">
               <img :src="item.icon" alt=""/>
@@ -384,6 +384,10 @@ const handleScroll = () => {
         align-items: center;
         gap: 1rem;
 
+        &.none {
+          cursor: unset;
+        }
+
         .icon {
           img {
             width: 3.5rem;
@@ -409,9 +413,11 @@ const handleScroll = () => {
           font-size: 1rem;
           margin-top: -0.46rem;
         }
+
       }
 
       .project {
+        cursor: pointer;
         display: flex;
         padding: 1.25rem;
         box-sizing: border-box;
