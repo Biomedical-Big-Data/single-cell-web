@@ -4,7 +4,9 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
+    :scroll="tableScroll"
     @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -17,16 +19,18 @@
           <div>
             <a-popover trigger="click" placement="bottom">
               <template #content>
-                <a-checkbox-group
-                  v-model:value="columnSettings"
-                  class="flex-col"
-                >
-                  <div v-for="item in columns" :key="item.title" class="p-2">
-                    <a-checkbox :value="item.title">
-                      {{ item.title }}
-                    </a-checkbox>
-                  </div>
-                </a-checkbox-group>
+                <div class="overflow-y-auto table-column-setting">
+                  <a-checkbox-group
+                    v-model:value="columnSettings"
+                    class="flex-col"
+                  >
+                    <div v-for="item in columns" :key="item.title" class="p-2">
+                      <a-checkbox :value="item.title">
+                        {{ item.title }}
+                      </a-checkbox>
+                    </div>
+                  </a-checkbox-group>
+                </div>
               </template>
               <a-button>
                 <template #icon>
@@ -60,29 +64,6 @@
           @click="handleToProject(record)"
         />
       </template>
-      <template v-if="column.dataIndex === 'disease'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["disease"]
-        }}
-      </template>
-      <template v-if="column.dataIndex === 'organ'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["organ"]
-        }}
-      </template>
-      <template v-if="column.dataIndex === 'sex'">
-        {{
-          record["cell_proportion_analysis_meta"][
-            "analysis_biosample_analysis_meta"
-          ][0]["biosample_analysis_biosample_meta"]["biosample_donor_meta"][
-            "sex"
-          ]
-        }}
-      </template>
     </template>
   </a-table>
 </template>
@@ -96,66 +77,74 @@ import {
   EyeOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue"
+import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
+import _ from "lodash"
 
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
-const columns = [
-  {
-    title: "Result",
-    dataIndex: "index",
-    align: "center",
-  },
-  {
-    title: "Project",
-    dataIndex: [
-      "cell_proportion_analysis_meta",
-      "analysis_project_meta",
-      "title",
-    ],
-    width: "50%",
-  },
-  {
-    title: "Proportion Of Cell",
-    dataIndex: "cell_proportion",
-    align: "center",
-  },
-  {
-    title: "Cell Number",
-    dataIndex: "cell_number",
-    align: "center",
-  },
-  {
-    title: "Disease",
-    dataIndex: "disease",
-  },
-  {
-    title: "Organ",
-    dataIndex: "organ",
-  },
-  {
-    title: "Sex",
-    dataIndex: "sex",
-  },
-]
+const columns = ref(
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+    },
+    {
+      title: "Project",
+      dataIndex: ["project_meta", "title"],
+      width: 300,
+    },
+    {
+      title: "Proportion Of Cell",
+      dataIndex: ["cell_proportion_meta", "cell_proportion"],
+      align: "center",
+    },
+    {
+      title: "Cell Number",
+      dataIndex: ["cell_proportion_meta", "cell_number"],
+      align: "center",
+    },
+    {
+      title: "Disease",
+      dataIndex: ["biosample_meta", "disease"],
+    },
+    {
+      title: "Organ",
+      dataIndex: ["biosample_meta", "organ"],
+    },
+    {
+      title: "Sex",
+      dataIndex: ["donor_meta", "sex"],
+    },
+    ...BIOSAMPLES_CLOUMNS,
+  ].map((item) => ({ width: 100, ...item, resizable: true })),
+)
 
-const columnSettings = ref(columns.map((item) => item.title))
+const columnSettings = ref(columns.value.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
-    ...columns.filter((item) => {
+    ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
     {
       title: "",
       dataIndex: "action",
+      fixed: "right",
       align: "center",
       width: 100,
     },
   ]
+})
+
+const tableScroll = computed(() => {
+  return {
+    x: _.sumBy(columns.value, (item) => item.width),
+  }
 })
 
 // const count = reactive({
@@ -172,6 +161,7 @@ const {
   current,
   pageSize,
 } = usePagination(getCellProjectList, {
+  manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
@@ -197,7 +187,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field,
+    sortField: sorter.field?.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -243,10 +233,11 @@ const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.cell_proportion_analysis_meta.analysis_project_meta.id,
+      id: record.project_meta.id,
     },
     query: {
-      analysis_id: record.analysis_id,
+      analysis_id:
+        record.analysis_meta.id,
     },
   })
   // console.log(routeData)
@@ -263,9 +254,17 @@ const handleListDownload = async () => {
   }
 }
 
+const handleResizeColumn = (w, col) => {
+  col.width = w
+}
+
 defineExpose({
   handleSearch,
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table-column-setting {
+  max-height: 75vh;
+}
+</style>

@@ -388,12 +388,20 @@ const handleProjectCreate = async (isPublish) => {
       other_file_ids: other_file_ids.join(","),
     })
     if (isPublish) {
-      await router.replace({
-        name: "project_detail",
-        params: {
-          id: data.project_id,
-        },
-      })
+      console.log(isPrivate)
+      if (isPrivate) {
+        await router.replace({
+          name: "project_detail",
+          params: {
+            id: data.project_id,
+          },
+        })
+      } else {
+        message.success("申请成功")
+        router.replace({
+          name: "projects",
+        })
+      }
     } else {
       message.success("保存成功")
       await router.replace({

@@ -4,7 +4,9 @@
     :data-source="list"
     :pagination="pagination"
     :loading="loading"
+    :scroll="tableScroll"
     @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -16,13 +18,18 @@
         <div>
           <a-popover trigger="click" placement="bottom">
             <template #content>
-              <a-checkbox-group v-model:value="columnSettings" class="flex-col">
-                <div v-for="item in columns" :key="item.title" class="p-2">
-                  <a-checkbox :value="item.title">
-                    {{ item.title }}
-                  </a-checkbox>
-                </div>
-              </a-checkbox-group>
+              <div class="overflow-y-auto table-column-setting">
+                <a-checkbox-group
+                  v-model:value="columnSettings"
+                  class="flex-col"
+                >
+                  <div v-for="item in columns" :key="item.title" class="p-2">
+                    <a-checkbox :value="item.title">
+                      {{ item.title }}
+                    </a-checkbox>
+                  </div>
+                </a-checkbox-group>
+              </div>
             </template>
             <a-button>
               <template #icon>
@@ -48,9 +55,6 @@
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-if="column.dataIndex === 'project'">
-        {{ record.project }}
-      </template>
       <template v-if="column.dataIndex === 'action'">
         <a-button
           shape="circle"
@@ -74,6 +78,7 @@ import {
   DownloadOutlined,
   EyeOutlined,
 } from "@ant-design/icons-vue"
+import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
 import _ from "lodash"
@@ -82,54 +87,65 @@ const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
-const columns = [
-  {
-    title: "Result",
-    dataIndex: "index",
-    align: "center",
-  },
-  {
-    title: "Project",
-    dataIndex: ["project", "project_biosample_project_meta", "title"],
-    width: "50%",
-  },
-  {
-    title: "Disease",
-    dataIndex: "disease",
-  },
-  {
-    title: "Platform",
-    dataIndex: "sequencing_instrument_manufacturer_model",
-  },
-  {
-    title: "Species",
-    dataIndex: ["biosample_species_meta", "species"],
-  },
-  {
-    title: "Organ",
-    dataIndex: "organ",
-  },
+const columns = ref(
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+    },
+    {
+      title: "Project",
+      dataIndex: ["project_meta", "title"],
+      width: 300,
+    },
+    {
+      title: "Disease",
+      dataIndex: ["biosample_meta", "disease"],
+    },
+    {
+      title: "Platform",
+      dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
+    },
+    {
+      title: "Species",
+      dataIndex: ["biosample_species_meta", "species"],
+    },
+    {
+      title: "Organ",
+      dataIndex: ["biosample_meta", "organ"],
+      sorter: true,
+    },
+    {
+      title: "Sex",
+      dataIndex: ["donor_meta", "sex"],
+      sorter: true,
+    },
+    ...BIOSAMPLES_CLOUMNS,
+  ].map((item) => ({ width: 100, ...item, resizable: true })),
+)
 
-  {
-    title: "Sex",
-    dataIndex: ["biosample_donor_meta", "sex"],
-  },
-]
-
-const columnSettings = ref(columns.map((item) => item.title))
+const columnSettings = ref(columns.value.map((item) => item.title))
 
 const columnResult = computed(() => {
   return [
-    ...columns.filter((item) => {
+    ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
     {
       title: "",
       dataIndex: "action",
+      fixed: "right",
       align: "center",
       width: 100,
     },
   ]
+})
+
+const tableScroll = computed(() => {
+  return {
+    x: _.sumBy(columns.value, (item) => item.width),
+  }
 })
 
 // const count = reactive({
@@ -146,6 +162,7 @@ const {
   current,
   pageSize,
 } = usePagination(getSampleProjectList, {
+  manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",
@@ -154,15 +171,7 @@ const {
 })
 
 const list = computed(() => {
-  const data = dataSource?.value?.project_list || []
-  const result = data.map((item) => {
-    const { biosample_project_biosample_meta, ...other } = item
-    return biosample_project_biosample_meta.map((project) => ({
-      project,
-      ...other,
-    }))
-  })
-  return _.flatten(result)
+  return dataSource?.value?.project_list || []
 })
 
 const pagination = computed(() => ({
@@ -176,10 +185,11 @@ const getTrueIndex = (index) => {
 }
 
 const handleTableChange = (pag, filters, sorter) => {
+  console.log(pag)
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    sortField: sorter.field,
+    sortField: sorter.field?.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -223,7 +233,10 @@ const handleToProject = (record) => {
   const routeData = router.resolve({
     name: "project_detail",
     params: {
-      id: record.project.project_id,
+      id: record.project_meta.id,
+    },
+    query: {
+      analysis_id: record.analysis_meta.id,
     },
   })
   window.open(routeData.href, "_blank")
@@ -238,9 +251,18 @@ const handleListDownload = async () => {
     downloading.value = false
   }
 }
+
+const handleResizeColumn = (w, col) => {
+  col.width = w
+}
+
 defineExpose({
   handleSearch,
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table-column-setting {
+  max-height: 75vh;
+}
+</style>

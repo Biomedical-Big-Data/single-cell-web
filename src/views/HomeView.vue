@@ -121,6 +121,10 @@ const species = ref([])
 
 const organs = ref([])
 
+const statical = ref([])
+
+// const samples = ref([])
+
 const projects = ref([])
 
 onMounted(() => {
@@ -132,7 +136,9 @@ const handleFetchHomeData = async () => {
 
   species.value = Object.entries(icons.species).map(([key, icon]) => {
     const result = data.species_list.find(
-      (a) => snakeCase(a.species || "") === key,
+      (a) =>
+        snakeCase(a.species || "") === key ||
+        snakeCase(a.species_label || "") === key,
     )
     return {
       icon: icon,
@@ -149,6 +155,18 @@ const handleFetchHomeData = async () => {
       icon: icon,
       name: titleCase(key.replace(/_/g, " ")),
       key: result?.organ || key,
+      count: result?.count || 0,
+    }
+  })
+
+  statical.value = Object.entries(icons.statical).map(([key, icon]) => {
+    const result = (data.statical_list || []).find(
+      (a) => snakeCase(a.statical || "") === key,
+    )
+    return {
+      icon: icon,
+      name: titleCase(key.replace(/_/g, " ")),
+      key: result?.statical || key,
       count: result?.count || 0,
     }
   })

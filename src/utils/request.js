@@ -1,6 +1,7 @@
 import axios from "axios"
 import { message } from "ant-design-vue"
 import { useUserStore } from "@/stores/user"
+import Router from "@/router"
 
 const userStore = useUserStore()
 
@@ -35,8 +36,11 @@ request.interceptors.response.use(
     }
   },
   async (error) => {
-    const msg = error.response?.data?.message || error.message
+    const msg = error.response?.data?.message || error.message || '服务器错误'
     await message.error(msg)
+    if (error.response?.status === 401) {
+      Router.push({ name: 'login' })
+    }
     return Promise.reject(error)
   },
 )
