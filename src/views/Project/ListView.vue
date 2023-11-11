@@ -21,47 +21,47 @@
             <a-form ref="sampleFormRef" layout="vertical" :model="sample">
               <a-form-item label="Organ" name="organ">
                 <a-select
-                  v-model:value="sample.organ"
-                  show-search
-                  placeholder="Organ"
-                  :options="options.organ"
-                  allow-clear
-                  @search="handleOrganSearch"
+                    v-model:value="sample.organ"
+                    show-search
+                    placeholder="Organ"
+                    :options="options.organ"
+                    allow-clear
+                    @search="handleOrganSearch"
                 >
                   <template v-if="state.organFetching" #notFoundContent>
-                    <a-spin />
+                    <a-spin/>
                   </template>
                 </a-select>
               </a-form-item>
 
               <a-form-item label="Species" name="species">
                 <a-select
-                  v-model:value="sample.species"
-                  :options="options.species"
-                  placeholder="Species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  allow-clear
+                    v-model:value="sample.species"
+                    :options="options.species"
+                    placeholder="Species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item
-                label="External Accession"
-                name="external_sample_accession"
+                  label="External Accession"
+                  name="external_sample_accession"
               >
                 <a-input
-                  v-model:value="sample.external_sample_accession"
-                  placeholder="External Accession"
+                    v-model:value="sample.external_sample_accession"
+                    placeholder="External Accession"
                 ></a-input>
               </a-form-item>
               <a-form-item label="Disease" name="disease">
                 <a-input
-                  v-model:value="sample.disease"
-                  placeholder="Disease"
+                    v-model:value="sample.disease"
+                    placeholder="Disease"
                 ></a-input>
               </a-form-item>
               <a-form-item label="Development Stage" name="development_stage">
                 <a-input
-                  v-model:value="sample.development_stage"
-                  placeholder="Development Stage"
+                    v-model:value="sample.development_stage"
+                    placeholder="Development Stage"
                 ></a-input>
               </a-form-item>
             </a-form>
@@ -70,18 +70,18 @@
             <a-form ref="cellFormRef" layout="vertical" :model="cell">
               <a-form-item label="Species" name="species">
                 <a-select
-                  v-model:value="cell.species"
-                  :options="options.species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  placeholder="Species"
-                  allow-clear
+                    v-model:value="cell.species"
+                    :options="options.species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    placeholder="Species"
+                    allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="CI ID" name="ci_id">
                 <a-input
-                  v-model:value="cell.ci_id"
-                  placeholder="CI ID"
-                  allow-clear
+                    v-model:value="cell.ci_id"
+                    placeholder="CI ID"
+                    allow-clear
                 ></a-input>
               </a-form-item>
               <div v-if="cell.species">
@@ -94,30 +94,30 @@
                 <div v-if="cell.searchBy === 'name'">
                   <a-form-item label="Name" name="name">
                     <a-input
-                      ref="cellNameInput"
-                      v-model:value="cell.name"
-                      placeholder="Click to search"
-                      @focus="handleCellNameSearch"
+                        ref="cellNameInput"
+                        v-model:value="cell.name"
+                        placeholder="Click to search"
+                        @focus="handleCellNameSearch"
                     />
                   </a-form-item>
                 </div>
                 <div v-else>
                   <a-form-item label="Positive" name="positive">
                     <a-select
-                      v-model:value="cell.positive"
-                      mode="tags"
-                      :token-separators="[',']"
-                      placeholder="Positive"
-                      allow-clear
+                        v-model:value="cell.positive"
+                        mode="tags"
+                        :token-separators="[',']"
+                        placeholder="Positive"
+                        allow-clear
                     ></a-select>
                   </a-form-item>
                   <a-form-item label="Negative" name="negative">
                     <a-select
-                      v-model:value="cell.negative"
-                      mode="tags"
-                      :token-separators="[',']"
-                      placeholder="Negative"
-                      allow-clear
+                        v-model:value="cell.negative"
+                        mode="tags"
+                        :token-separators="[',']"
+                        placeholder="Negative"
+                        allow-clear
                     ></a-select>
                   </a-form-item>
                 </div>
@@ -128,24 +128,24 @@
             <a-form ref="geneFormRef" layout="vertical" :model="gene">
               <a-form-item label="Species" name="species">
                 <a-select
-                  v-model:value="gene.species"
-                  :options="options.species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  placeholder="Species"
-                  allow-clear
+                    v-model:value="gene.species"
+                    :options="options.species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    placeholder="Species"
+                    allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item label="Search by gene symbol" name="symbol">
                 <a-select
-                  v-model:value="gene.symbol"
-                  show-search
-                  placeholder="Gene Symbol"
-                  :options="options.geneSymbol"
-                  allow-clear
-                  @search="handleGeneSymbolSearch"
+                    v-model:value="gene.symbol"
+                    show-search
+                    placeholder="Gene Symbol"
+                    :options="options.geneSymbol"
+                    allow-clear
+                    @search="handleGeneSymbolSearch"
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
-                    <a-spin />
+                    <a-spin/>
                   </template>
                 </a-select>
               </a-form-item>
@@ -155,17 +155,17 @@
         <div class="mt-4 flex justify-between align-center">
           <a-button class="flex items-center" @click="resetForm">
             <template #icon>
-              <undo-outlined />
+              <undo-outlined/>
             </template>
             <span>Reset</span>
           </a-button>
           <a-button
-            type="primary"
-            class="ml-2 flex items-center"
-            @click="handleSearch"
+              type="primary"
+              class="ml-2 flex items-center"
+              @click="handleSearch"
           >
             <template #icon>
-              <search-outlined />
+              <search-outlined/>
             </template>
             Search All
           </a-button>
@@ -175,8 +175,8 @@
     <div class="flex-1 w-0">
       <div class="bg-white rounded-lg">
         <SampleTable
-          v-if="filter === 'sample'"
-          ref="sampleTableRef"
+            v-if="filter === 'sample'"
+            ref="sampleTableRef"
         ></SampleTable>
         <CellTable v-if="filter === 'cell'" ref="cellTableRef"></CellTable>
         <GeneTable v-if="filter === 'gene'" ref="geneTableRef"></GeneTable>
@@ -184,21 +184,26 @@
     </div>
   </div>
 
+  <GeneNameModal
+      ref="geneNameRef"
+      @confirm="handleGeneNameChange"
+  ></GeneNameModal>
   <CellNameModal
-    ref="cellNameRef"
-    @confirm="handleCellNameChange"
+      ref="cellNameRef"
+      @confirm="handleCellNameChange"
   ></CellNameModal>
 </template>
 <script setup>
-import { onMounted, ref } from "vue"
-import { UndoOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { getOrganList } from "@/api/project"
-import SampleTable from "@/components/projects/SampleTable.vue"
-import CellTable from "@/components/projects/CellTable.vue"
-import GeneTable from "@/components/projects/GeneTable.vue"
-import { getGeneSymbolList, getSpecieList } from "@/api/options.js"
-import CellNameModal from "@/components/projects/CellNameModal.vue"
-import { useRoute } from "vue-router"
+import { onMounted, ref } from 'vue'
+import { UndoOutlined, SearchOutlined } from '@ant-design/icons-vue'
+import { getOrganList } from '@/api/project'
+import SampleTable from '@/components/projects/SampleTable.vue'
+import CellTable from '@/components/projects/CellTable.vue'
+import GeneTable from '@/components/projects/GeneTable.vue'
+import { getGeneSymbolList, getSpecieList } from '@/api/options.js'
+import CellNameModal from '@/components/projects/CellNameModal.vue'
+import GeneNameModal from '@/components/projects/GeneNameModal.vue'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
@@ -214,15 +219,15 @@ const state = ref({
   geneSymbolFetching: false,
 })
 
-const filter = ref("sample")
+const filter = ref('sample')
 // const filter = ref("cell");
 
 const sample = ref({
   species: undefined,
   organ: undefined,
-  external_sample_accession: "",
-  disease: "",
-  development_stage: "",
+  external_sample_accession: '',
+  disease: '',
+  development_stage: '',
 })
 
 const sampleFormRef = ref()
@@ -232,10 +237,10 @@ const cellNameInput = ref()
 
 const cell = ref({
   species: undefined,
-  ci_id: "",
-  cl_id: "",
-  searchBy: "name",
-  name: "",
+  ci_id: '',
+  cl_id: '',
+  searchBy: 'name',
+  name: '',
   positive: [],
   negative: [],
 })
@@ -253,13 +258,13 @@ const geneTableRef = ref()
 
 const resetForm = () => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       sampleFormRef.value.resetFields()
       break
-    case "cell":
+    case 'cell':
       cellFormRef.value.resetFields()
       break
-    case "gene":
+    case 'gene':
       geneFormRef.value.resetFields()
       break
     default:
@@ -292,11 +297,11 @@ const handleGeneSymbolSearch = async (keywords) => {
 
 const getConditions = () => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       return sample.value
-    case "cell":
+    case 'cell':
       return cell.value
-    case "gene":
+    case 'gene':
       return gene.value
     default:
       return {}
@@ -305,13 +310,13 @@ const getConditions = () => {
 
 const handleSearch = () => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       sampleTableRef.value.handleSearch(getConditions())
       break
-    case "cell":
+    case 'cell':
       cellTableRef.value.handleSearch(getConditions())
       break
-    case "gene":
+    case 'gene':
       geneTableRef.value.handleSearch(getConditions())
       break
     default:
@@ -327,6 +332,10 @@ const handleCellNameSearch = () => {
 const handleCellNameChange = (result) => {
   cell.value.name = result.name
   cell.value.cl_id = result.cl_id
+}
+
+const handleGeneNameChange = (result) => {
+  console.log(result)
 }
 
 onMounted(() => {

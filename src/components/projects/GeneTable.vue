@@ -153,6 +153,9 @@ const columns = ref(
           'gene_expression_meta',
           'cell_proportion_expression_the_gene',
         ],
+        customRender: ({ text }) => {
+          return text ? `${(text * 100).toFixed(2)}%` : ''
+        }
       },
       {
         title: 'Disease',
