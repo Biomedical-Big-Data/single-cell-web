@@ -20,7 +20,7 @@
   </div>
   <div class="h-screen relative">
     <div class="sologn">
-      <div>Welcome to My Amazing scRNA-seq Database !</div>
+      <div>Welcome to My Amazing <br> scRNA-seq Database !</div>
       <div class="flex items-center justify-center">
         <div class="more animate-bounce" @click="handleScroll">
           <img src="@/assets/images/home/icon_more.svg" alt=""/>
@@ -87,7 +87,7 @@
           <a-col
               v-for="item in statical"
               :key="item.id"
-              :span="3"
+              :span="4"
               class="item none"
           >
             <div class="icon flex justify-center">
