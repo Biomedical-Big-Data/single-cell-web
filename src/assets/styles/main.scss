@@ -17,6 +17,12 @@ body {
   flex-direction: column;
 }
 
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #1677ff;
+}
+
 .footer {
   mix-blend-mode: difference;
   color: #fff;

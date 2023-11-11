@@ -1,12 +1,12 @@
 <template>
   <a-table
-    :columns="columnResult"
-    :data-source="list"
-    :pagination="pagination"
-    :loading="loading"
-    :scroll="tableScroll"
-    @change="handleTableChange"
-    @resize-column="handleResizeColumn"
+      :columns="columnResult"
+      :data-source="list"
+      :pagination="pagination"
+      :loading="loading"
+      :scroll="tableScroll"
+      @change="handleTableChange"
+      @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -19,7 +19,7 @@
           <div>
             <a-button @click="handleChartModalOpen">
               <template #icon>
-                <DotChartOutlined />
+                <DotChartOutlined/>
               </template>
               Chart
             </a-button>
@@ -27,8 +27,8 @@
               <template #content>
                 <div class="overflow-y-auto table-column-setting">
                   <a-checkbox-group
-                    v-model:value="columnSettings"
-                    class="flex-col"
+                      v-model:value="columnSettings"
+                      class="flex-col"
                   >
                     <div v-for="item in columns" :key="item.title" class="p-2">
                       <a-checkbox :value="item.title">
@@ -40,18 +40,18 @@
               </template>
               <a-button class="ml-4">
                 <template #icon>
-                  <SettingOutlined />
+                  <SettingOutlined/>
                 </template>
                 Column Setting
               </a-button>
             </a-popover>
             <a-button
-              class="ml-4"
-              :loading="downloading"
-              @click="handleListDownload"
+                class="ml-4"
+                :loading="downloading"
+                @click="handleListDownload"
             >
               <template #icon>
-                <DownloadOutlined />
+                <DownloadOutlined/>
               </template>
               Download
             </a-button>
@@ -59,39 +59,37 @@
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, record, index }">
+    <template #bodyCell="{ column, record, index,text }">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-if="column.dataIndex === 'action'">
-        <a-button
-          shape="circle"
-          :icon="h(EyeOutlined)"
-          @click="handleToProject(record)"
-        />
+      <template v-else-if="joinTableIndex(column.dataIndex)  === 'analysis_meta.id'">
+        A{{ _.padStart(text, 6, '0') }}
+        <br>
+        <span class="link" @click="handleToProject(record)">view</span>
       </template>
     </template>
   </a-table>
 
   <a-modal
-    v-model:open="open"
-    width="60%"
-    wrap-class-name="full-modal"
-    :footer="null"
+      v-model:open="open"
+      width="60%"
+      wrap-class-name="full-modal"
+      :footer="null"
   >
     <a-tabs v-model:activeKey="geneChartType">
       <a-tab-pane key="percent" tab="Cell Number Percentage">
         <GeneExpressionLevelChart
-          :data="geneChartData"
-          title="Cell Number Percentage"
-          value-key="cell_proportion_expression_the_gene"
+            :data="geneChartData"
+            title="Cell Number Percentage"
+            value-key="cell_proportion_expression_the_gene"
         ></GeneExpressionLevelChart>
       </a-tab-pane>
       <a-tab-pane key="expression" tab="Gene Expression Level">
         <GeneExpressionLevelChart
-          :data="geneChartData"
-          title="Gene Expression Level"
-          value-key="average_gene_expression"
+            :data="geneChartData"
+            title="Gene Expression Level"
+            value-key="average_gene_expression"
         ></GeneExpressionLevelChart>
       </a-tab-pane>
     </a-tabs>
@@ -99,72 +97,77 @@
 </template>
 
 <script setup>
-import { usePagination } from "vue-request"
+import { usePagination } from 'vue-request'
 import {
   downloadGeneProjectList,
   getGeneProjectList,
   getProjectGeneChartData,
-} from "@/api/project.js"
-import { computed, h, ref } from "vue"
+} from '@/api/project.js'
+import { computed, ref } from 'vue'
 import {
   DotChartOutlined,
   DownloadOutlined,
-  EyeOutlined,
   SettingOutlined,
-} from "@ant-design/icons-vue"
-import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
-import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue"
-import { useRouter } from "vue-router"
-import { saveAs } from "file-saver"
-import _ from "lodash"
+} from '@ant-design/icons-vue'
+import { BIOSAMPLES_CLOUMNS } from '@/constants/biosample.js'
+import GeneExpressionLevelChart from '@/components/charts/GeneExpressionChart.vue'
+import { useRouter } from 'vue-router'
+import { saveAs } from 'file-saver'
+import _ from 'lodash'
+import { joinTableIndex } from '@/utils/common.js'
 
 const downloading = ref(false)
 const chartLoading = ref(false)
 const condition = ref({})
 const open = ref(false)
-const geneChartType = ref("percent")
+const geneChartType = ref('percent')
 const geneChartData = ref([])
 
 const router = useRouter()
 
 const columns = ref(
-  [
-    {
-      title: "Result",
-      dataIndex: "index",
-      align: "center",
-    },
-    {
-      title: "CellType",
-      dataIndex: ["gene_expression_meta", "cell_type_name"],
-      align: "center",
-    },
-    {
-      title: "Project",
-      dataIndex: ["project_meta", "title"],
-      width: 300,
-    },
-    {
-      title: "Proportion Expression",
-      dataIndex: [
-        "gene_expression_meta",
-        "cell_proportion_expression_the_gene",
-      ],
-    },
-    {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-    },
-    {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-    },
-    {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
-    },
-    ...BIOSAMPLES_CLOUMNS,
-  ].map((item) => ({ width: 100, ...item, resizable: true })),
+    [
+      {
+        title: 'Result',
+        dataIndex: 'index',
+        align: 'center',
+      },
+      {
+        title: 'CellType',
+        dataIndex: ['gene_expression_meta', 'cell_type_name'],
+        align: 'center',
+      },
+      {
+        title: 'Analysis ID',
+        dataIndex: ['analysis_meta', 'id'],
+        width: 180,
+      },
+      {
+        title: 'Project',
+        dataIndex: ['project_meta', 'title'],
+        width: 300,
+      },
+      {
+        title: 'Proportion Expression',
+        dataIndex: [
+          'gene_expression_meta',
+          'cell_proportion_expression_the_gene',
+        ],
+      },
+      {
+        title: 'Disease',
+        dataIndex: ['biosample_meta', 'disease'],
+      },
+      {
+        title: 'Organ',
+        dataIndex: ['biosample_meta', 'organ'],
+      },
+      {
+        title: 'Sex',
+        dataIndex: ['donor_meta', 'sex'],
+      },
+      ...BIOSAMPLES_CLOUMNS,
+    ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -174,13 +177,6 @@ const columnResult = computed(() => {
     ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
-    {
-      title: "",
-      dataIndex: "action",
-      fixed: "right",
-      align: "center",
-      width: 100,
-    },
   ]
 })
 
@@ -189,12 +185,6 @@ const tableScroll = computed(() => {
     x: _.sumBy(columns.value, (item) => item.width),
   }
 })
-
-// const count = reactive({
-//   project: 0,
-//   sample: 0,
-//   cell: 0,
-// })
 
 const getConditions = () => {
   const { species, symbol } = condition.value
@@ -231,9 +221,9 @@ const {
 } = usePagination(queryData, {
   manual: true,
   pagination: {
-    currentKey: "page",
-    pageSizeKey: "page_size",
-    totalKey: "total",
+    currentKey: 'page',
+    pageSizeKey: 'page_size',
+    totalKey: 'total',
   },
 })
 
@@ -243,7 +233,7 @@ const list = computed(() => {
   return (dataSource.value?.project_list || []).map((item) => {
     const { gene_expression_meta, ...other } = item
     const cell_type = cellTypeList.find(
-      (cell) => cell.cell_type_id === gene_expression_meta.cell_type_id,
+        (cell) => cell.cell_type_id === gene_expression_meta.cell_type_id,
     )
     return {
       ...other,
@@ -265,7 +255,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join("."),
+    sortField: sorter.field?.join('.'),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -288,7 +278,7 @@ const handleChartModalOpen = () => {
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: "project_detail",
+    name: 'project_detail',
     params: {
       id: record.project_meta.id,
     },
@@ -296,14 +286,14 @@ const handleToProject = (record) => {
       analysis_id: record.analysis_meta.id,
     },
   })
-  window.open(routeData.href, "_blank")
+  window.open(routeData.href, '_blank')
 }
 
 const handleListDownload = async () => {
   try {
     downloading.value = true
     const data = await downloadGeneProjectList(...getConditions())
-    saveAs(data, "sample_project_list.xlsx")
+    saveAs(data, 'sample_project_list.xlsx')
   } finally {
     downloading.value = false
   }
