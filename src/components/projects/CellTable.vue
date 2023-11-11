@@ -1,12 +1,12 @@
 <template>
   <a-table
-    :columns="columnResult"
-    :data-source="list"
-    :pagination="pagination"
-    :loading="loading"
-    :scroll="tableScroll"
-    @change="handleTableChange"
-    @resize-column="handleResizeColumn"
+      :columns="columnResult"
+      :data-source="list"
+      :pagination="pagination"
+      :loading="loading"
+      :scroll="tableScroll"
+      @change="handleTableChange"
+      @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -21,8 +21,8 @@
               <template #content>
                 <div class="overflow-y-auto table-column-setting">
                   <a-checkbox-group
-                    v-model:value="columnSettings"
-                    class="flex-col"
+                      v-model:value="columnSettings"
+                      class="flex-col"
                   >
                     <div v-for="item in columns" :key="item.title" class="p-2">
                       <a-checkbox :value="item.title">
@@ -34,18 +34,18 @@
               </template>
               <a-button>
                 <template #icon>
-                  <SettingOutlined />
+                  <SettingOutlined/>
                 </template>
                 Column Setting
               </a-button>
             </a-popover>
             <a-button
-              class="ml-4"
-              :loading="downloading"
-              @click="handleListDownload"
+                class="ml-4"
+                :loading="downloading"
+                @click="handleListDownload"
             >
               <template #icon>
-                <DownloadOutlined />
+                <DownloadOutlined/>
               </template>
               Download
             </a-button>
@@ -53,75 +53,78 @@
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, record, index }">
+    <template #bodyCell="{ column, record, index, text }">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-if="column.dataIndex === 'action'">
-        <a-button
-          shape="circle"
-          :icon="h(EyeOutlined)"
-          @click="handleToProject(record)"
-        />
+      <template v-else-if="joinTableIndex(column.dataIndex)  === 'analysis_meta.id'">
+        A{{ _.padStart(text, 6, '0') }}
+        <br>
+        <span class="link" @click="handleToProject(record)">view</span>
       </template>
     </template>
   </a-table>
 </template>
 
 <script setup>
-import { usePagination } from "vue-request"
-import { downloadCellProjectList, getCellProjectList } from "@/api/project.js"
-import { computed, h, ref } from "vue"
+import { usePagination } from 'vue-request'
+import { downloadCellProjectList, getCellProjectList } from '@/api/project.js'
+import { computed, ref } from 'vue'
 import {
   DownloadOutlined,
-  EyeOutlined,
   SettingOutlined,
-} from "@ant-design/icons-vue"
-import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
-import { useRouter } from "vue-router"
-import { saveAs } from "file-saver"
-import _ from "lodash"
+} from '@ant-design/icons-vue'
+import { BIOSAMPLES_CLOUMNS } from '@/constants/biosample.js'
+import { useRouter } from 'vue-router'
+import { saveAs } from 'file-saver'
+import _ from 'lodash'
+import { joinTableIndex } from '@/utils/common.js'
 
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
 const columns = ref(
-  [
-    {
-      title: "Result",
-      dataIndex: "index",
-      align: "center",
-    },
-    {
-      title: "Project",
-      dataIndex: ["project_meta", "title"],
-      width: 300,
-    },
-    {
-      title: "Proportion Of Cell",
-      dataIndex: ["cell_proportion_meta", "cell_proportion"],
-      align: "center",
-    },
-    {
-      title: "Cell Number",
-      dataIndex: ["cell_proportion_meta", "cell_number"],
-      align: "center",
-    },
-    {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-    },
-    {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-    },
-    {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
-    },
-    ...BIOSAMPLES_CLOUMNS,
-  ].map((item) => ({ width: 100, ...item, resizable: true })),
+    [
+      {
+        title: 'Result',
+        dataIndex: 'index',
+        align: 'center',
+      },
+      {
+        title: 'Analysis ID',
+        dataIndex: ['analysis_meta', 'id'],
+        width: 180,
+      },
+      {
+        title: 'Project',
+        dataIndex: ['project_meta', 'title'],
+        width: 300,
+      },
+      {
+        title: 'Proportion Of Cell',
+        dataIndex: ['cell_proportion_meta', 'cell_proportion'],
+        align: 'center',
+      },
+      {
+        title: 'Cell Number',
+        dataIndex: ['cell_proportion_meta', 'cell_number'],
+        align: 'center',
+      },
+      {
+        title: 'Disease',
+        dataIndex: ['biosample_meta', 'disease'],
+      },
+      {
+        title: 'Organ',
+        dataIndex: ['biosample_meta', 'organ'],
+      },
+      {
+        title: 'Sex',
+        dataIndex: ['donor_meta', 'sex'],
+      },
+      ...BIOSAMPLES_CLOUMNS,
+    ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -131,13 +134,6 @@ const columnResult = computed(() => {
     ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
-    {
-      title: "",
-      dataIndex: "action",
-      fixed: "right",
-      align: "center",
-      width: 100,
-    },
   ]
 })
 
@@ -146,12 +142,6 @@ const tableScroll = computed(() => {
     x: _.sumBy(columns.value, (item) => item.width),
   }
 })
-
-// const count = reactive({
-//   project: 0,
-//   sample: 0,
-//   cell: 0,
-// })
 
 const {
   data: dataSource,
@@ -163,9 +153,9 @@ const {
 } = usePagination(getCellProjectList, {
   manual: true,
   pagination: {
-    currentKey: "page",
-    pageSizeKey: "page_size",
-    totalKey: "total",
+    currentKey: 'page',
+    pageSizeKey: 'page_size',
+    totalKey: 'total',
   },
 })
 
@@ -187,7 +177,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join("."),
+    sortField: sorter.field?.join('.'),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -197,23 +187,23 @@ const handleTableChange = (pag, filters, sorter) => {
 const getConditions = () => {
   const result = {}
   const { positive, negative, species, cl_id, ci_id, searchBy } =
-    condition.value
+      condition.value
   if (species) {
     result.species_id = species
   }
   if (ci_id) {
     result.ci_id = ci_id
   }
-  if (searchBy === "name") {
+  if (searchBy === 'name') {
     if (cl_id) {
       result.cl_id = cl_id
     }
   } else {
     if (positive?.length) {
-      result.genes_positive = positive.join(",")
+      result.genes_positive = positive.join(',')
     }
     if (negative?.length) {
-      result.genes_negative = negative.join(",")
+      result.genes_negative = negative.join(',')
     }
   }
 
@@ -231,24 +221,24 @@ const handleSearch = (conditions) => {
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: "project_detail",
+    name: 'project_detail',
     params: {
       id: record.project_meta.id,
     },
     query: {
       analysis_id:
-        record.analysis_meta.id,
+      record.analysis_meta.id,
     },
   })
   // console.log(routeData)
-  window.open(routeData.href, "_blank")
+  window.open(routeData.href, '_blank')
 }
 
 const handleListDownload = async () => {
   try {
     downloading.value = true
     const data = await downloadCellProjectList({ ...getConditions() })
-    saveAs(data, "cell_project_list.xlsx")
+    saveAs(data, 'cell_project_list.xlsx')
   } finally {
     downloading.value = false
   }

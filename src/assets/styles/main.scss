@@ -12,3 +12,9 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #1677ff;
+}
