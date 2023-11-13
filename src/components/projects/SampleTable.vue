@@ -1,12 +1,13 @@
 <template>
   <a-table
-      :columns="columnResult"
-      :data-source="list"
-      :pagination="pagination"
-      :loading="loading"
-      :scroll="tableScroll"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    :columns="columnResult"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    :scroll="tableScroll"
+    :bordered="true"
+    @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -20,8 +21,8 @@
             <template #content>
               <div class="overflow-y-auto table-column-setting">
                 <a-checkbox-group
-                    v-model:value="columnSettings"
-                    class="flex-col"
+                  v-model:value="columnSettings"
+                  class="flex-col"
                 >
                   <div v-for="item in columns" :key="item.title" class="p-2">
                     <a-checkbox :value="item.title">
@@ -33,31 +34,33 @@
             </template>
             <a-button>
               <template #icon>
-                <SettingOutlined/>
+                <SettingOutlined />
               </template>
               Column Setting
             </a-button>
           </a-popover>
           <a-button
-              class="ml-4"
-              :loading="downloading"
-              @click="handleListDownload"
+            class="ml-4"
+            :loading="downloading"
+            @click="handleListDownload"
           >
             <template #icon>
-              <DownloadOutlined/>
+              <DownloadOutlined />
             </template>
             Download
           </a-button>
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, index ,record, text}">
+    <template #bodyCell="{ column, index, record, text }">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-else-if="joinTableIndex(column.dataIndex)  === 'analysis_meta.id'">
-        A{{ _.padStart(text, 6, '0') }}
-        <br>
+      <template
+        v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
+      >
+        A{{ _.padStart(text, 6, "0") }}
+        <br />
         <span class="link" @click="handleToProject(record)">view</span>
       </template>
     </template>
@@ -65,67 +68,64 @@
 </template>
 
 <script setup>
-import { usePagination } from 'vue-request'
+import { usePagination } from "vue-request"
 import {
   downloadSampleProjectList,
   getSampleProjectList,
-} from '@/api/project.js'
-import { computed, ref } from 'vue'
-import {
-  SettingOutlined,
-  DownloadOutlined,
-} from '@ant-design/icons-vue'
-import { BIOSAMPLES_CLOUMNS } from '@/constants/biosample.js'
-import { useRouter } from 'vue-router'
-import { saveAs } from 'file-saver'
-import _ from 'lodash'
-import { joinTableIndex } from '@/utils/common.js'
+} from "@/api/project.js"
+import { computed, ref } from "vue"
+import { SettingOutlined, DownloadOutlined } from "@ant-design/icons-vue"
+import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
+import { useRouter } from "vue-router"
+import { saveAs } from "file-saver"
+import _ from "lodash"
+import { joinTableIndex } from "@/utils/common.js"
 
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
 const columns = ref(
-    [
-      {
-        title: 'Result',
-        dataIndex: 'index',
-        align: 'center',
-      },
-      {
-        title: 'Analysis ID',
-        dataIndex: ['analysis_meta', 'id'],
-        width: 180,
-      },
-      {
-        title: 'Project',
-        dataIndex: ['project_meta', 'title'],
-        width: 400,
-      },
-      {
-        title: 'Disease',
-        dataIndex: ['biosample_meta', 'disease'],
-      },
-      {
-        title: 'Platform',
-        dataIndex: ['biosample_meta', 'sequencing_instrument_manufacturer_model'],
-      },
-      {
-        title: 'Species',
-        dataIndex: ['biosample_species_meta', 'species'],
-      },
-      {
-        title: 'Organ',
-        dataIndex: ['biosample_meta', 'organ'],
-        sorter: true,
-      },
-      {
-        title: 'Sex',
-        dataIndex: ['donor_meta', 'sex'],
-        sorter: true,
-      },
-      ...BIOSAMPLES_CLOUMNS,
-    ].map((item) => ({ width: 100, ...item, resizable: true })),
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+    },
+    {
+      title: "Analysis ID",
+      dataIndex: ["analysis_meta", "id"],
+      width: 180,
+    },
+    {
+      title: "Project",
+      dataIndex: ["project_meta", "title"],
+      width: 400,
+    },
+    {
+      title: "Disease",
+      dataIndex: ["biosample_meta", "disease"],
+    },
+    {
+      title: "Platform",
+      dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
+    },
+    {
+      title: "Species",
+      dataIndex: ["biosample_species_meta", "species"],
+    },
+    {
+      title: "Organ",
+      dataIndex: ["biosample_meta", "organ"],
+      sorter: true,
+    },
+    {
+      title: "Sex",
+      dataIndex: ["donor_meta", "sex"],
+      sorter: true,
+    },
+    ...BIOSAMPLES_CLOUMNS,
+  ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -154,9 +154,9 @@ const {
 } = usePagination(getSampleProjectList, {
   manual: true,
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size',
-    totalKey: 'total',
+    currentKey: "page",
+    pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
@@ -179,7 +179,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join('.'),
+    sortField: sorter.field?.join("."),
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,
@@ -221,7 +221,7 @@ const handleSearch = (conditions) => {
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
       id: record.project_meta.id,
     },
@@ -229,14 +229,14 @@ const handleToProject = (record) => {
       analysis_id: record.analysis_meta.id,
     },
   })
-  window.open(routeData.href, '_blank')
+  window.open(routeData.href, "_blank")
 }
 
 const handleListDownload = async () => {
   try {
     downloading.value = true
     const data = await downloadSampleProjectList(getConditions())
-    saveAs(data, 'sample_project_list.xlsx')
+    saveAs(data, "sample_project_list.xlsx")
   } finally {
     downloading.value = false
   }
