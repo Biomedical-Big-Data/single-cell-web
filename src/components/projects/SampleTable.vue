@@ -1,56 +1,15 @@
 <template>
   <a-table
+      class="h-full simple-table"
       :columns="columnResult"
       :data-source="list"
       :pagination="pagination"
       :loading="loading"
       :scroll="tableScroll"
+      :bordered="true"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
   >
-    <template #title>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <!-- <span class="mr-4">Project: {{ count.project }}</span>
-          <span class="mr-4">Samples: {{ count.sample }}</span>
-          <span>Cells: {{ count.cell }}</span> -->
-        </div>
-        <div>
-          <a-popover trigger="click" placement="bottom">
-            <template #content>
-              <div class="overflow-y-auto table-column-setting">
-                <a-checkbox-group
-                    v-model:value="columnSettings"
-                    class="flex-col"
-                >
-                  <div v-for="item in columns" :key="item.title" class="p-2">
-                    <a-checkbox :value="item.title">
-                      {{ item.title }}
-                    </a-checkbox>
-                  </div>
-                </a-checkbox-group>
-              </div>
-            </template>
-            <a-button>
-              <template #icon>
-                <SettingOutlined/>
-              </template>
-              Column Setting
-            </a-button>
-          </a-popover>
-          <a-button
-              class="ml-4"
-              :loading="downloading"
-              @click="handleListDownload"
-          >
-            <template #icon>
-              <DownloadOutlined/>
-            </template>
-            Download
-          </a-button>
-        </div>
-      </div>
-    </template>
     <template #bodyCell="{ column, index ,record, text}">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
@@ -70,11 +29,7 @@ import {
   downloadSampleProjectList,
   getSampleProjectList,
 } from '@/api/project.js'
-import { computed, ref } from 'vue'
-import {
-  SettingOutlined,
-  DownloadOutlined,
-} from '@ant-design/icons-vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { BIOSAMPLES_CLOUMNS } from '@/constants/biosample.js'
 import { useRouter } from 'vue-router'
 import { saveAs } from 'file-saver'
@@ -84,6 +39,16 @@ import { joinTableIndex } from '@/utils/common.js'
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
+const tableHeight = ref(0)
+
+let tableHeaderElem
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (let entry of entries) {
+    const cr = entry.contentRect
+    tableHeight.value = cr.height
+  }
+})
 
 const columns = ref(
     [
@@ -141,6 +106,7 @@ const columnResult = computed(() => {
 const tableScroll = computed(() => {
   return {
     x: _.sumBy(columns.value, (item) => item.width),
+    y: `calc(100vh - ${230 + tableHeight.value}px)`,
   }
 })
 
@@ -168,7 +134,17 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
+  position: ['bottomCenter'],
 }))
+
+onMounted(() => {
+  tableHeaderElem = document.querySelector('.simple-table .ant-table-thead')
+  resizeObserver.observe(tableHeaderElem)
+})
+
+onUnmounted(() => {
+  resizeObserver.unobserve(tableHeaderElem)
+})
 
 const getTrueIndex = (index) => {
   return (current.value - 1) * pageSize.value + index + 1
@@ -248,6 +224,7 @@ const handleResizeColumn = (w, col) => {
 
 defineExpose({
   handleSearch,
+  handleListDownload
 })
 </script>
 
