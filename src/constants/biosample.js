@@ -62,7 +62,6 @@ export const BIOSAMPLES_COLUMNS = [
   {
     title: "Disease",
     dataIndex: "disease",
-    group: "Disease Information",
   },
   {
     title: "Disease Ontology Label",
@@ -143,11 +142,6 @@ export const BIOSAMPLES_COLUMNS = [
     title: "Vaccination Time Since Unit",
     dataIndex: "vaccination_time_since_unit",
     group: "Vaccination Information",
-  },
-  {
-    title: "Organ",
-    dataIndex: "organ",
-    group: "Sample Basic Information",
   },
   {
     title: "Organ Region",
@@ -300,11 +294,6 @@ export const BIOSAMPLES_COLUMNS = [
     group: "Experiment Method",
   },
   {
-    title: "Sequencing Instrument Manufacturer Model",
-    dataIndex: "sequencing_instrument_manufacturer_model",
-    group: "Experiment Method",
-  },
-  {
     title: "Primer",
     dataIndex: "primer",
     group: "Experiment Method",
@@ -349,8 +338,8 @@ export const BIOSAMPLES_COLUMNS = [
     dataIndex: "number_of_reads",
     group: "Sample Basic Information",
   },
-].map(({ title, dataIndex }) => ({
+].map(({ title, dataIndex, group }) => ({
   title,
   dataIndex: ["biosample_meta", dataIndex],
-  // group,
+  group,
 }))

@@ -19,16 +19,32 @@
         <div>
           <a-popover trigger="click" placement="bottom">
             <template #content>
-              <div class="overflow-y-auto table-column-setting">
-                <a-checkbox-group
-                  v-model:value="columnSettings"
-                  class="flex-col"
-                >
-                  <div v-for="item in columns" :key="item.title" class="p-2">
-                    <a-checkbox :value="item.title">
-                      {{ item.title }}
-                    </a-checkbox>
-                  </div>
+              <div
+                class="overflow-y-auto table-column-setting"
+                style="width: 400px"
+              >
+                <a-checkbox-group v-model:value="columnSettings" class="w-full">
+                  <a-collapse expand-icon-position="end" class="w-full">
+                    <a-collapse-panel
+                      v-for="(v, k) in columnGroup"
+                      :key="k"
+                      :header="k"
+                    >
+                      <div>
+                        <div v-for="item in v" :key="item.title" class="p-2">
+                          <a-checkbox :value="item.title">
+                            {{ item.title }}
+                          </a-checkbox>
+                        </div>
+                      </div>
+                      <template #extra>
+                        <a-badge
+                          :count="columnResultCount[k]?.length || 0"
+                          :number-style="{ backgroundColor: '#52c41a' }"
+                        />
+                      </template>
+                    </a-collapse-panel>
+                  </a-collapse>
                 </a-checkbox-group>
               </div>
             </template>
@@ -107,10 +123,12 @@ const columns = ref(
     {
       title: "Disease",
       dataIndex: ["biosample_meta", "disease"],
+      group: "Disease Information",
     },
     {
       title: "Platform",
       dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
+      group: "Experiment Method",
     },
     {
       title: "Species",
@@ -119,6 +137,7 @@ const columns = ref(
     {
       title: "Organ",
       dataIndex: ["biosample_meta", "organ"],
+      group: "Sample Basic Information",
     },
     {
       title: "Sex",
@@ -135,12 +154,23 @@ const columns = ref(
 
 const columnSettings = ref(columns.value.map((item) => item.title))
 
+const columnGroup = computed(() => {
+  return _.chain(columns.value)
+    .filter((item) => !!item.group)
+    .groupBy("group")
+    .value()
+})
+
 const columnResult = computed(() => {
   return [
     ...columns.value.filter((item) => {
       return columnSettings.value.includes(item.title)
     }),
   ]
+})
+
+const columnResultCount = computed(() => {
+  return _.groupBy(columnResult.value, "group")
 })
 
 const tableScroll = computed(() => {
@@ -180,7 +210,6 @@ const getTrueIndex = (index) => {
 }
 
 const handleTableChange = (pag, filters, sorter) => {
-  console.log(pag)
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
