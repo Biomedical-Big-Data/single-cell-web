@@ -6,7 +6,7 @@
         <span>Home</span>
       </div>
       <div class="user-container">
-        <a-button class="create-action">
+        <a-button class="create-action" @click="handleGoProjectCreate()">
           Create Project
         </a-button>
         <a-avatar>
@@ -601,6 +601,9 @@ onMounted(() => {
 
 const handleGoHome = () => {
   router.push({ name: 'home' })
+}
+const handleGoProjectCreate = () => {
+  router.push({ name: 'project_create' })
 }
 
 const getOptions = () => {
