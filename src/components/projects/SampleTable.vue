@@ -75,7 +75,7 @@ import {
 } from "@/api/project.js"
 import { computed, ref } from "vue"
 import { SettingOutlined, DownloadOutlined } from "@ant-design/icons-vue"
-import { BIOSAMPLES_CLOUMNS } from "@/constants/biosample.js"
+import { BIOSAMPLES_COLUMNS } from "@/constants/biosample.js"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
 import _ from "lodash"
@@ -124,7 +124,7 @@ const columns = ref(
       dataIndex: ["donor_meta", "sex"],
       sorter: true,
     },
-    ...BIOSAMPLES_CLOUMNS,
+    ...BIOSAMPLES_COLUMNS,
   ].map((item) => ({ width: 100, ...item, resizable: true })),
 )
 
