@@ -91,11 +91,13 @@ const columns = ref(
       title: "Result",
       dataIndex: "index",
       align: "center",
+      sorter: false,
     },
     {
       title: "Analysis ID",
       dataIndex: ["analysis_meta", "id"],
       width: 180,
+      sorter: false,
     },
     {
       title: "Project",
@@ -117,15 +119,18 @@ const columns = ref(
     {
       title: "Organ",
       dataIndex: ["biosample_meta", "organ"],
-      sorter: true,
     },
     {
       title: "Sex",
       dataIndex: ["donor_meta", "sex"],
-      sorter: true,
     },
     ...BIOSAMPLES_COLUMNS,
-  ].map((item) => ({ width: 100, ...item, resizable: true })),
+  ].map((item) => ({
+    width: 150,
+    sorter: true,
+    ...item,
+    resizable: true,
+  })),
 )
 
 const columnSettings = ref(columns.value.map((item) => item.title))
@@ -179,8 +184,8 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join("."),
-    sortOrder: sorter.order,
+    order_by: sorter.field?.join("."),
+    asc: sorter.order ? sorter.order === "ascend" : null,
     ...getConditions(),
     ...filters,
   })
