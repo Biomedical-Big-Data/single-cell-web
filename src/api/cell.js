@@ -8,6 +8,20 @@ export function getCellTaxonomy(cell_standard) {
   })
 }
 
+export function getGeneCellTaxonomy({
+  species_id,
+  genes_positive,
+  genes_negative,
+}) {
+  return request.get("/project/view/table/cell_taxonomy", {
+    params: {
+      species_id,
+      genes_positive,
+      genes_negative,
+    },
+  })
+}
+
 export function getTaxonomyDetail(cl_id) {
   return request.get("/project/taxonomy/info", {
     params: {

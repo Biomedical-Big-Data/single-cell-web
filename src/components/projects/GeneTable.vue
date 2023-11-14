@@ -5,6 +5,7 @@
       :pagination="pagination"
       :loading="loading"
       :scroll="tableScroll"
+      :bordered="true"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
   >
@@ -23,22 +24,38 @@
               </template>
               Chart
             </a-button>
-            <a-popover trigger="click" placement="bottom">
+            <a-popover trigger="click" placement="bottom" class="ml-4">
               <template #content>
-                <div class="overflow-y-auto table-column-setting">
-                  <a-checkbox-group
-                      v-model:value="columnSettings"
-                      class="flex-col"
-                  >
-                    <div v-for="item in columns" :key="item.title" class="p-2">
-                      <a-checkbox :value="item.title">
-                        {{ item.title }}
-                      </a-checkbox>
-                    </div>
-                  </a-checkbox-group>
+                <div
+                    class="overflow-y-auto table-column-setting"
+                    style="width: 400px"
+                >
+                  <a-collapse expand-icon-position="end" class="w-full">
+                    <a-collapse-panel
+                        v-for="(v, k) in columnGroup"
+                        :key="k"
+                        :header="getTitleName(k)"
+                    >
+                      <div>
+                        <a-checkbox-group v-model:value="columnSettings[k]" class="w-full">
+                          <div v-for="item in v" :key="item.title" class="p-2">
+                            <a-checkbox :value="item.title">
+                              {{ item.title }}
+                            </a-checkbox>
+                          </div>
+                        </a-checkbox-group>
+                      </div>
+                      <template #extra>
+                        <a-badge
+                            :count="columnSettings[k]?.length || 0"
+                            :number-style="{ backgroundColor: '#52c41a' }"
+                        />
+                      </template>
+                    </a-collapse-panel>
+                  </a-collapse>
                 </div>
               </template>
-              <a-button class="ml-4">
+              <a-button>
                 <template #icon>
                   <SettingOutlined/>
                 </template>
@@ -59,13 +76,15 @@
         </div>
       </div>
     </template>
-    <template #bodyCell="{ column, record, index,text }">
+    <template #bodyCell="{ column, record, index, text }">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
-      <template v-else-if="joinTableIndex(column.dataIndex)  === 'analysis_meta.id'">
+      <template
+          v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
+      >
         A{{ _.padStart(text, 6, '0') }}
-        <br>
+        <br/>
         <span class="link" @click="handleToProject(record)">view</span>
       </template>
     </template>
@@ -109,12 +128,13 @@ import {
   DownloadOutlined,
   SettingOutlined,
 } from '@ant-design/icons-vue'
-import { BIOSAMPLES_CLOUMNS } from '@/constants/biosample.js'
+import { BIOSAMPLES_COLUMNS } from '@/constants/biosample.js'
 import GeneExpressionLevelChart from '@/components/charts/GeneExpressionChart.vue'
 import { useRouter } from 'vue-router'
 import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { joinTableIndex } from '@/utils/common.js'
+import { titleCase } from 'text-case'
 
 const downloading = ref(false)
 const chartLoading = ref(false)
@@ -131,6 +151,7 @@ const columns = ref(
         title: 'Result',
         dataIndex: 'index',
         align: 'center',
+        sorter: false,
       },
       {
         title: 'CellType',
@@ -141,6 +162,7 @@ const columns = ref(
         title: 'Analysis ID',
         dataIndex: ['analysis_meta', 'id'],
         width: 180,
+        sorter: false,
       },
       {
         title: 'Project',
@@ -155,30 +177,63 @@ const columns = ref(
         ],
         customRender: ({ text }) => {
           return text ? `${(text * 100).toFixed(2)}%` : ''
-        }
+        },
       },
       {
         title: 'Disease',
         dataIndex: ['biosample_meta', 'disease'],
+        group: 'disease_information',
       },
       {
         title: 'Organ',
         dataIndex: ['biosample_meta', 'organ'],
+        group: 'sample_basic_information',
       },
       {
         title: 'Sex',
         dataIndex: ['donor_meta', 'sex'],
       },
-      ...BIOSAMPLES_CLOUMNS,
-    ].map((item) => ({ width: 100, ...item, resizable: true })),
+      ...BIOSAMPLES_COLUMNS,
+    ].map((item) => ({
+      width: 150,
+      sorter: true,
+      ...item,
+      resizable: true
+    })),
 )
 
-const columnSettings = ref(columns.value.map((item) => item.title))
+const columnSettings = ref({
+  sample_basic_information: columns.value.filter(item => item.group === 'sample_basic_information').map(item => item.title),
+  disease_information: columns.value.filter(item => item.group === 'disease_information').map(item => item.title),
+  vaccination_information: columns.value.filter(item => item.group === 'vaccination_information').map(item => item.title),
+  perturbation_information: columns.value.filter(item => item.group === 'perturbation_information').map(item => item.title),
+  experiment_method: columns.value.filter(item => item.group === 'experiment_method').map(item => item.title),
+})
+
+const columnGroup = computed(() => {
+  return _.chain(columns.value)
+      .filter((item) => !!item.group)
+      .groupBy('group')
+      .value()
+})
 
 const columnResult = computed(() => {
   return [
     ...columns.value.filter((item) => {
-      return columnSettings.value.includes(item.title)
+      const {
+        sample_basic_information,
+        disease_information,
+        vaccination_information,
+        perturbation_information,
+        experiment_method
+      } = columnSettings.value
+      return !item.group || [
+        ...sample_basic_information,
+        ...disease_information,
+        ...vaccination_information,
+        ...perturbation_information,
+        ...experiment_method
+      ].includes(item.title)
     }),
   ]
 })
@@ -199,6 +254,10 @@ const getConditions = () => {
 
 const getTrueIndex = (index) => {
   return (current.value - 1) * pageSize.value + index + 1
+}
+
+const getTitleName = (k) => {
+  return titleCase(k.replace(/_/g, ' '))
 }
 
 const handleGeneChartDataFetch = async () => {
@@ -258,8 +317,8 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join('.'),
-    sortOrder: sorter.order,
+    order_by: sorter.field?.join('.'),
+    asc: sorter.order ? sorter.order === 'ascend' : null,
     ...getConditions(),
     ...filters,
   })

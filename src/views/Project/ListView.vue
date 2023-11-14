@@ -459,30 +459,32 @@ const state = ref({
   geneSymbolFetching: false,
 })
 
-const filter = ref('sample')
+const filter = ref("sample")
 // const filter = ref("cell");
 
 const sample = ref({
   species: undefined,
   organ: undefined,
-  external_sample_accession: '',
-  disease: '',
-  development_stage: '',
+  external_sample_accession: "",
+  disease: "",
+  development_stage: "",
 })
 
 const sampleFormRef = ref()
 const sampleTableRef = ref()
 const cellNameRef = ref()
+const geneNameRef = ref()
 const cellNameInput = ref()
+const geneNameInput = ref()
 
 const cell = ref({
   species: undefined,
-  ci_id: '',
-  cl_id: '',
-  searchBy: 'name',
-  name: '',
-  positive: [],
-  negative: [],
+  ct_id: "",
+  cl_id: "",
+  cl_ids: "",
+  searchBy: "name",
+  name: "",
+  names: "",
 })
 
 const cellFormRef = ref()
@@ -498,13 +500,13 @@ const geneTableRef = ref()
 
 const resetForm = () => {
   switch (filter.value) {
-    case 'sample':
+    case "sample":
       sampleFormRef.value.resetFields()
       break
-    case 'cell':
+    case "cell":
       cellFormRef.value.resetFields()
       break
-    case 'gene':
+    case "gene":
       geneFormRef.value.resetFields()
       break
     default:
@@ -537,11 +539,11 @@ const handleGeneSymbolSearch = async (keywords) => {
 
 const getConditions = () => {
   switch (filter.value) {
-    case 'sample':
+    case "sample":
       return sample.value
-    case 'cell':
+    case "cell":
       return cell.value
-    case 'gene':
+    case "gene":
       return gene.value
     default:
       return {}
@@ -550,13 +552,13 @@ const getConditions = () => {
 
 const handleSearch = () => {
   switch (filter.value) {
-    case 'sample':
+    case "sample":
       sampleTableRef.value.handleSearch(getConditions())
       break
-    case 'cell':
+    case "cell":
       cellTableRef.value.handleSearch(getConditions())
       break
-    case 'gene':
+    case "gene":
       geneTableRef.value.handleSearch(getConditions())
       break
     default:
@@ -569,13 +571,19 @@ const handleCellNameSearch = () => {
   cellNameRef.value.showModal()
 }
 
+const handleGeneNameSearch = () => {
+  geneNameInput.value.blur()
+  geneNameRef.value.showModal(cell.value.species)
+}
+
 const handleCellNameChange = (result) => {
   cell.value.name = result.name
   cell.value.cl_id = result.cl_id
 }
 
 const handleGeneNameChange = (result) => {
-  console.log(result)
+  cell.value.names = result.map((item) => item.cell_type_name).join()
+  cell.value.cl_ids = result.map((item) => item.cell_type_id)
 }
 
 onMounted(() => {
