@@ -105,16 +105,6 @@ import { titleCase } from "text-case"
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
-const tableHeight = ref(0)
-
-let tableHeaderElem
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (let entry of entries) {
-    const cr = entry.contentRect
-    tableHeight.value = cr.height
-  }
-})
 
 const columns = ref(
   [

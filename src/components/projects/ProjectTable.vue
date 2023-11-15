@@ -1,24 +1,24 @@
 <template>
   <a-table
-      class="h-full simple-table"
-      :columns="columns"
-      :data-source="list"
-      :pagination="pagination"
-      :loading="loading"
-      :scroll="tableScroll"
-      :bordered="true"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    class="h-full simple-table"
+    :columns="columns"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    :scroll="tableScroll"
+    :bordered="true"
+    @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #bodyCell="{ column, index, record, text }">
       <template v-if="column.dataIndex === 'index'">
         {{ getTrueIndex(index) }}
       </template>
       <template
-          v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
+        v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
       >
-        A{{ _.padStart(text, 6, '0') }}
-        <br/>
+        A{{ _.padStart(text, 6, "0") }}
+        <br />
         <span class="link" @click="handleToProject(record)">view</span>
       </template>
     </template>
@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-import { usePagination } from 'vue-request'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import _ from 'lodash'
-import { joinTableIndex } from '@/utils/common.js'
+import { usePagination } from "vue-request"
+import { computed, onMounted, onUnmounted, ref } from "vue"
+import { useRouter } from "vue-router"
+import _ from "lodash"
+import { joinTableIndex } from "@/utils/common.js"
 
 const props = defineProps({
   columns: {
@@ -44,13 +44,12 @@ const props = defineProps({
   resultKey: {
     type: String,
     required: false,
-    default: 'project_list'
+    default: "project_list",
   },
   search: {
     type: Function,
-    required: true
+    required: true,
   },
-
 })
 
 const router = useRouter()
@@ -86,9 +85,9 @@ const {
 } = usePagination(getSearchList, {
   manual: true,
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size',
-    totalKey: 'total',
+    currentKey: "page",
+    pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
@@ -100,11 +99,11 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-  position: ['bottomCenter'],
+  position: ["bottomCenter"],
 }))
 
 onMounted(() => {
-  tableHeaderElem = document.querySelector('.simple-table .ant-table-thead')
+  tableHeaderElem = document.querySelector(".simple-table .ant-table-thead")
   resizeObserver.observe(tableHeaderElem)
 })
 
@@ -120,11 +119,15 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag?.pageSize,
     page: pag?.current,
-    order_by: sorter.field?.join('.'),
-    asc: sorter.order ? sorter.order === 'ascend' : null,
+    order_by: sorter.field?.join("."),
+    asc: sorter.order ? sorter.order === "ascend" : null,
     ...props.conditions,
     ...filters,
   })
+}
+
+const handleReset = () => {
+  pagination.value.current = 1
 }
 
 const handleSearch = () => {
@@ -137,7 +140,7 @@ const handleSearch = () => {
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
       id: record.project_meta.id,
     },
@@ -145,7 +148,7 @@ const handleToProject = (record) => {
       analysis_id: record.analysis_meta.id,
     },
   })
-  window.open(routeData.href, '_blank')
+  window.open(routeData.href, "_blank")
 }
 
 const handleResizeColumn = (w, col) => {
@@ -153,7 +156,8 @@ const handleResizeColumn = (w, col) => {
 }
 
 defineExpose({
-  handleSearch
+  handleSearch,
+  handleReset,
 })
 </script>
 
