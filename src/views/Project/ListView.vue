@@ -341,7 +341,10 @@ const handleGeneSymbolSearch = async (keywords) => {
 const handleCellIDSearch = async (keywords) => {
   try {
     state.value.cellIDFetching = true
-    const data = await getCellTypeList({ cell_type_id: keywords })
+    const data = await getCellTypeList({
+      cell_type_id: keywords,
+      species_id: cell.value.species,
+    })
     options.value.cellIds = data.cell_type_list.map((item) => ({
       label: item.cell_type_name,
       value: item.cell_taxonomy_id,
