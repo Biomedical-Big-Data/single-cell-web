@@ -39,7 +39,7 @@
                   </template>
                   <a-button
                     type="text"
-                    
+
                     shape="circle"
                     :icon="h(QuestionCircleOutlined)"
                   ></a-button>
@@ -115,6 +115,10 @@
                 </template>
                 {{ formState.excel_id }}
               </a-button>
+              <div class="mt-2">
+                请按以下格式上传:
+                <a href="./update_file.xlsx">update_file.xlsx</a>
+              </div>
             </a-form-item>
             <a-form-item label="UMap文件" name="umap_id" required>
               <a-button

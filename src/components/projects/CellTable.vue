@@ -1,13 +1,13 @@
 <template>
   <a-table
-      :columns="columnResult"
-      :data-source="list"
-      :pagination="pagination"
-      :loading="loading"
-      :scroll="tableScroll"
-      :bordered="true"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    :columns="columnResult"
+    :data-source="list"
+    :pagination="pagination"
+    :loading="loading"
+    :scroll="tableScroll"
+    :bordered="true"
+    @change="handleTableChange"
+    @resize-column="handleResizeColumn"
   >
     <template #title>
       <div class="flex items-center justify-between">
@@ -21,17 +21,20 @@
             <a-popover trigger="click" placement="bottom">
               <template #content>
                 <div
-                    class="overflow-y-auto table-column-setting"
-                    style="width: 400px"
+                  class="overflow-y-auto table-column-setting"
+                  style="width: 400px"
                 >
                   <a-collapse expand-icon-position="end" class="w-full">
                     <a-collapse-panel
-                        v-for="(v, k) in columnGroup"
-                        :key="k"
-                        :header="getTitleName(k)"
+                      v-for="(v, k) in columnGroup"
+                      :key="k"
+                      :header="getTitleName(k)"
                     >
                       <div>
-                        <a-checkbox-group v-model:value="columnSettings[k]" class="w-full">
+                        <a-checkbox-group
+                          v-model:value="columnSettings[k]"
+                          class="w-full"
+                        >
                           <div v-for="item in v" :key="item.title" class="p-2">
                             <a-checkbox :value="item.title">
                               {{ item.title }}
@@ -41,8 +44,8 @@
                       </div>
                       <template #extra>
                         <a-badge
-                            :count="columnSettings[k]?.length || 0"
-                            :number-style="{ backgroundColor: '#52c41a' }"
+                          :count="columnSettings[k]?.length || 0"
+                          :number-style="{ backgroundColor: '#1677ff' }"
                         />
                       </template>
                     </a-collapse-panel>
@@ -51,18 +54,18 @@
               </template>
               <a-button>
                 <template #icon>
-                  <SettingOutlined/>
+                  <SettingOutlined />
                 </template>
                 Column Setting
               </a-button>
             </a-popover>
             <a-button
-                class="ml-4"
-                :loading="downloading"
-                @click="handleListDownload"
+              class="ml-4"
+              :loading="downloading"
+              @click="handleListDownload"
             >
               <template #icon>
-                <DownloadOutlined/>
+                <DownloadOutlined />
               </template>
               Download
             </a-button>
@@ -75,94 +78,115 @@
         {{ getTrueIndex(index) }}
       </template>
       <template
-          v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
+        v-else-if="joinTableIndex(column.dataIndex) === 'analysis_meta.id'"
       >
-        A{{ _.padStart(text, 6, '0') }}
-        <br/>
+        A{{ _.padStart(text, 6, "0") }}
+        <br />
         <span class="link" @click="handleToProject(record)">view</span>
+      </template>
+      <template
+        v-else-if="joinTableIndex(column.dataIndex) === 'biosample_meta.id'"
+      >
+        B{{ _.padStart(text, 6, "0") }}
       </template>
     </template>
   </a-table>
 </template>
 
 <script setup>
-import { usePagination } from 'vue-request'
-import { downloadCellProjectList, getCellProjectList } from '@/api/project.js'
-import { computed, ref } from 'vue'
-import { DownloadOutlined, SettingOutlined } from '@ant-design/icons-vue'
-import { BIOSAMPLES_COLUMNS } from '@/constants/biosample.js'
-import { useRouter } from 'vue-router'
-import { saveAs } from 'file-saver'
-import _ from 'lodash'
-import { joinTableIndex } from '@/utils/common.js'
-import { titleCase } from 'text-case'
+import { usePagination } from "vue-request"
+import { downloadCellProjectList, getCellProjectList } from "@/api/project.js"
+import { computed, ref } from "vue"
+import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue"
+import { BIOSAMPLES_COLUMNS } from "@/constants/biosample.js"
+import { useRouter } from "vue-router"
+import { saveAs } from "file-saver"
+import _ from "lodash"
+import { joinTableIndex } from "@/utils/common.js"
+import { titleCase } from "text-case"
 
 const router = useRouter()
 const downloading = ref(false)
 const condition = ref({})
 
 const columns = ref(
-    [
-      {
-        title: 'Result',
-        dataIndex: 'index',
-        align: 'center',
-        sorter: false,
-      },
-      {
-        title: 'Analysis ID',
-        dataIndex: ['analysis_meta', 'id'],
-        width: 180,
-        sorter: false,
-      },
-      {
-        title: 'Project',
-        dataIndex: ['project_meta', 'title'],
-        width: 300,
-      },
-      {
-        title: 'Proportion Of Cell',
-        dataIndex: ['cell_proportion_meta', 'cell_proportion'],
-        align: 'center',
-      },
-      {
-        title: 'Cell Number',
-        dataIndex: ['cell_proportion_meta', 'cell_number'],
-        align: 'center',
-      },
-      {
-        title: 'Disease',
-        dataIndex: ['biosample_meta', 'disease'],
-        group: 'disease_information',
-      },
-      {
-        title: 'Organ',
-        dataIndex: ['biosample_meta', 'organ'],
-        group: 'sample_basic_information',
-      },
-      {
-        title: 'Sex',
-        dataIndex: ['donor_meta', 'sex'],
-      },
-      ...BIOSAMPLES_COLUMNS,
-    ].map((item) => ({ width: 150, sorter: true, ...item, resizable: true })),
+  [
+    {
+      title: "Result",
+      dataIndex: "index",
+      align: "center",
+      sorter: false,
+    },
+    {
+      title: "Analysis ID",
+      dataIndex: ["analysis_meta", "id"],
+      width: 180,
+      sorter: false,
+    },
+    {
+      title: "Project",
+      dataIndex: ["project_meta", "title"],
+      width: 300,
+    },
+    {
+      title: "Proportion Of Cell",
+      dataIndex: ["cell_proportion_meta", "cell_proportion"],
+      align: "center",
+      customRender: ({ text }) => `${(text * 100).toFixed(2)}%`,
+    },
+    {
+      title: "Cell Number",
+      dataIndex: ["cell_proportion_meta", "cell_number"],
+      align: "center",
+    },
+    {
+      title: "Disease",
+      dataIndex: ["biosample_meta", "disease"],
+      group: "disease_information",
+    },
+    {
+      title: "Organ",
+      dataIndex: ["biosample_meta", "organ"],
+      group: "sample_basic_information",
+    },
+    {
+      title: "Sex",
+      dataIndex: ["donor_meta", "sex"],
+    },
+    ...BIOSAMPLES_COLUMNS,
+  ].map((item) => ({ width: 150, sorter: true, ...item, resizable: true })),
 )
 
 const columnSettings = ref({
-  sample_basic_information: columns.value.filter(item => item.group === 'sample_basic_information').map(item => item.title),
-  disease_information: columns.value.filter(item => item.group === 'disease_information').map(item => item.title),
-  vaccination_information: columns.value.filter(item => item.group === 'vaccination_information').map(item => item.title),
-  perturbation_information: columns.value.filter(item => item.group === 'perturbation_information').map(item => item.title),
-  experiment_method: columns.value.filter(item => item.group === 'experiment_method').map(item => item.title),
+  sample_basic_information: columns.value
+    .filter(
+      (item) => !item.autoHidden && item.group === "sample_basic_information",
+    )
+    .map((item) => item.title),
+  disease_information: columns.value
+    .filter((item) => !item.autoHidden && item.group === "disease_information")
+    .map((item) => item.title),
+  vaccination_information: columns.value
+    .filter(
+      (item) => !item.autoHidden && item.group === "vaccination_information",
+    )
+    .map((item) => item.title),
+  perturbation_information: columns.value
+    .filter(
+      (item) => !item.autoHidden && item.group === "perturbation_information",
+    )
+    .map((item) => item.title),
+  experiment_method: columns.value
+    .filter((item) => !item.autoHidden && item.group === "experiment_method")
+    .map((item) => item.title),
 })
 
 const columnGroup = computed(() => {
   return _.chain(columns.value)
-      .filter((item) => !!item.group)
-      .groupBy('group')
-      .value()
+    .filter((item) => !!item.group)
+    .groupBy("group")
+    .value()
 })
-
 
 const columnResult = computed(() => {
   return [
@@ -172,22 +196,25 @@ const columnResult = computed(() => {
         disease_information,
         vaccination_information,
         perturbation_information,
-        experiment_method
+        experiment_method,
       } = columnSettings.value
-      return !item.group || [
-        ...sample_basic_information,
-        ...disease_information,
-        ...vaccination_information,
-        ...perturbation_information,
-        ...experiment_method
-      ].includes(item.title)
+      return (
+        !item.group ||
+        [
+          ...sample_basic_information,
+          ...disease_information,
+          ...vaccination_information,
+          ...perturbation_information,
+          ...experiment_method,
+        ].includes(item.title)
+      )
     }),
   ]
 })
 
 const tableScroll = computed(() => {
   return {
-    x: _.sumBy(columns.value, (item) => item.width),
+    x: _.sumBy(columnResult.value, (item) => item.width),
   }
 })
 
@@ -201,9 +228,9 @@ const {
 } = usePagination(getCellProjectList, {
   manual: true,
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size',
-    totalKey: 'total',
+    currentKey: "page",
+    pageSizeKey: "page_size",
+    totalKey: "total",
   },
 })
 
@@ -222,15 +249,15 @@ const getTrueIndex = (index) => {
 }
 
 const getTitleName = (k) => {
-  return titleCase(k.replace(/_/g, ' '))
+  return titleCase(k.replace(/_/g, " "))
 }
 
 const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    order_by: sorter.field?.join('.'),
-    asc: sorter.order ? sorter.order === 'ascend' : null,
+    order_by: sorter.field?.join("."),
+    asc: sorter.order ? sorter.order === "ascend" : null,
     ...getConditions(),
     ...filters,
   })
@@ -238,25 +265,27 @@ const handleTableChange = (pag, filters, sorter) => {
 
 const getConditions = () => {
   const result = {}
-  const { positive, negative, species, cl_id, ci_id, searchBy } =
-      condition.value
+  const { species, cl_cell_id, ct_id, searchBy, ct_gene_ids } = condition.value
   if (species) {
     result.species_id = species
   }
-  if (ci_id) {
-    result.ci_id = ci_id
+  let ct_ids = []
+  if (searchBy === "id") {
+    if (ct_id) {
+      ct_ids = [ct_id]
+    }
+  } else if (searchBy === "name") {
+    if (cl_cell_id) {
+      result.cl_id = cl_cell_id
+    }
+  } else if (searchBy === "gene") {
+    if (ct_gene_ids?.length) {
+      ct_ids = ct_gene_ids
+    }
   }
-  if (searchBy === 'name') {
-    if (cl_id) {
-      result.cl_id = cl_id
-    }
-  } else {
-    if (positive?.length) {
-      result.genes_positive = positive.join(',')
-    }
-    if (negative?.length) {
-      result.genes_negative = negative.join(',')
-    }
+
+  if (ct_ids.length) {
+    result.ct_id = ct_ids.join(",")
   }
 
   return result
@@ -273,7 +302,7 @@ const handleSearch = (conditions) => {
 
 const handleToProject = (record) => {
   const routeData = router.resolve({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
       id: record.project_meta.id,
     },
@@ -282,14 +311,14 @@ const handleToProject = (record) => {
     },
   })
   // console.log(routeData)
-  window.open(routeData.href, '_blank')
+  window.open(routeData.href, "_blank")
 }
 
 const handleListDownload = async () => {
   try {
     downloading.value = true
     const data = await downloadCellProjectList({ ...getConditions() })
-    saveAs(data, 'cell_project_list.xlsx')
+    saveAs(data, "cell_project_list.xlsx")
   } finally {
     downloading.value = false
   }

@@ -96,8 +96,8 @@ const emits = defineEmits(["confirm"])
 const selectedCells = ref([])
 const open = ref(false)
 const condition = ref({
-  positive: ["1110017d15rik", "CCcdc33"],
-  negative: ["Ccdc33"],
+  positive: [],
+  negative: [],
   specie_id: null,
 })
 
@@ -120,6 +120,7 @@ const columns = [
     title: "Score",
     dataIndex: "score",
     width: 50,
+    sorter: true,
     customRender: ({ text }) => {
       return text.toFixed(4)
     },
@@ -158,9 +159,9 @@ const pagination = computed(() => ({
 }))
 
 const getConditions = () => {
-  const { positive, negative } = condition.value
+  const { positive, negative, specie_id } = condition.value
   return {
-    species_id: 1,
+    species_id: specie_id,
     genes_positive: positive.join(","),
     genes_negative: negative.join(","),
   }
@@ -170,7 +171,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join("."),
+    order_by: sorter.field,
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,

@@ -1,6 +1,9 @@
 <template>
   <div class="h-full flex flex-col">
-    <div class="flex-1">
+    <div v-if="loading">
+      <a-spin />
+    </div>
+    <div v-else class="flex-1">
       <VuePlotly
         :data="chartData"
         :layout="layout"
@@ -13,7 +16,7 @@
 
 <script setup>
 import { VuePlotly } from "vue3-plotly"
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { getCellNumber } from "@/api/project.js"
 import _ from "lodash"
 
@@ -24,13 +27,17 @@ const props = defineProps({
   },
 })
 const chartData = ref([])
-
-const layout = {
-  title: "Bar plot of cell number in each type",
-  autosize: true,
-  height: 700,
-  showlegend: true,
-}
+const loading = ref(false)
+const layout = computed(() => {
+  return {
+    title: "Bar plot of cell number in each type",
+    autosize: true,
+    height: 700,
+    yaxis: {
+      automargin: true,
+    },
+  }
+})
 
 onMounted(() => {
   handleCellNumberFetch()
@@ -39,27 +46,33 @@ onMounted(() => {
 const config = { responsive: true, scrollZoom: true }
 
 const handleCellNumberFetch = async () => {
-  const data = await getCellNumber(props.analysisId)
-  // eslint-disable-next-line no-unused-vars
-  const temp = _.chain(data)
-    .groupBy("cell_type_id")
-    .toPairs()
-    .map(([a, values]) => {
-      console.log(a)
-      return {
-        name: values[0].proportion_cell_type_meta.cell_type_name,
-        total: _.sumBy(values, "cell_number"),
-      }
-    })
-    .value()
-  chartData.value = [
-    {
-      y: _.map(temp, "name"),
-      x: _.map(temp, "total"),
-      type: "bar",
-      orientation: "h",
-    },
-  ]
+  try {
+    loading.value = true
+    const data = await getCellNumber(props.analysisId)
+    // eslint-disable-next-line no-unused-vars
+    const temp = _.chain(data)
+      .groupBy("cell_type_id")
+      .toPairs()
+      // eslint-disable-next-line no-unused-vars
+      .map(([a, values]) => {
+        return {
+          name: values[0].proportion_cell_type_meta.cell_type_name,
+          total: _.sumBy(values, "cell_number"),
+        }
+      })
+      .sortBy("total")
+      .value()
+    chartData.value = [
+      {
+        y: _.map(temp, "name"),
+        x: _.map(temp, "total"),
+        type: "bar",
+        orientation: "h",
+      },
+    ]
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 <style scoped lang="scss"></style>

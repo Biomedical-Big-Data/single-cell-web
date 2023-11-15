@@ -25,6 +25,7 @@
     "text-case": "^1.0.9",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
+    "vue-highlight-words": "^3.0.1",
     "vue-request": "^2.0.3",
     "vue-router": "^4.2.4",
     "vue3-plotly": "^0.0.7"

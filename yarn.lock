@@ -1454,6 +1454,11 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+highlight-words-core@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.npmmirror.com/highlight-words-core/-/highlight-words-core-1.2.2.tgz#1eff6d7d9f0a22f155042a00791237791b1eeaaa"
+  integrity sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==
+
 human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
@@ -2561,6 +2566,13 @@ vue-eslint-parser@^9.3.1:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.6"
+
+vue-highlight-words@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmmirror.com/vue-highlight-words/-/vue-highlight-words-3.0.1.tgz#530b490ea09528b7595bd3946f25d0cb07383175"
+  integrity sha512-t6L0+KRaMzX5RVubWl6Sog+Aa+U0kHsbUlDIrln1VfajR2SEg+zQYfXov8UmX3MLNOfd6cv7MCM6LclqNlW4ww==
+  dependencies:
+    highlight-words-core "^1.2.2"
 
 vue-request@^2.0.3:
   version "2.0.3"

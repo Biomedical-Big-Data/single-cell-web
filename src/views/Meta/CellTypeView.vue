@@ -26,6 +26,18 @@
           <a-button
             type="primary"
             class="flex items-center"
+            @click="handleCellTypeCreateModalShow"
+          >
+            <template #icon>
+              <PlusOutlined></PlusOutlined>
+            </template>
+            新增
+          </a-button>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            type="primary"
+            class="flex items-center"
             :loading="uploading"
             @click="handleUpdateFileSelect"
           >
@@ -72,6 +84,7 @@
       </a-table>
     </div>
   </div>
+  <CellTypeCreateModal ref="cellTypeCreateModalRef"></CellTypeCreateModal>
 </template>
 
 <script setup>
@@ -80,15 +93,18 @@ import {
   SearchOutlined,
   EditOutlined,
   UploadOutlined,
+  PlusOutlined,
 } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import { getCellTypeList, updateMetaByFile } from "@/api/meta"
 import { message } from "ant-design-vue"
+import CellTypeCreateModal from "@/components/meta/CellTypeCreateModal.vue"
 
 const conditions = ref({
   cell_type_name: "",
 })
 
+const cellTypeCreateModalRef = ref()
 const fileInputRef = ref(null)
 const uploading = ref(false)
 
@@ -195,6 +211,10 @@ const handleUpdate = async (event) => {
   } else {
     message.error("请选择文件")
   }
+}
+
+const handleCellTypeCreateModalShow = () => {
+  cellTypeCreateModalRef.value.openModal()
 }
 </script>
 

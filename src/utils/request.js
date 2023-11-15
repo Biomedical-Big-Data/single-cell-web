@@ -37,10 +37,10 @@ request.interceptors.response.use(
   },
   async (error) => {
     const msg = error.response?.data?.message || error.message || '服务器错误'
-    message.error(msg)
     if (error.response?.status === 401) {
-      Router.push({ name: 'login' })
+      Router.push({ name: "login" })
     }
+    message.error(msg)
     return Promise.reject(error)
   },
 )

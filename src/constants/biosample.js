@@ -1,5 +1,15 @@
 export const BIOSAMPLES_COLUMNS = [
   {
+    title: "Biosample Id",
+    dataIndex: "id",
+    group: "sample_basic_information",
+  },
+  {
+    title: "Biosample Name",
+    dataIndex: "biosample_name",
+    group: "sample_basic_information",
+  },
+  {
     title: "External Sample Accesstion",
     dataIndex: "external_sample_accesstion",
     group: "sample_basic_information",
@@ -337,5 +347,6 @@ export const BIOSAMPLES_COLUMNS = [
 ].map(({ title, dataIndex, group }) => ({
   title,
   dataIndex: ["biosample_meta", dataIndex],
+  autoHidden: true,
   group,
 }))
