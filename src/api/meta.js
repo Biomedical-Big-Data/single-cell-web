@@ -12,6 +12,10 @@ export function getCellTypeList(params) {
   return request.get("/admin/cell/list", { params })
 }
 
+export function createCellType(cellType) {
+  return request.post("/admin/cell_type_meta/create", cellType)
+}
+
 export function updateMetaByFile(file_type, file) {
   const formData = new FormData()
   formData.append("meta_file", file)

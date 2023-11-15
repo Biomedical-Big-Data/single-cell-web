@@ -5,9 +5,8 @@
         <span class="mr-4 font text-sm">Static UMAP group by</span>
         <a-select
           v-model:value="umapType"
-          class="w-28"
+          class="w-40"
           :options="options.umapType"
-          
           @change="handleFileFetch"
         ></a-select>
       </div>
@@ -20,7 +19,7 @@
 
 <script setup>
 import { onMounted, reactive, ref } from "vue"
-import { getUmap } from "@/api/file.js"
+import { getUmap, getUmapColumn } from "@/api/file.js"
 
 const props = defineProps({
   fileId: {
@@ -33,17 +32,29 @@ const loading = ref(false)
 const umapType = ref("CellType")
 const umapUrl = ref("")
 const options = reactive({
-  umapType: [
-    { label: "Cell Type", value: "CellType" },
-    { label: "Sample", value: "Sample" },
-    { label: "Sex", value: "Sex" },
-    { label: "Treatment", value: "Treatment" },
-  ],
+  umapType: [],
 })
 
 onMounted(() => {
-  handleFileFetch()
+  handleFetchColumn().then(handleFileFetch)
 })
+
+const handleFetchColumn = async () => {
+  const data = await getUmapColumn(props.fileId)
+  options.umapType = data
+    .filter((item) => {
+      return !["UMAP_1", "UMAP_2"].includes(item)
+    })
+    .map((item) => {
+      return {
+        label: item,
+        value: item,
+      }
+    })
+  if (data.length) {
+    umapType.value = data[0]
+  }
+}
 
 const handleFileFetch = async () => {
   const response = await getUmap(props.fileId, umapType.value)

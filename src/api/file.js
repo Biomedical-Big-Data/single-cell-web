@@ -18,6 +18,10 @@ export function getUmap(file_id, group_by) {
   })
 }
 
+export function getUmapColumn(file_id) {
+  return request.get(`/project/view/file/umap/${file_id}/column`)
+}
+
 export function getDownloadFileToken(id) {
   return request.get(`/project/download/file/${id}/token`)
 }

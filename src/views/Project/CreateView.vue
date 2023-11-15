@@ -388,7 +388,6 @@ const handleProjectCreate = async (isPublish) => {
       other_file_ids: other_file_ids.join(","),
     })
     if (isPublish) {
-      console.log(isPrivate)
       if (isPrivate) {
         await router.replace({
           name: "project_detail",

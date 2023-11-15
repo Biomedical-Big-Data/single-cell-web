@@ -77,22 +77,32 @@
                   allow-clear
                 ></a-select>
               </a-form-item>
-              <a-form-item label="CT ID" name="ct_id">
-                <a-input
-                  v-model:value="cell.ct_id"
-                  placeholder="CT ID"
-                  allow-clear
-                ></a-input>
-              </a-form-item>
               <div v-if="cell.species">
                 <a-form-item label="Search By" name="searchBy">
                   <a-radio-group v-model:value="cell.searchBy">
+                    <a-radio value="id">ID</a-radio>
                     <a-radio value="name">Name</a-radio>
                     <a-radio value="gene">Gene</a-radio>
                   </a-radio-group>
                 </a-form-item>
-                <div v-if="cell.searchBy === 'name'">
-                  <a-form-item label="Name" name="name">
+                <div v-if="cell.searchBy === 'id'">
+                  <a-form-item label="Cell" name="cell_id_name">
+                    <a-select
+                      v-model:value="cell.ct_id"
+                      placeholder="Search Cell"
+                      show-search
+                      :options="options.cellIds"
+                      allow-clear
+                      @search="handleCellIDSearch"
+                    >
+                      <template v-if="state.cellIDFetching" #notFoundContent>
+                        <a-spin />
+                      </template>
+                    </a-select>
+                  </a-form-item>
+                </div>
+                <div v-else-if="cell.searchBy === 'name'">
+                  <a-form-item label="Cell" name="name">
                     <a-input
                       ref="cellNameInput"
                       v-model:value="cell.name"
@@ -102,7 +112,7 @@
                   </a-form-item>
                 </div>
                 <div v-else>
-                  <a-form-item label="Name" name="name">
+                  <a-form-item label="Cell" name="name">
                     <a-textarea
                       ref="geneNameInput"
                       v-model:value="cell.names"
@@ -191,7 +201,11 @@ import { getOrganList } from "@/api/project"
 import SampleTable from "@/components/projects/SampleTable.vue"
 import CellTable from "@/components/projects/CellTable.vue"
 import GeneTable from "@/components/projects/GeneTable.vue"
-import { getGeneSymbolList, getSpecieList } from "@/api/options.js"
+import {
+  getCellTypeList,
+  getGeneSymbolList,
+  getSpecieList,
+} from "@/api/options.js"
 import CellNameModal from "@/components/projects/CellNameModal.vue"
 import GeneNameModal from "@/components/projects/GeneNameModal.vue"
 import { useRoute } from "vue-router"
@@ -203,11 +217,13 @@ const options = ref({
   organ: [],
   cell: [],
   geneSymbol: [],
+  cellIds: [],
 })
 
 const state = ref({
   organFetching: false,
   geneSymbolFetching: false,
+  cellIDFetching: false,
 })
 
 const filter = ref("sample")
@@ -230,9 +246,9 @@ const geneNameInput = ref()
 
 const cell = ref({
   species: undefined,
-  ct_id: "",
-  cl_id: "",
-  cl_ids: "",
+  ct_id: undefined,
+  cl_cell_id: "",
+  ct_cell_ids: [],
   searchBy: "name",
   name: "",
   names: "",
@@ -288,6 +304,19 @@ const handleGeneSymbolSearch = async (keywords) => {
   }
 }
 
+const handleCellIDSearch = async (keywords) => {
+  try {
+    state.value.cellIDFetching = true
+    const data = await getCellTypeList({ cell_type_id: keywords })
+    options.value.cellIds = data.cell_type_list.map((item) => ({
+      label: item.cell_type_name,
+      value: item.cell_taxonomy_id,
+    }))
+  } finally {
+    state.value.cellIDFetching = false
+  }
+}
+
 const getConditions = () => {
   switch (filter.value) {
     case "sample":
@@ -329,12 +358,12 @@ const handleGeneNameSearch = () => {
 
 const handleCellNameChange = (result) => {
   cell.value.name = result.name
-  cell.value.cl_id = result.cl_id
+  cell.value.cl_cell_id = result.cl_id
 }
 
 const handleGeneNameChange = (result) => {
   cell.value.names = result.map((item) => item.cell_type_name).join()
-  cell.value.cl_ids = result.map((item) => item.cell_type_id)
+  cell.value.ct_gene_ids = result.map((item) => item.cell_type_id)
 }
 
 onMounted(() => {
