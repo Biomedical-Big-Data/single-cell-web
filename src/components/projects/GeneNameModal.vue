@@ -120,6 +120,7 @@ const columns = [
     title: "Score",
     dataIndex: "score",
     width: 50,
+    sorter: true,
     customRender: ({ text }) => {
       return text.toFixed(4)
     },
@@ -170,7 +171,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
-    sortField: sorter.field?.join("."),
+    order_by: sorter.field,
     sortOrder: sorter.order,
     ...getConditions(),
     ...filters,

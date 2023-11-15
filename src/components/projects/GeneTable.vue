@@ -212,19 +212,25 @@ const columns = ref(
 
 const columnSettings = ref({
   sample_basic_information: columns.value
-    .filter((item) => item.group === "sample_basic_information")
+    .filter(
+      (item) => !item.autoHidden && item.group === "sample_basic_information",
+    )
     .map((item) => item.title),
   disease_information: columns.value
-    .filter((item) => item.group === "disease_information")
+    .filter((item) => !item.autoHidden && item.group === "disease_information")
     .map((item) => item.title),
   vaccination_information: columns.value
-    .filter((item) => item.group === "vaccination_information")
+    .filter(
+      (item) => !item.autoHidden && item.group === "vaccination_information",
+    )
     .map((item) => item.title),
   perturbation_information: columns.value
-    .filter((item) => item.group === "perturbation_information")
+    .filter(
+      (item) => !item.autoHidden && item.group === "perturbation_information",
+    )
     .map((item) => item.title),
   experiment_method: columns.value
-    .filter((item) => item.group === "experiment_method")
+    .filter((item) => !item.autoHidden && item.group === "experiment_method")
     .map((item) => item.title),
 })
 
@@ -261,7 +267,7 @@ const columnResult = computed(() => {
 
 const tableScroll = computed(() => {
   return {
-    x: _.sumBy(columns.value, (item) => item.width),
+    x: _.sumBy(columnResult.value, (item) => item.width),
   }
 })
 

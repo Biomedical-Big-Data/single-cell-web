@@ -347,5 +347,6 @@ export const BIOSAMPLES_COLUMNS = [
 ].map(({ title, dataIndex, group }) => ({
   title,
   dataIndex: ["biosample_meta", dataIndex],
+  autoHidden: true,
   group,
 }))
