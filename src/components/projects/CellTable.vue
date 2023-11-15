@@ -258,7 +258,7 @@ const handleTableChange = (pag, filters, sorter) => {
 
 const getConditions = () => {
   const result = {}
-  const { species, cl_cell_id, ct_id, searchBy, ct_gene_id } = condition.value
+  const { species, cl_cell_id, ct_id, searchBy, ct_gene_ids } = condition.value
   if (species) {
     result.species_id = species
   }
@@ -272,8 +272,8 @@ const getConditions = () => {
       result.cl_id = cl_cell_id
     }
   } else if (searchBy === "gene") {
-    if (ct_gene_id?.length) {
-      ct_ids = ct_gene_id
+    if (ct_gene_ids?.length) {
+      ct_ids = ct_gene_ids
     }
   }
 
