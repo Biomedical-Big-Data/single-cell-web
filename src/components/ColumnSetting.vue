@@ -12,17 +12,15 @@
               :header="getTitleName(k)"
           >
             <div>
-              <a-checkbox-group v-model:value="columnSettings[k]" class="w-full">
-                <div v-for="item in v" :key="item.title" class="p-2">
-                  <a-checkbox :value="item.title" @change="handleColumnToggle()">
-                    {{ item.title }}
-                  </a-checkbox>
-                </div>
-              </a-checkbox-group>
+              <div v-for="item in v" :key="item.title" class="p-2">
+                <a-checkbox :checked="getChecked(item)" :name="item.title" @change="handleColumnToggle">
+                  {{ item.title }}
+                </a-checkbox>
+              </div>
             </div>
             <template #extra>
               <a-badge
-                  :count="columnSettings[k]?.length || 0"
+                  :count="getSelectedCount(k)"
                   :number-style="{ backgroundColor: '#0081D8' }"
               />
             </template>
@@ -38,8 +36,7 @@
 </template>
 
 <script setup>
-
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick } from 'vue'
 import _ from 'lodash'
 import { titleCase } from 'text-case'
 
@@ -58,18 +55,6 @@ const props = defineProps({
 
 const emits = defineEmits(['update:columns'])
 
-const getColumnsByGroup = (group) => {
-  return props.totalColumns.filter(item => item.group === group).map(item => item.title)
-}
-
-const columnSettings = ref({
-  sample_basic_information: getColumnsByGroup('sample_basic_information'),
-  disease_information: getColumnsByGroup('disease_information'),
-  vaccination_information: getColumnsByGroup('vaccination_information'),
-  perturbation_information: getColumnsByGroup('perturbation_information'),
-  experiment_method: getColumnsByGroup('experiment_method'),
-})
-
 const columnGroup = computed(() => {
   return _.chain(props.totalColumns)
       .filter((item) => !!item.group)
@@ -77,26 +62,22 @@ const columnGroup = computed(() => {
       .value()
 })
 
-const handleColumnToggle = () => {
+const handleColumnToggle = ({ target }) => {
+  const { name, checked } = target
   nextTick(() => {
-    emits('update:columns', props.totalColumns.filter((item) => {
-      const {
-        sample_basic_information,
-        disease_information,
-        vaccination_information,
-        perturbation_information,
-        experiment_method
-      } = columnSettings.value
-      return !item.group || [
-        ...sample_basic_information,
-        ...disease_information,
-        ...vaccination_information,
-        ...perturbation_information,
-        ...experiment_method
-      ].includes(item.title)
+    emits('update:columns', props.totalColumns.map((item) => item.title).filter(item => {
+      return item === name ? checked : props.columns.includes(item)
     }))
   })
+}
 
+const getChecked = (item) => {
+  return props.columns.includes(item.title)
+}
+const getSelectedCount = (group) => {
+  return props.totalColumns.filter((item) => {
+    return item.group === group && getChecked(item)
+  }).length
 }
 
 const getTitleName = (k) => {
