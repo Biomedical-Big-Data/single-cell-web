@@ -40,7 +40,7 @@
                     <template #extra>
                       <a-badge
                         :count="columnSettings[k]?.length || 0"
-                        :number-style="{ backgroundColor: '#52c41a' }"
+                        :number-style="{ backgroundColor: '#1677ff' }"
                       />
                     </template>
                   </a-collapse-panel>
