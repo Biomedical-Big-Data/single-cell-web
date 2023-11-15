@@ -29,7 +29,7 @@ const props = defineProps({
 })
 
 const loading = ref(false)
-const umapType = ref("CellType")
+const umapType = ref("")
 const umapUrl = ref("")
 const options = reactive({
   umapType: [],
