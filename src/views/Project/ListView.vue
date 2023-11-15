@@ -67,7 +67,12 @@
             </a-form>
           </div>
           <div v-if="filter === 'cell'">
-            <a-form ref="cellFormRef" layout="vertical" :model="cell">
+            <a-form
+              ref="cellFormRef"
+              layout="vertical"
+              :model="cell"
+              :rules="cellRules"
+            >
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="cell.species"
@@ -126,7 +131,12 @@
             </a-form>
           </div>
           <div v-if="filter === 'gene'">
-            <a-form ref="geneFormRef" layout="vertical" :model="gene">
+            <a-form
+              ref="geneFormRef"
+              layout="vertical"
+              :model="gene"
+              :rules="geneRules"
+            >
               <a-form-item label="Species" name="species">
                 <a-select
                   v-model:value="gene.species"
@@ -211,6 +221,30 @@ import GeneNameModal from "@/components/projects/GeneNameModal.vue"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
+
+const cellRules = {
+  species: [
+    {
+      required: true,
+      message: "Please select species",
+    },
+  ],
+}
+
+const geneRules = {
+  species: [
+    {
+      required: true,
+      message: "Please select species",
+    },
+  ],
+  symbol: [
+    {
+      required: true,
+      message: "Please select gene symbol",
+    },
+  ],
+}
 
 const options = ref({
   species: [],
@@ -336,10 +370,18 @@ const handleSearch = () => {
       sampleTableRef.value.handleSearch(getConditions())
       break
     case "cell":
-      cellTableRef.value.handleSearch(getConditions())
+      cellFormRef.value.validate().then((valid) => {
+        if (valid) {
+          cellTableRef.value.handleSearch(getConditions())
+        }
+      })
       break
     case "gene":
-      geneTableRef.value.handleSearch(getConditions())
+      geneFormRef.value.validate().then((valid) => {
+        if (valid) {
+          geneTableRef.value.handleSearch(getConditions())
+        }
+      })
       break
     default:
       break
