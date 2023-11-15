@@ -84,6 +84,11 @@
         <br />
         <span class="link" @click="handleToProject(record)">view</span>
       </template>
+      <template
+        v-else-if="joinTableIndex(column.dataIndex) === 'biosample_meta.id'"
+      >
+        B{{ _.padStart(text, 6, "0") }}
+      </template>
     </template>
   </a-table>
 </template>
