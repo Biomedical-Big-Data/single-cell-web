@@ -1,266 +1,276 @@
 <template>
-  <div v-if="loading" class="py-4 px-6 bg-white">
-    <a-skeleton active />
-  </div>
-  <div v-if="projectDetail" class="project-detail-container">
-    <div class="py-4 px-6 bg-white">
-      <div class="summary">
-        {{ projectDetail.title }}
-      </div>
-      <div class="mt-4 leading-normal">{{ projectDetail.description }}</div>
-      <div class="mt-4">
-        <a-tag
-          v-for="item in (projectDetail.tags || '')
-            .split(',')
-            .filter((item) => !!item)"
-          :key="item"
-        >
-          {{ item }}
-        </a-tag>
-      </div>
-      <div class="mt-4">
-        <a-button
-          v-for="item in analysis"
-          :key="item.id"
-          class="mr-3"
-          type="primary"
-          @click="handleOpenCellxgene(item)"
-        >
-          {{ item.h5ad_id }} viewer
-        </a-button>
-      </div>
-    </div>
-    <div class="mt-4 px-4 flex-1">
-      <div v-if="projectDetail" class="h-full">
-        <a-tabs
-          v-model:activeKey="activeKey"
-          tab-position="left"
-          class="py-4 bg-white h-full"
-        >
-          <a-tab-pane key="umap" tab="UMap">
-            <UMapChart
-              :file-id="projectDetail.project_analysis_meta[0].umap_id"
-            />
-          </a-tab-pane>
-          <a-tab-pane
-            v-if="!projectDetail.is_private"
-            key="barplot"
-            tab="Barplot of cell number in each type"
-          >
-            <BarChart
-              :analysis-id="projectDetail.project_analysis_meta[0].id"
-            ></BarChart>
-          </a-tab-pane>
-          <a-tab-pane key="celltype" tab="Celltype Markers">
-            <CellTypeMarkers
-              :file-id="projectDetail.project_analysis_meta[0].cell_marker_id"
-            />
-          </a-tab-pane>
-          <a-tab-pane v-if="pathWayVisiable" key="score" tab="Score of pathway">
-            <PathWayChart :project="projectDetail"></PathWayChart>
-          </a-tab-pane>
-          <a-tab-pane key="download" tab="Download">
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.h5ad_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].h5ad_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              H5AD File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.umap_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].umap_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Umap File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.cell_marker_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].cell_marker_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Cell Marker File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.pathway_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].pathway_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Pathway File
-            </a-button>
-
-            <a-button
-              v-for="item in otherFiles"
-              :key="item"
-              class="mr-4"
-              type="primary"
-              @click="handleDownloadFile(item)"
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              {{ item }}
-            </a-button>
-          </a-tab-pane>
-          <!--          <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>-->
-        </a-tabs>
-      </div>
-    </div>
-
-    <div class="information mt-4 px-4">
-      <div class="bg-white p-5 text-sm">
-        <div>
-          Publication:
-          {{ dayjs(projectDetail.update_at).format("YYYY-MM-DD HH:mm") }}
+  <div class="page">
+    <NavBar></NavBar>
+    <div class="content-container">
+      <div class="project-header">
+        <div class="title">Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages of
+          multiple myeloma
         </div>
-        <div class="mt-4">
-          Email: {{ projectDetail.project_user_meta.email_address }}
+        <a-typography-paragraph
+            class="desc"
+            :ellipsis="{rows:2,expandable:true, symbol:'more'}"
+            :content="desc"
+        ></a-typography-paragraph>
+        <div class="tags">
+          <a-tag>Tag 1</a-tag>
+          <a-tag>Tag 2</a-tag>
+          <a-tag>Tag 3</a-tag>
         </div>
+      </div>
+      <div class="project-body">
+        <div class="left">
+          <div class="top">
+            <div class="fill"/>
+            <a class="interactive">Interactive Viewer</a>
+            <div class="group-desc">Static UMAP group by</div>
+          </div>
+          <div class="bottom">
+            <div class="umap"></div>
+            <div class="umap-types">
+              <div class="type">Cell Type</div>
+              <div class="type">Sample</div>
+              <div class="type active">sex</div>
+              <div class="type">Treatment</div>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <a-tabs type="card" size="large" :tab-bar-gutter="8" class="h-full">
+            <template #leftExtra>
+              <div class="fix-fill"></div>
+            </template>
+            <a-tab-pane key="1" tab="Celltype Markers">
+              <div class="bg-amber-100 h-full">123</div>
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="Cell type distribution">Content of Tab Pane 2</a-tab-pane>
+            <a-tab-pane key="3" tab="Score of pathway">Content of Tab Pane 3</a-tab-pane>
+            <a-tab-pane key="4" tab="Download">Content of Tab Pane 3</a-tab-pane>
+          </a-tabs>
+        </div>
+      </div>
+      <div class="project-footer">
+        <div>Publication : xxx aacbecekdede gogogesdepnfejde</div>
+        <div>Email : xyz@shanghaiitech.edu.cn</div>
       </div>
     </div>
   </div>
+
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue"
-import BarChart from "@/components/charts/BarChart.vue"
-import PathWayChart from "@/components/charts/PathWayChart.vue"
-import UMapChart from "@/components/charts/UMapChart.vue"
-import CellTypeMarkers from "@/components/CellTypeMarkers.vue"
-import { getProjectDetail } from "@/api/project"
-import dayjs from "dayjs"
-import { useRoute } from "vue-router"
-import { saveAs } from "file-saver"
-import { CloudDownloadOutlined } from "@ant-design/icons-vue"
-import { getDownloadFileToken } from "@/api/file.js"
+import NavBar from '@/components/NavBar.vue'
+import { ref } from 'vue'
 
-const route = useRoute()
-// const activeKey = ref('score')
-const loading = ref(true)
-const activeKey = ref("umap")
-const projectDetail = ref(null)
-const props = defineProps({
-  id: {
-    required: true,
-    type: [Number, String],
-  },
-})
+const desc = ref(` Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
+          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
+          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
+          cells from precursor stages, MGUS and
+          Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
+          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
+          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
+          cells from precursor stages, MGUS and
+          Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
+          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
+          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
+          cells from precursor stages, MGUS and`)
 
-onMounted(() => {
-  handleProjectDetailFetch()
-})
-
-const otherFiles = computed(() => {
-  return projectDetail.value?.is_private
-    ? projectDetail.value?.project_analysis_meta[0].other_file_ids
-        .split(",")
-        .filter((item) => item)
-    : []
-})
-
-const pathWayVisiable = computed(() => {
-  const { is_private, project_analysis_meta } = projectDetail.value
-  if (!is_private) {
-    return true
-  } else {
-    return !!project_analysis_meta?.[0]?.pathway_id
-  }
-})
-
-// const pathwayData = computed(() => {
-//   if (projectDetail.value?.is_private) {
-//     return pathWayFileData.value
-//   } else {
-//     return projectDetail.value?.project_analysis_meta[0]
-//       ?.analysis_pathway_score_meta
-//   }
-// })
-
-const analysis = computed(() => {
-  const { analysis_id } = route.query
-  if (analysis_id) {
-    return projectDetail.value.project_analysis_meta.filter(
-      (item) => +item.id === +analysis_id,
-    )
-  } else {
-    return projectDetail.value.project_analysis_meta
-  }
-})
-
-const handleProjectDetailFetch = async () => {
-  try {
-    loading.value = true
-    const data = await getProjectDetail(props.id)
-    projectDetail.value = data
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleOpenCellxgene = (record) => {
-  window.open(
-    `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
-    "_blank",
-  )
-}
-
-const handleDownloadFile = async (file_id) => {
-  const data = await getDownloadFileToken(file_id)
-  saveAs(
-    `${
-      import.meta.env.VITE_BASE_API_URL
-    }/project/download/file/${file_id}?download_file_token=${
-      data.download_file_token
-    }`,
-    file_id,
-  )
-}
 </script>
 <style scoped lang="scss">
-.summary {
-  color: var(--character-title-85, rgba(0, 0, 0, 0.85));
-  font-size: 1.5rem;
-  line-height: 1.75rem;
+.page {
+  background: #F0F2F5;
+  min-height: 100vh;
 }
 
-.project-detail-container {
-  height: calc(100vh - 60px);
+.content-container {
   display: flex;
+  padding-top: 12px;
   flex-direction: column;
-}
+  align-items: stretch;
+  gap: 1rem;
 
-:deep(.ant-tabs-content) {
-  height: 100%;
+  .project-header {
+    display: flex;
+    padding: 0.625rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    align-self: stretch;
+
+    .title {
+      color: #5F5F5F;
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.375rem; /* 91.667% */
+    }
+
+    .desc {
+      color: #7E7E7E;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+  }
+
+  .project-body {
+    display: flex;
+    align-items: stretch;
+    gap: 0.625rem;
+
+    .left {
+      display: flex;
+      height: 34.75rem;
+      flex-direction: column;
+      align-items: stretch;
+
+      .top {
+        display: flex;
+        height: 4rem;
+        align-items: stretch;
+        flex-shrink: 0;
+        gap: 0.38rem;
+        border-radius: 0 2.5rem 0 0;
+        overflow: hidden;
+
+        .fill {
+          background: #0081D8;
+          width: 1.625rem;
+        }
+
+        .interactive {
+          display: flex;
+          padding: 0 1.25rem;
+          align-items: center;
+          background: #00A9DD;
+          color: #FFF;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .group-desc {
+          flex: 1;
+          background: #0081D8;
+          display: flex;
+          padding: 1rem 1.25rem;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 0.625rem;
+          align-self: stretch;
+          color: #FFF;
+          font-size: 1.25rem;
+          font-weight: 500;
+        }
+      }
+
+      .bottom {
+        background: #0081D8;
+        display: flex;
+        align-items: stretch;
+
+        .umap {
+          width: 30.75rem;
+          height: 30.75rem;
+          padding: 1.5rem;
+          box-sizing: border-box;
+          background: #fff;
+        }
+
+        .umap-types {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+
+          .type {
+            color: #FFF;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            text-transform: capitalize;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+            text-align: center;
+            cursor: pointer;
+
+            &.active {
+              background: #FF7555;
+            }
+          }
+        }
+
+      }
+    }
+
+    .right {
+      width: 0;
+      flex: 1;
+
+      .fix-fill {
+        height: 2.5rem;
+        width: 0.75rem;
+        border-radius: 0.625rem 0 0 0;
+        background: #0081D8;
+      }
+
+      :deep(.ant-tabs-nav) {
+
+        margin-bottom: 0 !important;
+
+        .ant-tabs-nav-wrap {
+          .ant-tabs-tab {
+            height: 2.5rem;
+            width: 11.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7E7E7E;
+            background: #DFE2E8;
+            border-radius: 0.625rem 0.625rem 0 0;
+            border: none;
+
+            &:first-child {
+              border-radius: 0 0.625rem 0 0;
+            }
+
+            &.ant-tabs-tab-active {
+              background: #0081D8;
+
+              .ant-tabs-tab-btn {
+                color: #FFFFFF;
+              }
+            }
+          }
+        }
+
+      }
+
+      :deep(.ant-tabs-content-holder) {
+        padding-left: 0.75rem;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: #0081D8;
+          width: 0.75rem;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .project-footer {
+    display: flex;
+    padding: 0.75rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+
+    div {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5rem; /* 150% */
+      color: #5F5F5F;
+      padding: 0.5rem;
+    }
+  }
 }
 </style>
