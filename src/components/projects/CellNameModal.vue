@@ -1,21 +1,33 @@
 <template>
   <a-modal
     v-model:open="open"
+    class="simple-modal"
     title="Search Cell Name"
     :width="900"
     :mask-closable="false"
+    :ok-button-props="{
+      class: 'ok-button',
+    }"
+    :cancel-button-props="{
+      class: 'cancel-button',
+    }"
     @ok="confirm"
   >
-    <div class="p-4 flex">
-      <div class="flex-1 content flex flex-col">
-        <div>
-          <a-input-search
-            placeholder="Search"
-            :loading="loading"
-            @search="handleSearch"
-          />
-        </div>
-        <div class="mt-4 flex-1 overflow-y-auto">
+    <div class="searchbar-container">
+      <a-input-search
+        class="searchbar"
+        placeholder="Search"
+        :loading="loading"
+        size="large"
+        @search="handleSearch"
+      />
+    </div>
+    <div v-if="!treeData.length" class="content py-4">
+      <a-empty />
+    </div>
+    <div v-else class="flex content">
+      <div class="flex-2 flex flex-col">
+        <div class="p-4 overflow-y-auto">
           <a-tree
             v-if="treeData.length"
             v-model:selectedKeys="selectedKeys"
@@ -45,18 +57,25 @@
           </a-tree>
         </div>
       </div>
-      <div class="flex-1 ml-3 content overflow-y-auto">
-        <div v-if="current" class="flex relative">
-          <a
-            v-for="item in relations"
-            :key="item.id"
-            class="p-1"
-            target="_blank"
-            :href="getLink(item.cell_marker)"
-          >
-            {{ item.cell_marker }}
-          </a>
-        </div>
+      <div class="flex-1 content overflow-y-auto">
+        <a-spin :spinning="markLoading">
+          <div v-if="current" class="flex relative p-4">
+            <div v-if="relations.length">
+              <a-tag v-for="item in relations" :key="item.id" class="mr-2 mb-2">
+                <a
+                  target="_blank"
+                  :href="getLink(item.cell_marker)"
+                  class="cell-marker"
+                >
+                  {{ item.cell_marker }}
+                </a>
+              </a-tag>
+            </div>
+            <div v-else class="flex justify-center w-full pt-8">
+              <a-empty />
+            </div>
+          </div>
+        </a-spin>
       </div>
     </div>
   </a-modal>
@@ -71,7 +90,7 @@ import arrayToTree from "array-to-tree"
 import _ from "lodash"
 
 const emits = defineEmits(["confirm"])
-
+const markLoading = ref(false)
 const keywords = ref([])
 const open = ref(false)
 const loading = ref(false)
@@ -122,8 +141,13 @@ const handleSearch = async (keyword) => {
 }
 
 const handleNodeSelected = async (event) => {
-  const data = await getTaxonomyDetail(event[0])
-  relations.value = _.uniqBy(data, "cell_marker")
+  try {
+    markLoading.value = true
+    const data = await getTaxonomyDetail(event[0])
+    relations.value = _.uniqBy(data, "cell_marker")
+  } finally {
+    markLoading.value = false
+  }
 }
 
 const getLink = (cell_marker) => {
@@ -141,7 +165,17 @@ defineExpose({
 }
 
 .content {
-  max-height: 60vh;
+  max-height: 50vh;
+  background: #ffffff;
+  border-radius: 1.375rem 1.375rem 0 0;
+  overflow: hidden;
+}
+
+.cell-marker {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0.25rem 0.5rem;
 }
 </style>
 <style>
@@ -153,5 +187,14 @@ defineExpose({
 .highlighted {
   background: rgba(95, 255, 70, 0.2);
   padding: 0;
+}
+
+.searchbar-container {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+
+  .searchbar {
+    border-radius: 1.375rem;
+    overflow: hidden;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <a-modal
     v-model:open="open"
+    class="simple-modal"
     title="Search Cell Name By Gene"
     :width="1200"
     :mask-closable="false"
