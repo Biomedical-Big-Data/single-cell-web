@@ -18,7 +18,7 @@
         </div>
         <div>
           <div>
-            <a-button @click="handleChartModalOpen">
+            <a-button v-if="list.length" @click="handleChartModalOpen">
               <template #icon>
                 <DotChartOutlined />
               </template>
