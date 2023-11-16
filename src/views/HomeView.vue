@@ -2,22 +2,7 @@
   <video autoplay loop muted class="background">
     <source src="/background.mp4" type="video/mp4"/>
   </video>
-  <div class="flex items-center justify-between menu">
-    <div>
-      <router-link class="project no-underline" :to="{ name: 'projects' }">
-        <img src="@/assets/images/home/icon_project.svg" alt=""/>
-        <span class="flex-1 text-center">Project</span>
-      </router-link>
-    </div>
-    <div class="flex items-center">
-      <router-link class="login no-underline" :to="{ name: 'login' }">
-        Login
-      </router-link>
-      <router-link class="sign-up no-underline" :to="{ name: 'register' }">
-        Sign up
-      </router-link>
-    </div>
-  </div>
+  <NavBar></NavBar>
   <div class="h-screen relative">
     <div class="sologn">
       <div>Welcome to My Amazing <br> scRNA-seq Database !</div>
@@ -141,6 +126,7 @@ import icons from '@/icons/index.js'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { titleCase, snakeCase } from 'text-case'
+import NavBar from '@/components/NavBar.vue'
 
 const router = useRouter()
 
@@ -262,64 +248,6 @@ const handleScroll = () => {
   z-index: -1;
 }
 
-.menu {
-  background: white;
-  padding: 0.62rem 1.25rem;
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  z-index: 99;
-
-  button {
-    cursor: pointer;
-  }
-
-  .project {
-    border: none;
-    display: flex;
-    width: 11.25rem;
-    height: 2.25rem;
-    padding: 0rem 1.25rem;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 2.9375rem;
-    background: #ff7555;
-    backdrop-filter: blur(7px);
-    color: #fff;
-    font-size: 1rem;
-  }
-
-  .login {
-    background: transparent;
-    display: flex;
-    width: 7.5rem;
-    height: 2.25rem;
-    padding: 0rem 0.625rem 0.125rem 0.625rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.625rem;
-    border-radius: 2.9375rem;
-    border: 2px solid #0062ff;
-    color: #0062ff;
-    font-size: 1rem;
-  }
-
-  .sign-up {
-    margin-left: 0.75rem;
-    border: none;
-    display: flex;
-    width: 7.5rem;
-    height: 2.25rem;
-    padding: 0rem 0.625rem 0.125rem 0.625rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.625rem;
-    border-radius: 2.9375rem;
-    background: #0062ff;
-    color: #fff;
-    font-size: 1rem;
-  }
-}
 
 .sologn {
   position: absolute;

@@ -37,6 +37,16 @@
             :total-columns="columnsTotal[filter]"
         ></ColumnSetting>
         <a-button
+            v-if="isChartAvailable"
+            class="chart"
+            @click="handleChartModalOpen"
+        >
+          <template #icon>
+            <DotChartOutlined/>
+          </template>
+          Chart
+        </a-button>
+        <a-button
             class="download"
             :loading="downloading"
             @click="handleListDownload"
@@ -115,7 +125,7 @@
             </a-form>
           </div>
           <div v-if="filter === 'cell'">
-            <a-form ref="cellFormRef" layout="vertical" :model="cell">
+            <a-form ref="cellFormRef" layout="vertical" :model="cell" :rules="cellRules">
               <a-form-item
                   label="Species"
                   name="species"
@@ -182,7 +192,7 @@
                     name="names"
                     class="condition-item"
                 >
-                  <a-input
+                  <a-textarea
                       ref="geneNameInput"
                       v-model:value="cell.names"
                       placeholder="Click to search"
@@ -194,7 +204,7 @@
             </a-form>
           </div>
           <div v-if="filter === 'gene'">
-            <a-form ref="geneFormRef" layout="vertical" :model="gene">
+            <a-form ref="geneFormRef" layout="vertical" :model="gene" :rules="geneRules">
               <a-form-item
                   label="Species"
                   name="species"
@@ -259,10 +269,13 @@
       ref="geneNameRef"
       @confirm="handleGeneNameChange"
   />
+  <GeneChartModal
+      ref="geneChartRef"
+  />
 </template>
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { CaretDownOutlined } from '@ant-design/icons-vue'
+import { CaretDownOutlined, DotChartOutlined } from '@ant-design/icons-vue'
 import {
   downloadCellProjectList,
   downloadGeneProjectList,
@@ -276,6 +289,7 @@ import ProjectTable from '@/components/projects/ProjectTable.vue'
 import { getCellTypeList, getGeneSymbolList, getSpecieList } from '@/api/options.js'
 import CellNameModal from '@/components/projects/CellNameModal.vue'
 import GeneNameModal from '@/components/projects/GeneNameModal.vue'
+import GeneChartModal from '@/components/charts/GeneChartModal.vue'
 import { useRoute } from 'vue-router'
 import ColumnSetting from '@/components/ColumnSetting.vue'
 import { BIOSAMPLES_COLUMNS } from '@/constants/biosample.js'
@@ -441,14 +455,41 @@ const columnsSetting = ref({
   gene: columnsTotal.value.gene.filter((item) => !item.autoHidden).map(({ title }) => title),
 })
 
-console.log(columnsSetting.value)
-
 const columns = computed(() => {
   const type = filter.value
   return columnsTotal.value[type].filter(item => {
     return columnsSetting.value[type].includes(item.title)
   })
 })
+
+const isChartAvailable = computed(() => {
+  const { species, symbol } = gene.value
+  return filter.value === 'gene' && species && symbol
+})
+
+const cellRules = {
+  species: [
+    {
+      required: true,
+      message: 'Please select species',
+    },
+  ],
+}
+
+const geneRules = {
+  species: [
+    {
+      required: true,
+      message: 'Please select species',
+    },
+  ],
+  symbol: [
+    {
+      required: true,
+      message: 'Please select gene symbol',
+    },
+  ],
+}
 
 const options = ref({
   species: [],
@@ -480,6 +521,7 @@ const sampleFormRef = ref()
 
 const cellNameRef = ref()
 const geneNameRef = ref()
+const geneChartRef = ref()
 const cellNameInput = ref()
 const geneNameInput = ref()
 
@@ -637,8 +679,21 @@ const handleGeneSymbolSearch = async (keywords) => {
   }
 }
 
+const validate = () => {
+  switch (filter.value) {
+    case 'cell':
+      return cellFormRef.value.validate()
+    case 'gene':
+      return geneFormRef.value.validate()
+    default:
+      return Promise.resolve()
+  }
+}
+
 const handleSearch = () => {
-  projectTableRef.value.handleSearch()
+  validate().then(() => {
+    projectTableRef.value.handleSearch()
+  })
 }
 
 const handleCellNameSearch = () => {
@@ -668,9 +723,7 @@ onMounted(() => {
       organ,
       species: species ? Number(species) : undefined,
     })
-    if (organ || species) {
-      handleSearch()
-    }
+    handleSearch()
   })
 })
 
@@ -689,9 +742,14 @@ const getSpecieOptions = async () => {
   options.value.species = data
 }
 
+const handleChartModalOpen = () => {
+  geneChartRef.value.openModal(getGeneCondition())
+}
+
 const handleListDownload = async () => {
   try {
     downloading.value = true
+    await validate()
     const data = await {
       sample: downloadSampleProjectList,
       cell: downloadCellProjectList,
@@ -761,6 +819,7 @@ const handleListDownload = async () => {
       .download {
         height: 100%;
         border-radius: 0;
+        border: 0;
         background: #00a9dd;
         display: flex;
         align-items: center;
@@ -771,6 +830,15 @@ const handleListDownload = async () => {
         font-size: 1rem;
         font-weight: 400;
         line-height: 1.375rem;
+
+        &:hover {
+          background: rgba(#00a9dd, 0.8);
+        }
+      }
+
+      .chart {
+        @extend .download;
+        margin-right: 0;
       }
 
       .fill {
@@ -832,6 +900,11 @@ const handleListDownload = async () => {
               background-color: #ff7555;
             }
           }
+
+          :deep(.ant-form-item-explain-error) {
+            text-align: center;
+            color: #ff7555;
+          }
         }
 
         .action {
@@ -846,11 +919,8 @@ const handleListDownload = async () => {
             border-radius: 2.9375rem;
             background: #ff7555;
             border: 1px solid transparent;
-            display: flex;
-            height: 2rem;
+            height: 2.375rem;
             padding: 0 1.75rem;
-            justify-content: center;
-            align-items: center;
             gap: 0.625rem;
             align-self: stretch;
             color: #fff;
@@ -862,11 +932,8 @@ const handleListDownload = async () => {
             border-radius: 2.9375rem;
             background: transparent;
             border: 1px solid #fff;
-            display: flex;
-            height: 2rem;
+            height: 2.375rem;
             padding: 0 1.75rem;
-            justify-content: center;
-            align-items: center;
             gap: 0.625rem;
             align-self: stretch;
             color: #fff;

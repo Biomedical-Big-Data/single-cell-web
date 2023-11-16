@@ -34,33 +34,43 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-
-      .button{
-        display: flex;
-        width: 7.5rem;
-        height: 2.25rem;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        font-weight: 400;
-        border-radius: 2.9375rem;
-        box-sizing: border-box;
-      }
-
-
-      .cancel-button {
-        @extend .button;
-        background: #FFF;
-        color: #7E7E7E;
-        border: 1px solid #D2D2D2;
-      }
-
-      .ok-button {
-        @extend .button;
-        background: #0062FF;
-        color: #FFF;
-      }
     }
 
+  }
+
+  .default-button {
+    display: flex;
+    width: 7.5rem;
+    height: 2.25rem;
+    align-items: baseline;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 400;
+    border-radius: 2.9375rem;
+    box-sizing: border-box;
+  }
+
+
+  .cancel-button {
+    @extend .default-button;
+    background: #FFF;
+    color: #7E7E7E;
+    border: 1px solid #D2D2D2;
+  }
+
+  .ok-button {
+    @extend .default-button;
+    background: #0062FF;
+    color: #FFF;
+  }
+
+  .search-button {
+    @extend .default-button;
+    background: #ff7555;
+    color: #FFF;
+
+    &:hover {
+      background: rgba(#ff7555, 0.9);
+    }
   }
 }

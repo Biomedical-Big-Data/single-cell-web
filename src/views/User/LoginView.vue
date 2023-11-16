@@ -59,10 +59,13 @@
 import { ref } from 'vue'
 import { login } from '@/api/user'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
+
+console.log(route)
 
 const loading = ref(false)
 const formRef = ref()
@@ -94,7 +97,7 @@ const handleUserLogin = async function () {
     const { email_address, user_password } = loginForm.value
     const result = await login({ email_address, user_password })
     userStore.setUser(result)
-    await router.replace({ name: 'home' })
+    await router.replace({ name: (route.query?.feedback || 'home') })
   } finally {
     loading.value = false
   }
