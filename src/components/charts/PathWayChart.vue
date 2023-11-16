@@ -1,29 +1,31 @@
 <template>
-  <div class="h-full flex flex-col">
-    <div class="flex items-center px-4 p-2">
-      <a-select
-        v-model:value="pathType"
-        class="w-50"
-        :options="pathTypeList"
-        placeholder="Select pathway type"
-        @change="handlePathTypeChange"
-      ></a-select>
-      <a-select
-        v-model:value="pathWay"
-        class="w-40 ml-4"
-        :options="pathWayList"
-        placeholder="Select pathway"
-      ></a-select>
+  <a-spin :spinning="loading">
+    <div class="h-full flex flex-col">
+      <div class="flex items-center px-4 p-2">
+        <a-select
+          v-model:value="pathType"
+          class="w-50"
+          :options="pathTypeList"
+          placeholder="Select pathway type"
+          @change="handlePathTypeChange"
+        ></a-select>
+        <a-select
+          v-model:value="pathWay"
+          class="w-40 ml-4"
+          :options="pathWayList"
+          placeholder="Select pathway"
+        ></a-select>
+      </div>
+      <div class="flex-1">
+        <VuePlotly
+          :data="chartData"
+          :layout="layout"
+          :display-mode-bar="false"
+          :config="config"
+        ></VuePlotly>
+      </div>
     </div>
-    <div class="flex-1">
-      <VuePlotly
-        :data="chartData"
-        :layout="layout"
-        :display-mode-bar="false"
-        :config="config"
-      ></VuePlotly>
-    </div>
-  </div>
+  </a-spin>
 </template>
 
 <script setup>
@@ -32,25 +34,18 @@ import { computed, onMounted, ref } from "vue"
 import _ from "lodash"
 import { getCellPathwayFile } from "@/api/file"
 import csvtojson from "csvtojson"
+import { getPathwayData } from "@/api/project"
 
 const pathType = ref(undefined)
 const pathWay = ref(undefined)
-const pathWayFileData = ref([])
-
+const pathways = ref([])
+const loading = ref(true)
 const props = defineProps({
   project: {
     required: true,
     type: Object,
     default: () => {},
   },
-})
-
-const pathways = computed(() => {
-  if (props.project?.is_private) {
-    return pathWayFileData.value
-  } else {
-    return props.project?.project_analysis_meta[0]?.analysis_pathway_score_meta
-  }
 })
 
 const pathTypeList = computed(() => {
@@ -109,13 +104,19 @@ const handlePathTypeChange = () => {
 
 onMounted(async () => {
   const { project } = props
-  if (project.is_private && project.project_analysis_meta?.[0]?.pathway_id) {
-    const pathway = await getCellPathwayFile(
-      project.project_analysis_meta?.[0]?.pathway_id,
-    )
-    pathWayFileData.value = await csvtojson({ output: "json" }).fromString(
-      pathway,
-    )
+  try {
+    loading.value = true
+    if (project.is_private && project.project_analysis_meta?.[0]?.pathway_id) {
+      const pathway = await getCellPathwayFile(
+        project.project_analysis_meta?.[0]?.pathway_id,
+      )
+      pathways.value = await csvtojson({ output: "json" }).fromString(pathway)
+    } else {
+      const data = await getPathwayData(project.project_analysis_meta?.[0]?.id)
+      pathways.value = data
+    }
+  } finally {
+    loading.value = false
   }
 })
 </script>

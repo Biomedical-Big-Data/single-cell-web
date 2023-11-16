@@ -114,3 +114,7 @@ export function getProjectGeneChartData({ gene_symbol, species_id }) {
 export function getCellNumber(analysis_id) {
   return request.get(`/project/${analysis_id}/graph/cell_number`)
 }
+
+export function getPathwayData(analysis_id) {
+  return request.get(`/project/${analysis_id}/graph/pathway`)
+}
