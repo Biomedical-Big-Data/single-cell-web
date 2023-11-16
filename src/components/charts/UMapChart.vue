@@ -1,5 +1,25 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="bottom">
+    <div class="umap">
+      <a-spin :spinning="loading">
+        <img v-show="!!umapUrl" :src="umapUrl" class="w-full umap" alt="" />
+      </a-spin>
+    </div>
+    <div class="umap-types">
+      <div
+        v-for="item in options.umapType"
+        :key="item"
+        class="type"
+        :class="{
+          active: item === umapType,
+        }"
+        @click="handleUMapTypeChange(item)"
+      >
+        {{ item }}
+      </div>
+    </div>
+  </div>
+  <div v-if="false" class="h-full flex flex-col">
     <a-spin :spinning="loading">
       <div class="flex items-center px-4 p-2">
         <span class="mr-4 font text-sm">Static UMAP group by</span>
@@ -41,32 +61,76 @@ onMounted(() => {
 
 const handleFetchColumn = async () => {
   const data = await getUmapColumn(props.fileId)
-  options.umapType = data
-    .filter((item) => {
-      return !["UMAP_1", "UMAP_2"].includes(item)
-    })
-    .map((item) => {
-      return {
-        label: item,
-        value: item,
-      }
-    })
+  options.umapType = data.filter((item) => {
+    return !["UMAP_1", "UMAP_2"].includes(item)
+  })
   if (data.length) {
-    umapType.value = data[0]
+    umapType.value = options.umapType[0]
+  }
+}
+
+const handleUMapTypeChange = (type) => {
+  if (type !== umapType.value) {
+    umapType.value = type
+    handleFileFetch()
   }
 }
 
 const handleFileFetch = async () => {
-  const response = await getUmap(props.fileId, umapType.value)
-  const arrayBufferView = new Uint8Array(response)
-  const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
-  const urlCreator = window.URL || window.webkitURL
-  umapUrl.value = urlCreator.createObjectURL(blob)
+  try {
+    loading.value = true
+    const response = await getUmap(props.fileId, umapType.value)
+    const arrayBufferView = new Uint8Array(response)
+    const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
+    const urlCreator = window.URL || window.webkitURL
+    umapUrl.value = urlCreator.createObjectURL(blob)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.umap {
-  max-width: 900px;
+img {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  padding: 0 !important;
+}
+
+.bottom {
+  background: #0081d8;
+  display: flex;
+  align-items: stretch;
+
+  .umap {
+    width: 30.75rem;
+    height: 30.75rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .umap-types {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .type {
+      color: #fff;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 400;
+      text-transform: capitalize;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      cursor: pointer;
+
+      &.active {
+        background: #ff7555;
+      }
+    }
+  }
 }
 </style>

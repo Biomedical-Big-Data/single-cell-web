@@ -1,16 +1,15 @@
 <template>
   <div class="h-full flex flex-col">
-    <div v-if="loading">
-      <a-spin />
-    </div>
-    <div v-else class="flex-1">
-      <VuePlotly
-        :data="chartData"
-        :layout="layout"
-        :display-mode-bar="false"
-        :config="config"
-      ></VuePlotly>
-    </div>
+    <a-spin :spinning="loading">
+      <div>
+        <VuePlotly
+          :data="chartData"
+          :layout="layout"
+          :display-mode-bar="false"
+          :config="config"
+        ></VuePlotly>
+      </div>
+    </a-spin>
   </div>
 </template>
 
@@ -30,9 +29,13 @@ const chartData = ref([])
 const loading = ref(false)
 const layout = computed(() => {
   return {
-    title: "Bar plot of cell number in each type",
+    resposnive: true,
     autosize: true,
-    height: 700,
+    height: 515,
+    margin: {
+      b: 50,
+      t: 50,
+    },
     yaxis: {
       automargin: true,
     },

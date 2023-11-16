@@ -1,82 +1,174 @@
 <template>
   <div class="page">
     <NavBar></NavBar>
-    <div class="content-container">
-      <div class="project-header">
-        <div class="title">Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages of
-          multiple myeloma
-        </div>
-        <a-typography-paragraph
+    <a-spin :spinning="loading" class="min-w-full">
+      <div v-if="projectDetail" class="content-container">
+        <div class="project-header">
+          <div class="title">
+            {{ projectDetail.title }}
+          </div>
+          <a-typography-paragraph
             class="desc"
-            :ellipsis="{rows:2,expandable:true, symbol:'more'}"
-            :content="desc"
-        ></a-typography-paragraph>
-        <div class="tags">
-          <a-tag>Tag 1</a-tag>
-          <a-tag>Tag 2</a-tag>
-          <a-tag>Tag 3</a-tag>
-        </div>
-      </div>
-      <div class="project-body">
-        <div class="left">
-          <div class="top">
-            <div class="fill"/>
-            <a class="interactive">Interactive Viewer</a>
-            <div class="group-desc">Static UMAP group by</div>
+            :ellipsis="{ rows: 2, expandable: true, symbol: 'more' }"
+            :content="projectDetail.description"
+          ></a-typography-paragraph>
+          <div class="tags">
+            <a-tag
+              v-for="item in (projectDetail.tags || '')
+                .split(',')
+                .filter((item) => !!item)"
+              :key="item"
+            >
+              {{ item }}
+            </a-tag>
           </div>
-          <div class="bottom">
-            <div class="umap"></div>
-            <div class="umap-types">
-              <div class="type">Cell Type</div>
-              <div class="type">Sample</div>
-              <div class="type active">sex</div>
-              <div class="type">Treatment</div>
+        </div>
+        <div class="project-body">
+          <div class="left">
+            <div class="top">
+              <div class="fill" />
+              <a
+                v-for="item in analysis"
+                :key="item.id"
+                class="interactive"
+                @click="handleOpenCellxgene(item)"
+              >
+                Interactive Viewer
+              </a>
+              <div class="group-desc">Static UMAP group by</div>
             </div>
+            <UMapChart
+              :file-id="projectDetail.project_analysis_meta[0].umap_id"
+            />
+          </div>
+          <div class="right">
+            <a-tabs
+              v-model:activeKey="activeKey"
+              type="card"
+              size="large"
+              :tab-bar-gutter="8"
+              class="h-full"
+            >
+              <template #leftExtra>
+                <div class="fix-fill"></div>
+              </template>
+              <a-tab-pane key="celltype" tab="Celltype Markers">
+                <CellTypeMarkers
+                  :file-id="
+                    projectDetail.project_analysis_meta[0].cell_marker_id
+                  "
+                />
+              </a-tab-pane>
+              <a-tab-pane
+                v-if="!projectDetail.is_private"
+                key="barplot"
+                tab="Cell type distribution"
+              >
+                <BarChart
+                  :analysis-id="projectDetail.project_analysis_meta[0].id"
+                ></BarChart>
+              </a-tab-pane>
+              <a-tab-pane
+                v-if="pathWayVisiable"
+                key="score"
+                tab="Score of pathway"
+              >
+                <PathWayChart :project="projectDetail"></PathWayChart>
+              </a-tab-pane>
+              <a-tab-pane key="download" tab="Download">
+                <DownloadTable :project-detail="projectDetail"></DownloadTable>
+              </a-tab-pane>
+            </a-tabs>
           </div>
         </div>
-        <div class="right">
-          <a-tabs type="card" size="large" :tab-bar-gutter="8" class="h-full">
-            <template #leftExtra>
-              <div class="fix-fill"></div>
-            </template>
-            <a-tab-pane key="1" tab="Celltype Markers">
-              <div class="bg-amber-100 h-full">123</div>
-            </a-tab-pane>
-            <a-tab-pane key="2" tab="Cell type distribution">Content of Tab Pane 2</a-tab-pane>
-            <a-tab-pane key="3" tab="Score of pathway">Content of Tab Pane 3</a-tab-pane>
-            <a-tab-pane key="4" tab="Download">Content of Tab Pane 3</a-tab-pane>
-          </a-tabs>
+        <div class="project-footer">
+          <div>
+            Publication:
+            {{ dayjs(projectDetail.update_at).format("YYYY-MM-DD HH:mm") }}
+          </div>
+          <div>Email: {{ projectDetail.project_user_meta.email_address }}</div>
         </div>
       </div>
-      <div class="project-footer">
-        <div>Publication : xxx aacbecekdede gogogesdepnfejde</div>
-        <div>Email : xyz@shanghaiitech.edu.cn</div>
-      </div>
-    </div>
+    </a-spin>
   </div>
-
 </template>
 <script setup>
-import NavBar from '@/components/NavBar.vue'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from "vue"
+import BarChart from "@/components/charts/BarChart.vue"
+import PathWayChart from "@/components/charts/PathWayChart.vue"
+import UMapChart from "@/components/charts/UMapChart.vue"
+import CellTypeMarkers from "@/components/CellTypeMarkers.vue"
+import { getProjectDetail } from "@/api/project"
+import dayjs from "dayjs"
+import { useRoute } from "vue-router"
+import NavBar from "@/components/NavBar.vue"
+import DownloadTable from "@/components/charts/DownloadTable.vue"
 
-const desc = ref(` Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
-          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
-          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
-          cells from precursor stages, MGUS and
-          Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
-          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
-          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
-          cells from precursor stages, MGUS and
-          Single-cell RNA sequencing reveals compromised immune microenvironment in precursor stages
-          ofPrecursor states of Multiple Myeloma (MM) and its native tumeor microenvironment need in-depth molecular
-          characterizationto better stratify and treat patients at risk. Using single-cell RNA sequencing of bone marrow
-          cells from precursor stages, MGUS and`)
+const route = useRoute()
+// const activeKey = ref('score')
+const loading = ref(true)
+const activeKey = ref("umap")
+const projectDetail = ref(null)
+const props = defineProps({
+  id: {
+    required: true,
+    type: [Number, String],
+  },
+})
 
+onMounted(() => {
+  handleProjectDetailFetch()
+})
+
+const pathWayVisiable = computed(() => {
+  const { is_private, project_analysis_meta } = projectDetail.value
+  if (!is_private) {
+    return true
+  } else {
+    return !!project_analysis_meta?.[0]?.pathway_id
+  }
+})
+
+// const pathwayData = computed(() => {
+//   if (projectDetail.value?.is_private) {
+//     return pathWayFileData.value
+//   } else {
+//     return projectDetail.value?.project_analysis_meta[0]
+//       ?.analysis_pathway_score_meta
+//   }
+// })
+
+const analysis = computed(() => {
+  const { analysis_id } = route.query
+  if (analysis_id) {
+    return projectDetail.value.project_analysis_meta.filter(
+      (item) => +item.id === +analysis_id,
+    )
+  } else {
+    return projectDetail.value.project_analysis_meta
+  }
+})
+
+const handleProjectDetailFetch = async () => {
+  try {
+    loading.value = true
+    const data = await getProjectDetail(props.id)
+    projectDetail.value = data
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleOpenCellxgene = (record) => {
+  window.open(
+    `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
+    "_blank",
+  )
+}
 </script>
 <style scoped lang="scss">
 .page {
-  background: #F0F2F5;
+  background: #f0f2f5;
   min-height: 100vh;
 }
 
@@ -96,14 +188,14 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
     align-self: stretch;
 
     .title {
-      color: #5F5F5F;
+      color: #5f5f5f;
       font-size: 1.5rem;
       font-weight: 400;
       line-height: 1.375rem; /* 91.667% */
     }
 
     .desc {
-      color: #7E7E7E;
+      color: #7e7e7e;
       font-size: 1rem;
       font-weight: 400;
     }
@@ -113,6 +205,7 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
     display: flex;
     align-items: stretch;
     gap: 0.625rem;
+    padding-right: 0.75rem;
 
     .left {
       display: flex;
@@ -130,7 +223,7 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
         overflow: hidden;
 
         .fill {
-          background: #0081D8;
+          background: #0081d8;
           width: 1.625rem;
         }
 
@@ -138,8 +231,8 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
           display: flex;
           padding: 0 1.25rem;
           align-items: center;
-          background: #00A9DD;
-          color: #FFF;
+          background: #00a9dd;
+          color: #fff;
           font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
@@ -147,21 +240,21 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
 
         .group-desc {
           flex: 1;
-          background: #0081D8;
+          background: #0081d8;
           display: flex;
           padding: 1rem 1.25rem;
           justify-content: flex-end;
           align-items: center;
           gap: 0.625rem;
           align-self: stretch;
-          color: #FFF;
+          color: #fff;
           font-size: 1.25rem;
           font-weight: 500;
         }
       }
 
       .bottom {
-        background: #0081D8;
+        background: #0081d8;
         display: flex;
         align-items: stretch;
 
@@ -179,21 +272,20 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
           align-items: stretch;
 
           .type {
-            color: #FFF;
+            color: #fff;
             padding: 0.75rem;
             font-size: 1rem;
             font-weight: 400;
             text-transform: capitalize;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             cursor: pointer;
 
             &.active {
-              background: #FF7555;
+              background: #ff7555;
             }
           }
         }
-
       }
     }
 
@@ -205,11 +297,10 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
         height: 2.5rem;
         width: 0.75rem;
         border-radius: 0.625rem 0 0 0;
-        background: #0081D8;
+        background: #0081d8;
       }
 
       :deep(.ant-tabs-nav) {
-
         margin-bottom: 0 !important;
 
         .ant-tabs-nav-wrap {
@@ -219,8 +310,8 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #7E7E7E;
-            background: #DFE2E8;
+            color: #7e7e7e;
+            background: #dfe2e8;
             border-radius: 0.625rem 0.625rem 0 0;
             border: none;
 
@@ -229,15 +320,14 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
             }
 
             &.ant-tabs-tab-active {
-              background: #0081D8;
+              background: #0081d8;
 
               .ant-tabs-tab-btn {
-                color: #FFFFFF;
+                color: #ffffff;
               }
             }
           }
         }
-
       }
 
       :deep(.ant-tabs-content-holder) {
@@ -245,14 +335,19 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
         position: relative;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: 0;
-          background: #0081D8;
+          background: #0081d8;
           width: 0.75rem;
           height: 100%;
         }
+      }
+
+      :deep(.ant-tabs-tabpane) {
+        border-radius: 0 0.625rem 0 0;
+        overflow: hidden;
       }
     }
   }
@@ -268,7 +363,7 @@ const desc = ref(` Single-cell RNA sequencing reveals compromised immune microen
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.5rem; /* 150% */
-      color: #5F5F5F;
+      color: #5f5f5f;
       padding: 0.5rem;
     }
   }
