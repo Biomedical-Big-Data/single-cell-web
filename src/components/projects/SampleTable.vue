@@ -226,7 +226,7 @@ const {
   current,
   pageSize,
 } = usePagination(getSampleProjectList, {
-  manual: true,
+  // manual: true,
   pagination: {
     currentKey: "page",
     pageSizeKey: "page_size",

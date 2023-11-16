@@ -24,13 +24,23 @@
             :default-expand-all="true"
             @select="handleNodeSelected"
           >
-            <template #title="{ title }">
-              <Highlighter
-                highlight-class-name="highlight"
-                :search-words="keywords"
-                :text-to-highlight="title"
-                :auto-escape="false"
-              />
+            <template
+              #title="{
+                title,
+                data: {
+                  data: { cell_number, is_exist },
+                },
+              }"
+            >
+              <div :class="{ highlighted: is_exist }">
+                <Highlighter
+                  highlight-class-name="highlight"
+                  :search-words="keywords"
+                  :text-to-highlight="title"
+                  :auto-escape="false"
+                />
+                <span v-if="cell_number">({{ cell_number }})</span>
+              </div>
             </template>
           </a-tree>
         </div>
@@ -94,8 +104,9 @@ const handleSearch = async (keyword) => {
     const data = await getCellTaxonomy(keyword)
     cache.value = data
     treeData.value = arrayToTree(
-      data.map(({ cl_id, cl_pid, name, cell_number }) => ({
-        title: cell_number ? `${name} (${cell_number})` : name,
+      data.map(({ cl_id, cl_pid, name, cell_number, is_exist }) => ({
+        title: name,
+        data: { is_exist, cell_number },
         key: cl_id,
         pid: cl_pid,
       })),
@@ -136,6 +147,11 @@ defineExpose({
 <style>
 .highlight {
   background: #ffc046;
+  padding: 0;
+}
+
+.highlighted {
+  background: rgba(95, 255, 70, 0.2);
   padding: 0;
 }
 </style>
