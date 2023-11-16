@@ -31,7 +31,7 @@ const layout = computed(() => {
   return {
     resposnive: true,
     autosize: true,
-    height: 515,
+    height: 612,
     margin: {
       b: 50,
       t: 50,

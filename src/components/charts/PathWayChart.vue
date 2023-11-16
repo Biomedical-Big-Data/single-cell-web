@@ -100,7 +100,7 @@ const layout = computed(() => {
       t: 50,
     },
     autosize: true,
-    height: 460,
+    height: 556,
     showlegend: true,
   }
 })

@@ -105,7 +105,7 @@ img {
 
   .umap {
     width: 30.75rem;
-    height: 30.75rem;
+    height: 36.75rem;
     padding: 1.5rem;
     box-sizing: border-box;
     background: #fff;

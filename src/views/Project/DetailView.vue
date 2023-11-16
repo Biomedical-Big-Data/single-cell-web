@@ -209,7 +209,7 @@ const handleOpenCellxgene = (record) => {
 
     .left {
       display: flex;
-      height: 34.75rem;
+      height: 40rem;
       flex-direction: column;
       align-items: stretch;
 
@@ -257,35 +257,6 @@ const handleOpenCellxgene = (record) => {
         background: #0081d8;
         display: flex;
         align-items: stretch;
-
-        .umap {
-          width: 30.75rem;
-          height: 30.75rem;
-          padding: 1.5rem;
-          box-sizing: border-box;
-          background: #fff;
-        }
-
-        .umap-types {
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-
-          .type {
-            color: #fff;
-            padding: 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            text-transform: capitalize;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            cursor: pointer;
-
-            &.active {
-              background: #ff7555;
-            }
-          }
-        }
       }
     }
 

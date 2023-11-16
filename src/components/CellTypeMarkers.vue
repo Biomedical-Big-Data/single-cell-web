@@ -1,6 +1,6 @@
 <template>
-  <div class="pr-6">
-    <div class="flex justify-end">
+  <div>
+    <div class="flex justify-end action-container">
       <a-popover trigger="click" placement="bottom">
         <template #content>
           <a-checkbox-group v-model:value="columnSettings" class="flex-col">
@@ -11,7 +11,7 @@
             </div>
           </a-checkbox-group>
         </template>
-        <a-button>
+        <a-button class="columns-setting" size="large">
           <template #icon>
             <SettingOutlined />
           </template>
@@ -19,24 +19,27 @@
         </a-button>
       </a-popover>
 
-      <a-button :loading="downloading" class="ml-4" @click="handleFileDownload">
-        <template #icon>
-          <DownloadOutlined />
-        </template>
-        Download
+      <a-button
+        :loading="downloading"
+        class="download"
+        size="large"
+        @click="handleFileDownload"
+      >
+        Download CSV
       </a-button>
+      <div class="empty-fill" />
     </div>
     <div class="mt-4">
       <a-table
         :columns="columnResult"
         :data-source="result"
-        :scroll="{ x: columnSettings.length * 150 }"
+        :scroll="{ x: columnSettings.length * 150, y: 393 }"
       >
         <template #headerCell="{ title }">
           <div>{{ title }}</div>
           <div class="mt-2">
             <a-input
-              
+              class="w-full"
               @click.stop
               @change="filterBy(title, $event)"
             ></a-input>
@@ -50,7 +53,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue"
 import csvtojson from "csvtojson"
-import { DownloadOutlined, SettingOutlined } from "@ant-design/icons-vue"
+import { SettingOutlined } from "@ant-design/icons-vue"
 import { saveAs } from "file-saver"
 import { getCellMarkerFile } from "../api/file"
 
@@ -127,4 +130,33 @@ const filterBy = (title, event) => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.action-container {
+  height: 2.75rem;
+  display: flex;
+  align-items: stretch;
+  background: #0081d8;
+  padding-right: 1.25rem;
+
+  .columns-setting {
+    height: 100%;
+    background: transparent;
+    border-radius: 0;
+    border: 0;
+    color: #fff;
+  }
+
+  .download {
+    height: 100%;
+    background: #00a9dd;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    border-radius: 0;
+    border-left: 0.38rem solid #fff;
+    border-right: 0.38rem solid #fff;
+    border-top: 0;
+    border-bottom: 0;
+  }
+}
+</style>
