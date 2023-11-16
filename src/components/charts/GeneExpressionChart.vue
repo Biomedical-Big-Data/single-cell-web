@@ -43,7 +43,7 @@ const chartData = computed(() => {
       return {
         x: values.map((item) => item[props.valueKey]),
         // y: new Array(values.length).fill(name),
-        y: values.map(() => -index - Math.random()),
+        y: values.map(() => -index - Math.random() * 0.5),
         mode: "markers",
         type: "scatter",
         hovertemplate: "%{x}",
