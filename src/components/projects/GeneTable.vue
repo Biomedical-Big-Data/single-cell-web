@@ -143,6 +143,7 @@ import _ from "lodash"
 import { joinTableIndex } from "@/utils/common.js"
 import { titleCase } from "text-case"
 import { GENE_COLUMNS } from "@/constants/gene.js"
+import { message } from "ant-design-vue"
 
 const downloading = ref(false)
 const chartLoading = ref(false)
@@ -321,6 +322,7 @@ const handleTableChange = (pag, filters, sorter) => {
 }
 
 const handleSearch = (conditions) => {
+  console.log(conditions)
   condition.value = conditions
   run({
     page: current,
@@ -350,8 +352,13 @@ const handleToProject = (record) => {
 const handleListDownload = async () => {
   try {
     downloading.value = true
-    const data = await downloadGeneProjectList(...getConditions())
-    saveAs(data, "sample_project_list.xlsx")
+    const conditions = getConditions()
+    if (conditions.species_id && conditions.gene_symbol) {
+      const data = await downloadGeneProjectList(conditions)
+      saveAs(data, "sample_project_list.xlsx")
+    } else {
+      message.error("Please select species and gene symbol")
+    }
   } finally {
     downloading.value = false
   }
