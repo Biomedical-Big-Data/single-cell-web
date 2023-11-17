@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="detail-page">
     <NavBar></NavBar>
     <a-spin :spinning="loading" class="min-w-full">
       <div v-if="projectDetail" class="content-container">
@@ -167,7 +167,7 @@ const handleOpenCellxgene = (record) => {
 }
 </script>
 <style scoped lang="scss">
-.page {
+.detail-page {
   background: #f0f2f5;
   min-height: 100vh;
 }
