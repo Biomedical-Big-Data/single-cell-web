@@ -2,7 +2,7 @@
   <div class="list-container">
     <NavBar></NavBar>
     <div class="body-container">
-      <div class="title-container">Project List</div>
+      <div class="title-container">Personal Project List</div>
       <div class="content-container">
         <div class="search-container">
           <a-form :model="conditions" autocomplete="off" layout="vertical">

@@ -41,6 +41,7 @@
         </div>
         <div class="table-container">
           <a-table
+            size="large"
             :columns="columns"
             :row-key="(record) => record.id"
             :data-source="list"

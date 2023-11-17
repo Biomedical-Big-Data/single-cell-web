@@ -137,7 +137,7 @@
                 {{ formState.excel_id }}
               </a-button>
               <div class="mt-2">
-                请按以下格式上传:
+                Please upload in the following format:
                 <a href="./update_file.xlsx">update_file.xlsx</a>
               </div>
             </a-form-item>

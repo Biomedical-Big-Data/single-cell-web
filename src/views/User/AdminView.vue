@@ -6,16 +6,20 @@
       <div class="content-container">
         <div class="search-container">
           <a-form :model="conditions" layout="vertical" autocomplete="off">
-            <a-form-item label="用户名" name="user_name" class="condition-item">
+            <a-form-item
+              label="User name"
+              name="user_name"
+              class="condition-item"
+            >
               <a-input
                 v-model:value="conditions.user_name"
                 class="w-full"
                 size="large"
-                placeholder="用户名"
+                placeholder="User name"
               ></a-input>
             </a-form-item>
             <a-form-item
-              label="组织"
+              label="Organization"
               name="organization"
               class="condition-item"
             >
@@ -23,11 +27,11 @@
                 v-model:value="conditions.organization"
                 class="w-full"
                 size="large"
-                placeholder="组织"
+                placeholder="Organization"
               ></a-input>
             </a-form-item>
             <a-form-item
-              label="邮箱"
+              label="Email"
               name="email_address"
               class="condition-item"
             >
@@ -35,27 +39,27 @@
                 v-model:value="conditions.email_address"
                 class="w-full"
                 size="large"
-                placeholder="邮箱"
+                placeholder="Email"
               ></a-input>
             </a-form-item>
-            <a-form-item label="状态" name="state" class="condition-item">
+            <a-form-item label="Status" name="state" class="condition-item">
               <a-select
                 v-model:value="conditions.state"
                 :options="USER_STATUS"
-                placeholder="用户状态"
+                placeholder="Status"
                 class="w-full"
                 size="large"
                 allow-clear
               ></a-select>
             </a-form-item>
             <a-form-item
-              label="注册时间"
+              label="Create date"
               name="create_at"
               class="condition-item"
             >
               <a-date-picker
                 v-model:value="conditions.create_at"
-                placeholder="注册时间"
+                placeholder="Create date"
                 class="w-full"
                 size="large"
               />
@@ -70,6 +74,7 @@
 
         <div class="table-container">
           <a-table
+            size="large"
             :columns="columns"
             :row-key="(record) => record.id"
             :data-source="list"
@@ -86,15 +91,17 @@
               </template>
               <template v-if="dataIndex === 'operation'">
                 <a-button
-                  type="primary"
+                  type="link"
+                  size="large"
                   @click="handleUpdateUserPasswordModalOpen(record)"
                 >
                   重设密码
                 </a-button>
                 <a-button
                   v-if="record.state === 1"
-                  type="primary"
+                  type="link"
                   danger
+                  size="large"
                   class="ml-2"
                   @click="handleUpdateUserState(record, -1)"
                 >
@@ -102,7 +109,8 @@
                 </a-button>
                 <a-button
                   v-if="record.state === -1"
-                  type="primary"
+                  type="link"
+                  size="large"
                   danger
                   class="ml-2"
                   @click="handleUpdateUserState(record, 1)"
@@ -172,19 +180,19 @@ const getStateName = function (state) {
 
 const columns = [
   {
-    title: "用户名",
+    title: "User name",
     dataIndex: "user_name",
   },
   {
-    title: "邮箱",
+    title: "Email",
     dataIndex: "email_address",
   },
   {
-    title: "组织",
+    title: "Organization",
     dataIndex: "organization",
   },
   {
-    title: "状态",
+    title: "Status",
     dataIndex: "state",
     width: "120px",
   },

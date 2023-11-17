@@ -106,7 +106,7 @@
             <a-form-item
               v-if="!!formState.isPrivate"
               label="Invitee:"
-              name="public"
+              name="members"
             >
               <a-select
                 v-model:value="formState.members"
@@ -174,7 +174,7 @@
                 </a-button>
               </div>
               <div class="mt-2">
-                请按以下格式上传:
+                Please upload in the following format:
                 <a href="./umap.csv">umap.csv</a>
               </div>
             </a-form-item>
@@ -208,7 +208,7 @@
                 </a-button>
               </div>
               <div class="mt-2">
-                请按以下格式上传:
+                Please upload in the following format:
                 <a href="./cell_marker.csv">cell_marker.csv</a>
               </div>
             </a-form-item>
@@ -246,7 +246,7 @@
                 </a-button>
               </div>
               <div class="mt-2">
-                请按以下格式上传:
+                Please upload in the following format:
                 <a href="./pathway_score.csv">pathway_score.csv</a>
               </div>
             </a-form-item>
@@ -280,7 +280,7 @@
                   Other file
                 </a-button>
               </div>
-              <div class="mt-2">Max file count: 5</div>
+              <div class="mt-2">Up to 5 files can be uploaded</div>
             </a-form-item>
 
             <a-form-item label="Description" name="description" required>

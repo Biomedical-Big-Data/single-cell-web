@@ -21,7 +21,7 @@
             :label-col="{ style: { width: '8.75rem' } }"
             :rules="rules"
           >
-            <a-form-item label="用户名">
+            <a-form-item label="User Name">
               <a-input
                 v-model:value="userInfo.user_name"
                 disabled

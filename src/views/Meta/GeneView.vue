@@ -39,6 +39,7 @@
     <div class="table-container">
       <a-table
         class="w-full"
+        size="large"
         :columns="columns"
         :row-key="(record) => record.id"
         :data-source="list"

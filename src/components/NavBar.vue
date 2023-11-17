@@ -16,7 +16,7 @@
       </a-button>
       <a-dropdown>
         <a-avatar class="cursor-pointer">
-          {{ userStore.getUser?.user_name }}
+          {{ userStore.getUser?.user_name?.[0] }}
         </a-avatar>
         <template #overlay>
           <a-menu>
