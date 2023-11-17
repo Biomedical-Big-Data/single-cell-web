@@ -43,7 +43,7 @@ const chartData = computed(() => {
       return {
         x: values.map((item) => item[props.valueKey]),
         // y: new Array(values.length).fill(name),
-        y: values.map(() => -index - Math.random() * 0.5),
+        y: values.map(() => -index - Math.random() * 0.2),
         mode: "markers",
         type: "scatter",
         hovertemplate: "%{x}",
@@ -57,7 +57,7 @@ const chartData = computed(() => {
 })
 
 const layout = computed(() => {
-  const temp = ["", ..._.chain(dataGroup.value).keys().value()]
+  const temp = [..._.chain(dataGroup.value).keys().value(), ""]
   console.log(temp)
   return {
     title: props.title,
