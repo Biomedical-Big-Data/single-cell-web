@@ -51,8 +51,8 @@ const handleFetchColumn = async () => {
         value: item,
       }
     })
-  if (data.length) {
-    umapType.value = data[0]
+  if (options.umapType.length) {
+    umapType.value = options.umapType[0]
   }
 }
 
