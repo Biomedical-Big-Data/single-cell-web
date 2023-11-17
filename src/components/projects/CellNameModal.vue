@@ -4,6 +4,9 @@
     title="Search Cell Name"
     :width="900"
     :mask-closable="false"
+    :ok-button-props="{
+      disabled: !selectedKeys.length,
+    }"
     @ok="confirm"
   >
     <div class="p-4 flex">
@@ -122,8 +125,10 @@ const handleSearch = async (keyword) => {
 }
 
 const handleNodeSelected = async (event) => {
-  const data = await getTaxonomyDetail(event[0])
-  relations.value = _.uniqBy(data, "cell_marker")
+  if (event[0]) {
+    const data = await getTaxonomyDetail(event[0])
+    relations.value = _.uniqBy(data, "cell_marker")
+  }
 }
 
 const getLink = (cell_marker) => {
