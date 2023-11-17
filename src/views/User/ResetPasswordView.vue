@@ -1,58 +1,58 @@
 <template>
-  <div class="p-5">
-    <div class="flex items-center flex-col w-full bg-white py-5">
-      <div class="text-lg">重置密码</div>
-      <div class="max-w-screen-lg w-full mt-6">
-        <a-form
-          ref="formRef"
-          layout="vertical"
-          :model="formState"
-          class="w-full"
-          :rules="rules"
-        >
-          <a-form-item label="重置密码" required name="password">
-            <a-input-password
-              v-model:value="formState.password"
-              placeholder="请输入重置密码"
-            />
-          </a-form-item>
-          <a-form-item label="确认重置密码" required name="confirm_password">
-            <a-input-password
-              v-model:value="formState.confirm_password"
-              placeholder="请再次输入重置密码"
-            />
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              type="primary"
-              class="flex items-center"
-              :loading="loading"
-              @click="handleResetPassword"
-            >
-              <template #icon>
-                <CheckOutlined />
-              </template>
-              确认修改
-            </a-button>
-          </a-form-item>
-        </a-form>
+  <div class="auth-container">
+    <div class="content-container">
+      <div class="title-container">
+        <div class="title-sm text-center">Change password</div>
       </div>
+      <a-form ref="formRef" :model="formState" :rules="rules">
+        <a-form-item class="w-full form-item" name="password">
+          <div class="label">
+            Password
+          </div>
+          <div>
+            <a-input
+                v-model:value="formState.password" class="simple-input"
+                placeholder="Enter your password"></a-input>
+          </div>
+        </a-form-item>
+        <a-form-item class="w-full form-item" name="confirm_password">
+          <div class="label">
+            Confirm password
+          </div>
+          <div>
+            <a-input
+                v-model:value="formState.confirm_password" class="simple-input"
+                placeholder="Confirm your password"></a-input>
+          </div>
+        </a-form-item>
+      </a-form>
+
+      <div>
+        <div class="w-full justify-center flex">
+          <a-button class="login" :loading="loading" @click="handleResetPassword">
+            Change password
+          </a-button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-fixed">
+      scRNA-seq Database © 2023
     </div>
   </div>
 </template>
 <script setup>
-import { reactive, ref } from "vue"
-import { CheckOutlined } from "@ant-design/icons-vue"
-import { useRoute, useRouter } from "vue-router"
-import { resetPassword } from "@/api/user"
-import { message } from "ant-design-vue"
+import { reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { resetPassword } from '@/api/user'
+import { message } from 'ant-design-vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const formState = reactive({
-  password: "",
-  confirm_password: "",
+  password: '',
+  confirm_password: '',
 })
 const loading = ref(false)
 const formRef = ref()
@@ -61,18 +61,20 @@ const rules = {
   password: [
     {
       required: true,
-      message: "请输入重置密码",
+      message: 'Enter your password',
+      trigger: 'blur',
     },
   ],
   confirm_password: [
     {
       required: true,
-      message: "请再次输入重置密码",
+      message: 'Confirm your password',
+      trigger: 'blur',
     },
     {
       validator: (rule, value) => {
         if (value !== formState.password) {
-          return Promise.reject("两次输入的密码不一致")
+          return Promise.reject('The two passwords that you entered do not match!')
         }
         return Promise.resolve()
       },
@@ -82,16 +84,17 @@ const rules = {
 
 const handleResetPassword = async function () {
   await formRef.value.validate()
-
   try {
     loading.value = true
     const { token } = route.query
     await resetPassword({ token, password: formState.password })
-    message.success("重置密码成功，请重新登录")
-    await router.replace({ name: "login" })
+    message.success('重置密码成功，请重新登录')
+    await router.replace({ name: 'login' })
   } finally {
     loading.value = false
   }
 }
 </script>
-<style></style>
+<style>
+
+</style>

@@ -1,52 +1,69 @@
 <template>
-  <div class="p-5 page">
-    <a-card :title="projectDetail.title" :bordered="false">
+  <div class="create-container">
+    <NavBarForProject>
+      <a-button
+        class="mr-3 button-save"
+        :saving="saving"
+        @click="handleProjectUpdate(false)"
+      >
+        保存
+      </a-button>
+      <a-button
+        v-if="!projectDetail.isPublish"
+        class="mr-3 button-publish"
+        :saving="saving"
+        @click="handleProjectUpdate(true)"
+      >
+        保存并发布
+      </a-button>
+      <a-button
+        v-if="projectDetail.isPublish"
+        class="mr-3 button-warning"
+        :saving="saving"
+        @click="handleProjectOffline()"
+      >
+        下线
+      </a-button>
+      <a-button
+        v-if="projectDetail.isPublish"
+        class="mr-3 button-warning"
+        danger
+        :saving="saving"
+        @click="handleTransferModalShow"
+      >
+        转移项目
+      </a-button>
+    </NavBarForProject>
+    <div class="content-container">
+      <div class="title">{{ projectDetail.title }}</div>
       <div class="flex items-center flex-col w-full">
         <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
+            label-align="left"
             :model="formState"
             name="basic"
             :rules="rules"
             autocomplete="off"
-            :label-col="{ span: 5 }"
+            :label-col="{ style: { width: '8.75rem' } }"
           >
-            <a-form-item label="项目名称" name="title" required>
-              <a-input v-model:value="formState.title" placeholder="项目名称" />
+            <a-form-item label="Project Name" name="title" required>
+              <a-input
+                v-model:value="formState.title"
+                placeholder="Project Name"
+                size="large"
+              />
             </a-form-item>
 
-            <a-form-item label="标签" name="tags">
+            <a-form-item label="Tags" name="tags">
               <a-select
                 v-model:value="formState.tags"
                 mode="tags"
-                placeholder="标签"
+                size="large"
+                placeholder="Tags"
                 :options="[]"
               ></a-select>
             </a-form-item>
-
-            <!-- <a-form-item label="访问权限" name="public">
-              <div class="flex items-center">
-                <a-switch
-                  v-model:checked="formState.isPrivate"
-                  checked-children="私有"
-                  un-checked-children="公开"
-                />
-                <a-tooltip placement="right" class="ml-2">
-                  <template #title>
-                    <span>
-                      私有项目，仅受邀人可看，公开项目需要管理员审核后才可见
-                    </span>
-                  </template>
-                  <a-button
-                    type="text"
-
-                    shape="circle"
-                    :icon="h(QuestionCircleOutlined)"
-                  ></a-button>
-                </a-tooltip>
-              </div>
-            </a-form-item> -->
-
             <a-form-item
               v-if="projectDetail.isPrivate"
               label="可访问人员"
@@ -54,6 +71,7 @@
             >
               <a-select
                 v-model:value="formState.members"
+                size="large"
                 mode="tags"
                 placeholder="受邀人"
                 :options="[]"
@@ -63,8 +81,9 @@
             <a-form-item label="H5AD文件" name="h5ad_id" required>
               <a-button
                 v-if="!formState.h5ad_id"
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
+                size="large"
                 @click="fileModalRef?.open('h5ad_id')"
               >
                 <template #icon>
@@ -74,9 +93,10 @@
               </a-button>
               <a-button
                 v-else
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
                 danger
+                size="large"
                 @click="formState.h5ad_id = null"
               >
                 <template #icon>
@@ -93,7 +113,8 @@
             >
               <a-button
                 v-if="!formState.excel_id"
-                class="w-full flex items-center"
+                size="large"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
                 @click="fileModalRef?.open('excel_id')"
               >
@@ -104,9 +125,10 @@
               </a-button>
               <a-button
                 v-else
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
                 danger
+                size="large"
                 @click="formState.excel_id = null"
               >
                 <template #icon>
@@ -115,15 +137,16 @@
                 {{ formState.excel_id }}
               </a-button>
               <div class="mt-2">
-                请按以下格式上传:
+                Please upload in the following format:
                 <a href="./update_file.xlsx">update_file.xlsx</a>
               </div>
             </a-form-item>
             <a-form-item label="UMap文件" name="umap_id" required>
               <a-button
                 v-if="!formState.umap_id"
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
+                size="large"
                 @click="fileModalRef?.open('umap_id')"
               >
                 <template #icon>
@@ -133,9 +156,10 @@
               </a-button>
               <a-button
                 v-else
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
                 danger
+                size="large"
                 @click="formState.umap_id = null"
               >
                 <template #icon>
@@ -147,8 +171,9 @@
             <a-form-item label="CellMarker文件" name="cell_marker_id">
               <a-button
                 v-if="!formState.cell_marker_id"
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
+                size="large"
                 @click="fileModalRef?.open('cell_marker_id')"
               >
                 <template #icon>
@@ -158,9 +183,10 @@
               </a-button>
               <a-button
                 v-else
-                class="w-full flex items-center"
+                class="w-full flex items-center justify-center upload-button"
                 type="dashed"
                 danger
+                size="large"
                 @click="formState.cell_marker_id = null"
               >
                 <template #icon>
@@ -175,48 +201,14 @@
                 v-model:value="formState.description"
                 show-count
                 :maxlength="1000"
+                size="large"
                 :auto-size="{ minRows: 4 }"
               />
-            </a-form-item>
-
-            <a-form-item :wrapper-col="{ offset: 5 }">
-              <a-button
-                class="mr-3"
-                :saving="saving"
-                @click="handleProjectUpdate(false)"
-              >
-                保存
-              </a-button>
-              <a-button
-                v-if="!projectDetail.isPublish"
-                class="mr-3"
-                :saving="saving"
-                @click="handleProjectUpdate(true)"
-              >
-                保存并发布
-              </a-button>
-              <a-button
-                v-if="projectDetail.isPublish"
-                class="mr-3"
-                :saving="saving"
-                @click="handleProjectOffline()"
-              >
-                下线
-              </a-button>
-              <a-button
-                v-if="projectDetail.isPublish"
-                class="mr-3"
-                danger
-                :saving="saving"
-                @click="handleTransferModalShow"
-              >
-                转移项目
-              </a-button>
             </a-form-item>
           </a-form>
         </div>
       </div>
-    </a-card>
+    </div>
     <a-modal
       v-model:open="open"
       title="转移项目"
@@ -241,13 +233,14 @@
 import { onMounted, ref } from "vue"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import {
+  adminProjectTransfer,
   getAdminProjectDetail,
   offlineProject,
-  transferProject,
   updateAdminProject,
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
 import FileModalView from "@/views/File/ModalView.vue"
+import NavBarForProject from "@/components/NavBarForProject.vue"
 
 const props = defineProps({
   id: { required: true, type: [Number, String] },
@@ -279,7 +272,7 @@ const rules = {
   title: [
     {
       required: true,
-      message: "项目名称不能为空",
+      message: "Project Name不能为空",
       trigger: "blur",
     },
   ],
@@ -405,7 +398,7 @@ const handleProjectTransfer = async () => {
   }
   try {
     saving.value = true
-    await transferProject(props.id, transferMail.value)
+    await adminProjectTransfer(props.id, transferMail.value)
     message.success("转移项目成功")
     await handleProjectFetch()
     open.value = false
@@ -443,4 +436,6 @@ const handleFileSelected = (record) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/styles/screate.scss";
+</style>

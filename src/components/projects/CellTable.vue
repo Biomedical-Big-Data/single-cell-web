@@ -169,7 +169,10 @@ const columns = ref(
       dataIndex: ["cell_type_meta", "cell_type_name"],
     },
     ...BIOSAMPLES_COLUMNS,
-  ].map((item) => ({ width: 150, sorter: true, ...item, resizable: true })),
+  ].map((item) => {
+    console.log(item.dataIndex[1])
+    return { width: 150, sorter: true, ...item, resizable: true }
+  }),
 )
 
 const columnSettings = ref({

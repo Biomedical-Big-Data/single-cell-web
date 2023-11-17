@@ -53,12 +53,22 @@ export function getAdminProjectDetail(id) {
   return request.get(`/admin/project/${id}`)
 }
 
+export function adminProjectTransfer(id, mail) {
+  return request.post(`/admin/project/${id}/transfer`, {
+    transfer_to_email_address: mail,
+  })
+}
+
 export function getAdminProjectList(params) {
   return request.get("/admin/project/list", { params })
 }
 
 export function getMyProjectFile(params) {
   return request.get("/project/file/me", { params })
+}
+
+export function removeMyProjectFile(id) {
+  return request.delete(`/project/file/${id}`)
 }
 
 export function uploadProjectFile(file, config) {

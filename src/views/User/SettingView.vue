@@ -1,39 +1,57 @@
 <template>
-  <div class="p-5">
-    <a-card title="修改个人信息" bordered>
+  <div class="create-container">
+    <NavBarForProject>
+      <a-button
+        class="button-save"
+        :loading="loading"
+        @click="handleUpdateUser"
+      >
+        保存
+      </a-button>
+    </NavBarForProject>
+    <div class="content-container">
+      <div class="title">修改个人信息</div>
+
       <div class="flex items-center flex-col w-full">
         <div class="max-w-screen-lg w-full mt-6">
           <a-form
             ref="formRef"
+            label-align="left"
             :model="userInfo"
-            :label-col="{ span: 5 }"
+            :label-col="{ style: { width: '8.75rem' } }"
             :rules="rules"
           >
-            <a-form-item label="用户名">
-              <a-input v-model:value="userInfo.user_name" disabled />
+            <a-form-item label="User Name">
+              <a-input
+                v-model:value="userInfo.user_name"
+                disabled
+                class="simple-input"
+                size="large"
+              />
             </a-form-item>
             <a-form-item label="组织" name="organization">
-              <a-input v-model:value="userInfo.organization" />
+              <a-input
+                v-model:value="userInfo.organization"
+                size="large"
+                class="simple-input"
+              />
             </a-form-item>
             <a-form-item label="新密码" name="password">
-              <a-input-password v-model:value="userInfo.password" />
+              <a-input-password
+                v-model:value="userInfo.password"
+                size="large"
+              />
             </a-form-item>
             <a-form-item label="确认密码" name="confirm_password">
-              <a-input-password v-model:value="userInfo.confirm_password" />
-            </a-form-item>
-            <a-form-item :wrapper-col="{ span: 13, offset: 5 }">
-              <a-button
-                type="primary"
-                :loading="loading"
-                @click="handleUpdateUser"
-              >
-                保存
-              </a-button>
+              <a-input-password
+                v-model:value="userInfo.confirm_password"
+                size="large"
+              />
             </a-form-item>
           </a-form>
         </div>
       </div>
-    </a-card>
+    </div>
   </div>
 </template>
 
@@ -41,6 +59,7 @@
 import { onMounted, ref } from "vue"
 import { getUserInfo, updateMyUserInfo } from "@/api/user"
 import { message } from "ant-design-vue"
+import NavBarForProject from "@/components/NavBarForProject.vue"
 
 const loading = ref(false)
 const userInfo = ref({})
@@ -81,4 +100,6 @@ const handleUpdateUser = async function () {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+@import "@/assets/styles/screate.scss";
+</style>

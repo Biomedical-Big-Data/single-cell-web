@@ -1,47 +1,55 @@
 <template>
   <a-modal
     v-model:open="open"
-    title="选择文件"
+    class="simple-modal"
+    title="File Selector"
     :footer="null"
     width="500"
     :centered="true"
+    :mask-closable="false"
+    :ok-button-props="{
+      class: 'ok-button',
+    }"
+    :cancel-button-props="{
+      class: 'cancel-button',
+    }"
+    @ok="confirm"
   >
-    <div class="bg-white py-2 px-4 rounded-lg">
-      <a-form :model="conditions" layout="inline" autocomplete="off">
-        <a-form-item label="文件名称" name="file_name">
+    <div class="py-6">
+      <a-form
+        :model="conditions"
+        layout="inline"
+        autocomplete="off"
+        class="items-center px-4"
+      >
+        <a-form-item
+          label="文件名称"
+          name="file_name"
+          class="search-condition-item condition-item"
+        >
           <a-input
             v-model:value="conditions.file_name"
-            class="w-56"
+            size="large"
             placeholder="文件名称"
           ></a-input>
         </a-form-item>
-        <a-form-item>
-          <a-button
-            type="primary"
-            class="flex items-center"
-            :loading="loading"
-            @click="handleSearch"
-          >
-            <template #icon>
-              <SearchOutlined></SearchOutlined>
-            </template>
-            查询
-          </a-button>
-        </a-form-item>
-        <a-form-item>
-          <a-button
-            type="primary"
-            class="flex items-center"
-            :loading="uploading"
-            @click="fileRef.click()"
-          >
-            <template #icon>
-              <CloudUploadOutlined></CloudUploadOutlined>
-            </template>
-            上传
-          </a-button>
-          <input ref="fileRef" type="file" hidden @change="handleUpload" />
-        </a-form-item>
+        <a-button
+          type="primary"
+          class="search-button"
+          :loading="loading"
+          @click="handleSearch"
+        >
+          Search all
+        </a-button>
+        <a-button
+          type="primary"
+          class="ml-4 cancel-button"
+          :loading="uploading"
+          @click="fileRef.click()"
+        >
+          Upload
+        </a-button>
+        <input ref="fileRef" type="file" hidden @change="handleUpload" />
       </a-form>
     </div>
 
@@ -52,6 +60,7 @@
         :data-source="list"
         :pagination="pagination"
         :loading="loading"
+        size="large"
         @change="handleTableChange"
       >
         <template #bodyCell="{ column: { dataIndex }, text, record }">
@@ -67,6 +76,7 @@
 
     <a-modal
       v-model:open="uploading"
+      class="uploading-modal"
       title="Uploading"
       :footer="null"
       :closable="false"
@@ -78,13 +88,14 @@
         <div class="mt-2">
           <a-progress class="w-full" :percent="uploadProgress" />
         </div>
-        <div>
+        <div class="flex justify-center mt-4">
           <a-button
             type="primary"
+            class="cancel-upload-button"
             :loading="canceling"
             @click="handleCancelUpload"
           >
-            取消上传
+            Cancel
           </a-button>
         </div>
       </div>
@@ -94,11 +105,11 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import { SearchOutlined, CloudUploadOutlined } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import { getMyProjectFile, uploadProjectFile } from "@/api/project"
 import { message } from "ant-design-vue"
 import dayjs from "dayjs"
+import { filesize } from "filesize"
 
 const emits = defineEmits(["selected"])
 
@@ -116,20 +127,23 @@ const controller = ref(null)
 
 const columns = [
   {
-    title: "文件ID",
+    title: "File ID",
     dataIndex: "file_id",
     width: "200px",
   },
   {
-    title: "文件名称",
+    title: "File name",
     dataIndex: "file_name",
   },
   {
-    title: "文件大小",
+    title: "File size",
     dataIndex: "file_size",
+    customRender: ({ text }) => {
+      return filesize(text)
+    },
   },
   {
-    title: "上传时间",
+    title: "Upload time",
     dataIndex: "create_at",
     width: "150px",
     align: "center",
@@ -251,4 +265,6 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "@/assets/styles/modal-form";
+</style>

@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import nProgress from "nprogress"
 import "nprogress/nprogress.css"
 
+nProgress.configure({ showSpinner: false })
+
 export const constantRoutes = [
   {
     path: "/",
@@ -127,7 +129,7 @@ export const asyncRoutes = [
       {
         path: "species",
         meta: {
-          title: "Species管理",
+          title: "Species Meta",
           roles: ["admin"],
         },
         component: () => import("../views/Meta/SpeciesView.vue"),
@@ -135,7 +137,7 @@ export const asyncRoutes = [
       {
         path: "gene",
         meta: {
-          title: "Gene管理",
+          title: "Gene Meta",
           roles: ["admin"],
         },
         component: () => import("../views/Meta/GeneView.vue"),
@@ -143,7 +145,7 @@ export const asyncRoutes = [
       {
         path: "cell_type",
         meta: {
-          title: "CellType管理",
+          title: "CellType Meta",
           roles: ["admin"],
         },
         component: () => import("../views/Meta/CellTypeView.vue"),

@@ -1,17 +1,20 @@
 <template>
   <a-spin :spinning="loading">
     <div class="h-full flex flex-col">
-      <div class="flex items-center px-4 p-2">
+      <div class="flex items-center px-4 p-2 select-container">
         <a-select
           v-model:value="pathType"
-          class="w-50"
+          class="selector"
+          size="large"
           :options="pathTypeList"
+          show-search
           placeholder="Select pathway type"
           @change="handlePathTypeChange"
         ></a-select>
         <a-select
           v-model:value="pathWay"
-          class="w-40 ml-4"
+          class="selector"
+          size="large"
           :options="pathWayList"
           placeholder="Select pathway"
         ></a-select>
@@ -30,7 +33,7 @@
 
 <script setup>
 import { VuePlotly } from "vue3-plotly"
-import { computed, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref } from "vue"
 import _ from "lodash"
 import { getCellPathwayFile } from "@/api/file"
 import csvtojson from "csvtojson"
@@ -89,17 +92,23 @@ const chartData = computed(() => {
     .value()
 })
 
-const layout = {
-  title: "Score of Pathway",
-  autosize: true,
-  height: 700,
-  showlegend: true,
-}
+const layout = computed(() => {
+  return {
+    resposnive: true,
+    margin: {
+      b: 50,
+      t: 50,
+    },
+    autosize: true,
+    height: 556,
+    showlegend: true,
+  }
+})
 
 const config = { responsive: true, scrollZoom: true }
 
 const handlePathTypeChange = () => {
-  pathWay.value = undefined
+  pathWay.value = pathWayList.value[0].value
 }
 
 onMounted(async () => {
@@ -115,10 +124,29 @@ onMounted(async () => {
       const data = await getPathwayData(project.project_analysis_meta?.[0]?.id)
       pathways.value = data
     }
+    await nextTick(() => {
+      pathTypeList.value.length &&
+        (pathType.value = pathTypeList.value[0].value)
+      pathWayList.value.length && (pathWay.value = pathWayList.value[0].value)
+    })
   } finally {
     loading.value = false
   }
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.select-container {
+  background: #0081d8;
+
+  .selector {
+    width: 20rem;
+    margin-right: 1rem;
+  }
+  :deep(.ant-select-selector) {
+    border-radius: 1.25rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+</style>

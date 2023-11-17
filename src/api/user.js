@@ -28,7 +28,7 @@ export function getUserInfo() {
 export function updateMyUserInfo({ organization, password }) {
   return request.post("/user/me/edit", {
     organization,
-    password,
+    user_password: password,
   })
 }
 

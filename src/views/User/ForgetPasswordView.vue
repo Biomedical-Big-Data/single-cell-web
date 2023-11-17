@@ -1,48 +1,44 @@
 <template>
-  <div class="p-5">
-    <div class="flex items-center flex-col w-full bg-white py-5">
-      <div class="text-lg">重置密码</div>
-      <div class="max-w-screen-lg w-full mt-6">
-        <a-form
-          ref="formRef"
-          layout="vertical"
-          :model="formState"
-          class="w-full"
-          :rules="rules"
-        >
-          <a-form-item label="用户邮箱" required name="mail">
-            <a-input
-              v-model:value="formState.mail"
-              placeholder="请输入用户邮箱"
-            />
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              type="primary"
-              class="flex items-center"
-              :loading="loading"
-              @click="handleSendResetPasswordMail()"
-            >
-              <template #icon>
-                <MailOutlined />
-              </template>
-              发送重置邮件
-            </a-button>
-          </a-form-item>
-        </a-form>
+  <div class="auth-container">
+    <div class="content-container">
+      <div class="title-container">
+        <div class="title-sm text-center">Reset your password</div>
       </div>
+      <a-form ref="formRef" :model="formState" :rules="rules">
+        <a-form-item class="w-full form-item" name="mail">
+          <div class="label">
+            Enter your user account‘s verified email address and we will send you a password reset link.
+          </div>
+          <div>
+            <a-input
+                v-model:value="formState.mail" class="simple-input"
+                placeholder="Enter your email address"></a-input>
+          </div>
+        </a-form-item>
+      </a-form>
+
+      <div>
+        <div class="w-full justify-center flex">
+          <a-button class="login" :loading="loading" @click="handleSendResetPasswordMail">
+            Send password reset email
+          </a-button>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-fixed">
+      scRNA-seq Database © 2023
     </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
-import { MailOutlined } from "@ant-design/icons-vue"
-import { sendResetPasswordMail } from "@/api/user"
-import { message } from "ant-design-vue"
-import { useRouter } from "vue-router"
+import { ref } from 'vue'
+import { sendResetPasswordMail } from '@/api/user'
+import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
 
 const formState = ref({
-  mail: "",
+  mail: '',
 })
 const formRef = ref()
 const router = useRouter()
@@ -52,11 +48,13 @@ const rules = {
   mail: [
     {
       required: true,
-      message: "请输入用户邮箱",
+      message: 'Enter your email address',
+      trigger: 'blur',
     },
     {
-      type: "email",
-      message: "请输入正确的邮箱格式",
+      type: 'email',
+      message: 'Enter a valid email address',
+      trigger: 'blur',
     },
   ],
 }
@@ -67,11 +65,12 @@ const handleSendResetPasswordMail = async function () {
     loading.value = true
     const { mail } = formState.value
     await sendResetPasswordMail(mail)
-    message.success("重置邮件发送成功，请前往邮箱查看")
-    await router.replace({ name: "login" })
+    message.success('重置邮件发送成功，请前往邮箱查看')
+    await router.replace({ name: 'login' })
   } finally {
     loading.value = false
   }
 }
 </script>
-<style></style>
+<style lang="scss" scoped>
+</style>

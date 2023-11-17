@@ -12,21 +12,21 @@ export const AUDIT_STATUS = {
 export const PROJECT_STATUS_DESC = [
   {
     value: PROJECT_STATUS.DRAFT,
-    label: "草稿",
+    label: "Draft",
   },
   {
     value: PROJECT_STATUS.AVAILABLE,
-    label: "已发布",
+    label: "Published",
   },
 ]
 
 export const IS_PRIVATE_DESC = [
   {
-    label: "私有",
+    label: "Private",
     value: 1,
   },
   {
-    label: "公开",
+    label: "Public",
     value: 0,
   },
 ]

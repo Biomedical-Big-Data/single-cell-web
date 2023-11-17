@@ -4,7 +4,6 @@
       :data="chartData"
       :layout="layout"
       :display-mode-bar="false"
-      :config="config"
     ></VuePlotly>
   </div>
 </template>
@@ -29,17 +28,22 @@ const props = defineProps({
   },
 })
 
-const dataGroup = computed(() => {
+const keys = computed(() => {
   return _.chain(props.data)
     .filter((item) => !!item[props.valueKey])
-    .groupBy("cell_type_name")
+    .map("cell_type_name")
+    .uniq()
     .value()
 })
 
 const chartData = computed(() => {
-  return _.chain(dataGroup.value)
+  return _.chain(props.data)
+    .filter((item) => !!item[props.valueKey])
+    .groupBy("cell_type_name")
     .toPairs()
-    .map(([name, values], index) => {
+    .map(([name, values]) => {
+      values.map((item) => item[props.valueKey])
+      const index = keys.value.indexOf(name)
       return {
         x: values.map((item) => item[props.valueKey]),
         // y: new Array(values.length).fill(name),
@@ -57,27 +61,27 @@ const chartData = computed(() => {
 })
 
 const layout = computed(() => {
-  const temp = [..._.chain(dataGroup.value).keys().value(), ""]
-  console.log(temp)
+  const temp = [...keys.value, ""]
   return {
+    responsive: true,
     title: props.title,
     autosize: true,
     height: 700,
+    width: 950,
     showlegend: false,
     xaxis: {
       side: "top",
       ticklabelposition: "outside top",
-      tickformat: ".00%",
+      tickformat: ".0000%",
     },
     yaxis: {
       automargin: true,
       tickvals: Object.keys(temp).map((item) => -item),
       ticktext: temp,
     },
+    margin: { b: 50 },
   }
 })
-
-const config = { responsive: true, scrollZoom: true }
 </script>
 
 <style scoped lang="scss">

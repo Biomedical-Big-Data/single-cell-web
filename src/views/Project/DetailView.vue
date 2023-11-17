@@ -1,155 +1,95 @@
 <template>
-  <div v-if="loading" class="py-4 px-6 bg-white">
-    <a-skeleton active />
-  </div>
-  <div v-if="projectDetail" class="project-detail-container">
-    <div class="py-4 px-6 bg-white">
-      <div class="summary">
-        {{ projectDetail.title }}
-      </div>
-      <div class="mt-4 leading-normal">{{ projectDetail.description }}</div>
-      <div class="mt-4">
-        <a-tag
-          v-for="item in (projectDetail.tags || '')
-            .split(',')
-            .filter((item) => !!item)"
-          :key="item"
-        >
-          {{ item }}
-        </a-tag>
-      </div>
-      <div class="mt-4">
-        <a-button
-          v-for="item in analysis"
-          :key="item.id"
-          class="mr-3"
-          type="primary"
-          @click="handleOpenCellxgene(item)"
-        >
-          {{ item.h5ad_id }} viewer
-        </a-button>
-      </div>
-    </div>
-    <div class="mt-4 px-4 flex-1">
-      <div v-if="projectDetail" class="h-full">
-        <a-tabs
-          v-model:activeKey="activeKey"
-          tab-position="left"
-          class="py-4 bg-white h-full"
-        >
-          <a-tab-pane key="umap" tab="UMap">
+  <div class="detail-page">
+    <NavBar></NavBar>
+    <a-spin :spinning="loading" class="min-w-full">
+      <div v-if="projectDetail" class="content-container">
+        <div class="project-header">
+          <div class="title">
+            {{ projectDetail.title }}
+          </div>
+          <a-typography-paragraph
+            class="desc"
+            :ellipsis="{ rows: 2, expandable: true, symbol: 'more' }"
+            :content="projectDetail.description"
+          ></a-typography-paragraph>
+          <div class="tags">
+            <a-tag
+              v-for="item in (projectDetail.tags || '')
+                .split(',')
+                .filter((item) => !!item)"
+              :key="item"
+            >
+              {{ item }}
+            </a-tag>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="left">
+            <div class="top">
+              <div class="fill" />
+              <a
+                v-for="item in analysis"
+                :key="item.id"
+                class="interactive"
+                @click="handleOpenCellxgene(item)"
+              >
+                Interactive Viewer
+              </a>
+              <div class="group-desc">Static UMAP group by</div>
+            </div>
             <UMapChart
               :file-id="projectDetail.project_analysis_meta[0].umap_id"
             />
-          </a-tab-pane>
-          <a-tab-pane
-            v-if="!projectDetail.is_private"
-            key="barplot"
-            tab="Barplot of cell number in each type"
-          >
-            <BarChart
-              :analysis-id="projectDetail.project_analysis_meta[0].id"
-            ></BarChart>
-          </a-tab-pane>
-          <a-tab-pane key="celltype" tab="Celltype Markers">
-            <CellTypeMarkers
-              :file-id="projectDetail.project_analysis_meta[0].cell_marker_id"
-            />
-          </a-tab-pane>
-          <a-tab-pane v-if="pathWayVisiable" key="score" tab="Score of pathway">
-            <PathWayChart :project="projectDetail"></PathWayChart>
-          </a-tab-pane>
-          <a-tab-pane key="download" tab="Download">
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.h5ad_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].h5ad_id,
-                )
-              "
+          </div>
+          <div class="right">
+            <a-tabs
+              v-model:activeKey="activeKey"
+              type="card"
+              size="large"
+              :tab-bar-gutter="8"
+              class="h-full"
             >
-              <template #icon>
-                <CloudDownloadOutlined />
+              <template #leftExtra>
+                <div class="fix-fill"></div>
               </template>
-              H5AD File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.umap_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].umap_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Umap File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.cell_marker_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].cell_marker_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Cell Marker File
-            </a-button>
-            <a-button
-              v-if="projectDetail?.project_analysis_meta?.[0]?.pathway_id"
-              class="mr-4"
-              type="primary"
-              @click="
-                handleDownloadFile(
-                  projectDetail.project_analysis_meta[0].pathway_id,
-                )
-              "
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              Pathway File
-            </a-button>
-
-            <a-button
-              v-for="item in otherFiles"
-              :key="item"
-              class="mr-4"
-              type="primary"
-              @click="handleDownloadFile(item)"
-            >
-              <template #icon>
-                <CloudDownloadOutlined />
-              </template>
-              {{ item }}
-            </a-button>
-          </a-tab-pane>
-          <!--          <a-tab-pane key="interactive" tab="interactive view">interactive view</a-tab-pane>-->
-        </a-tabs>
-      </div>
-    </div>
-
-    <div class="information mt-4 px-4">
-      <div class="bg-white p-5 text-sm">
-        <div>
-          Publication:
-          {{ dayjs(projectDetail.update_at).format("YYYY-MM-DD HH:mm") }}
+              <a-tab-pane key="celltype" tab="Celltype Markers">
+                <CellTypeMarkers
+                  :file-id="
+                    projectDetail.project_analysis_meta[0].cell_marker_id
+                  "
+                />
+              </a-tab-pane>
+              <a-tab-pane
+                v-if="!projectDetail.is_private"
+                key="barplot"
+                tab="Cell type distribution"
+              >
+                <BarChart
+                  :analysis-id="projectDetail.project_analysis_meta[0].id"
+                ></BarChart>
+              </a-tab-pane>
+              <a-tab-pane
+                v-if="pathWayVisiable"
+                key="score"
+                tab="Score of pathway"
+              >
+                <PathWayChart :project="projectDetail"></PathWayChart>
+              </a-tab-pane>
+              <a-tab-pane key="download" tab="Download">
+                <DownloadTable :project-detail="projectDetail"></DownloadTable>
+              </a-tab-pane>
+            </a-tabs>
+          </div>
         </div>
-        <div class="mt-4">
-          Email: {{ projectDetail.project_user_meta.email_address }}
+        <div class="project-footer">
+          <div>
+            Publication:
+            {{ dayjs(projectDetail.update_at).format("YYYY-MM-DD HH:mm") }}
+          </div>
+          <div>Email: {{ projectDetail.project_user_meta.email_address }}</div>
         </div>
       </div>
-    </div>
+    </a-spin>
   </div>
 </template>
 <script setup>
@@ -161,14 +101,13 @@ import CellTypeMarkers from "@/components/CellTypeMarkers.vue"
 import { getProjectDetail } from "@/api/project"
 import dayjs from "dayjs"
 import { useRoute } from "vue-router"
-import { saveAs } from "file-saver"
-import { CloudDownloadOutlined } from "@ant-design/icons-vue"
-import { getDownloadFileToken } from "@/api/file.js"
+import NavBar from "@/components/NavBar.vue"
+import DownloadTable from "@/components/charts/DownloadTable.vue"
 
 const route = useRoute()
 // const activeKey = ref('score')
 const loading = ref(true)
-const activeKey = ref("umap")
+const activeKey = ref("celltype")
 const projectDetail = ref(null)
 const props = defineProps({
   id: {
@@ -179,14 +118,6 @@ const props = defineProps({
 
 onMounted(() => {
   handleProjectDetailFetch()
-})
-
-const otherFiles = computed(() => {
-  return projectDetail.value?.is_private
-    ? projectDetail.value?.project_analysis_meta[0].other_file_ids
-        .split(",")
-        .filter((item) => item)
-    : []
 })
 
 const pathWayVisiable = computed(() => {
@@ -234,33 +165,178 @@ const handleOpenCellxgene = (record) => {
     "_blank",
   )
 }
-
-const handleDownloadFile = async (file_id) => {
-  const data = await getDownloadFileToken(file_id)
-  saveAs(
-    `${
-      import.meta.env.VITE_BASE_API_URL
-    }/project/download/file/${file_id}?download_file_token=${
-      data.download_file_token
-    }`,
-    file_id,
-  )
-}
 </script>
 <style scoped lang="scss">
-.summary {
-  color: var(--character-title-85, rgba(0, 0, 0, 0.85));
-  font-size: 1.5rem;
-  line-height: 1.75rem;
+.detail-page {
+  background: #f0f2f5;
+  min-height: 100vh;
 }
 
-.project-detail-container {
-  height: calc(100vh - 60px);
+.content-container {
   display: flex;
+  padding-top: 12px;
   flex-direction: column;
-}
+  align-items: stretch;
+  gap: 1rem;
 
-:deep(.ant-tabs-content) {
-  height: 100%;
+  .project-header {
+    display: flex;
+    padding: 0.625rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    align-self: stretch;
+
+    .title {
+      color: #5f5f5f;
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.375rem; /* 91.667% */
+    }
+
+    .desc {
+      color: #7e7e7e;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+  }
+
+  .project-body {
+    display: flex;
+    align-items: stretch;
+    gap: 0.625rem;
+    padding-right: 0.75rem;
+
+    .left {
+      display: flex;
+      height: 40rem;
+      flex-direction: column;
+      align-items: stretch;
+
+      .top {
+        display: flex;
+        height: 4rem;
+        align-items: stretch;
+        flex-shrink: 0;
+        gap: 0.38rem;
+        border-radius: 0 2.5rem 0 0;
+        overflow: hidden;
+
+        .fill {
+          background: #0081d8;
+          width: 1.625rem;
+        }
+
+        .interactive {
+          display: flex;
+          padding: 0 1.25rem;
+          align-items: center;
+          background: #00a9dd;
+          color: #fff;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .group-desc {
+          flex: 1;
+          background: #0081d8;
+          display: flex;
+          padding: 1rem 1.25rem;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 0.625rem;
+          align-self: stretch;
+          color: #fff;
+          font-size: 1.25rem;
+          font-weight: 500;
+        }
+      }
+
+      .bottom {
+        background: #0081d8;
+        display: flex;
+        align-items: stretch;
+      }
+    }
+
+    .right {
+      width: 0;
+      flex: 1;
+
+      .fix-fill {
+        height: 2.5rem;
+        width: 0.75rem;
+        border-radius: 0.625rem 0 0 0;
+        background: #0081d8;
+      }
+
+      :deep(.ant-tabs-nav) {
+        margin-bottom: 0 !important;
+
+        .ant-tabs-nav-wrap {
+          .ant-tabs-tab {
+            height: 2.5rem;
+            width: 11.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7e7e7e;
+            background: #dfe2e8;
+            border-radius: 0.625rem 0.625rem 0 0;
+            border: none;
+
+            &:first-child {
+              border-radius: 0 0.625rem 0 0;
+            }
+
+            &.ant-tabs-tab-active {
+              background: #0081d8;
+
+              .ant-tabs-tab-btn {
+                color: #ffffff;
+              }
+            }
+          }
+        }
+      }
+
+      :deep(.ant-tabs-content-holder) {
+        padding-left: 0.75rem;
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: #0081d8;
+          width: 0.75rem;
+          height: 100%;
+        }
+      }
+
+      :deep(.ant-tabs-tabpane) {
+        border-radius: 0 0.625rem 0 0;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .project-footer {
+    display: flex;
+    padding: 0.75rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+
+    div {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5rem; /* 150% */
+      color: #5f5f5f;
+      padding: 0.5rem;
+    }
+  }
 }
 </style>

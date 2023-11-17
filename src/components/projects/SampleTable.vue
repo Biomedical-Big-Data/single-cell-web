@@ -260,7 +260,7 @@ const getConditions = () => {
   const {
     species,
     organ,
-    external_sample_accession,
+    external_sample_accesstion,
     disease,
     development_stage,
   } = condition.value
@@ -274,7 +274,7 @@ const getConditions = () => {
   return {
     ...(species ? { species_id: species } : {}),
     ...(organ ? { organ } : {}),
-    ...(external_sample_accession ? { external_sample_accession } : {}),
+    ...(external_sample_accesstion ? { external_sample_accesstion } : {}),
     ...(disease ? { disease } : {}),
     ...(development_stage ? { development_stage } : {}),
   }
