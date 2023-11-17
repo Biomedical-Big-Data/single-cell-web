@@ -142,6 +142,7 @@ import { saveAs } from "file-saver"
 import _ from "lodash"
 import { joinTableIndex } from "@/utils/common.js"
 import { titleCase } from "text-case"
+import { GENE_COLUMNS } from "@/constants/gene.js"
 
 const downloading = ref(false)
 const chartLoading = ref(false)
@@ -202,6 +203,7 @@ const columns = ref(
         "gene_expression_meta",
         "cell_proportion_expression_the_gene",
       ],
+      group: "gene_expression",
       customRender: ({ text }) => {
         return text ? `${(text * 100).toFixed(2)}%` : ""
       },
@@ -213,11 +215,9 @@ const columns = ref(
       customRender: ({ text }) => {
         return text ? `${(text * 100).toFixed(2)}%` : ""
       },
+      group: "gene_expression",
     },
-    {
-      title: "Gene Symbol",
-      dataIndex: ["gene_expression_meta", "gene_symbol"],
-    },
+    ...GENE_COLUMNS,
   ].map((item) => ({
     width: 150,
     sorter: true,
@@ -227,26 +227,8 @@ const columns = ref(
 )
 
 const columnSettings = ref({
-  sample_basic_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "sample_basic_information",
-    )
-    .map((item) => item.title),
-  disease_information: columns.value
-    .filter((item) => !item.autoHidden && item.group === "disease_information")
-    .map((item) => item.title),
-  vaccination_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "vaccination_information",
-    )
-    .map((item) => item.title),
-  perturbation_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "perturbation_information",
-    )
-    .map((item) => item.title),
-  experiment_method: columns.value
-    .filter((item) => !item.autoHidden && item.group === "experiment_method")
+  gene_expression: columns.value
+    .filter((item) => !item.autoHidden && item.group === "gene_expression")
     .map((item) => item.title),
 })
 
@@ -260,23 +242,8 @@ const columnGroup = computed(() => {
 const columnResult = computed(() => {
   return [
     ...columns.value.filter((item) => {
-      const {
-        sample_basic_information,
-        disease_information,
-        vaccination_information,
-        perturbation_information,
-        experiment_method,
-      } = columnSettings.value
-      return (
-        !item.group ||
-        [
-          ...sample_basic_information,
-          ...disease_information,
-          ...vaccination_information,
-          ...perturbation_information,
-          ...experiment_method,
-        ].includes(item.title)
-      )
+      const { gene_expression } = columnSettings.value
+      return !item.group || [...gene_expression].includes(item.title)
     }),
   ]
 })
