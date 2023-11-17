@@ -241,7 +241,7 @@ const handleTableChange = (pag, filters, sorter) => {
 
 const handleSearch = () => {
   run({
-    page: current,
+    page: 1,
     page_size: pageSize,
     ...getConditions(),
   })

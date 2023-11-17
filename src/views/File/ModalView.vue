@@ -216,7 +216,7 @@ const handleOpen = (t) => {
 
 const handleSearch = () => {
   run({
-    page: current,
+    page: 1,
     page_size: pageSize,
     ...getConditions(),
   })

@@ -135,7 +135,7 @@ const handleReset = () => {
 
 const handleSearch = () => {
   run({
-    page: list.value.length ? pagination.value.current : 1,
+    page: 1,
     page_size: pagination.value.pageSize,
     ...props.conditions,
   })

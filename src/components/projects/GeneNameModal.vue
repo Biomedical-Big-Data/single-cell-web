@@ -178,7 +178,7 @@ const pagination = computed(() => ({
   current: current.value,
   pageSize: pageSize.value,
   showSizeChanger: false,
-  position: ["bottomCenter"],
+  position: ['bottomCenter'],
 }))
 
 const getConditions = () => {
@@ -203,7 +203,7 @@ const handleTableChange = (pag, filters, sorter) => {
 const handleSearch = () => {
   run({
     page_size: pagination.value.pageSize,
-    page: pagination.value.current,
+    page: 1,
     ...getConditions(),
   })
 }
