@@ -130,5 +130,9 @@
     padding: 0.75rem;
     background: #f0f2f5;
     border-radius: 1.25rem 0 0 0;
+
+    :deep(.ant-table) {
+      font-size: 1rem !important;
+    }
   }
 }
