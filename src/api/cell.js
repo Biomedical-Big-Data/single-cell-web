@@ -12,12 +12,14 @@ export function getGeneCellTaxonomy({
   species_id,
   genes_positive,
   genes_negative,
+  asc,
 }) {
   return request.get("/project/view/table/cell_taxonomy", {
     params: {
       species_id,
       genes_positive,
       genes_negative,
+      asc,
     },
   })
 }

@@ -126,23 +126,16 @@ const columns = ref(
       width: 400,
     },
     {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-      group: "disease_information",
+      title: "Biosample Number",
+      dataIndex: ["project_meta", "biosample_number"],
     },
     {
-      title: "Platform",
-      dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
-      group: "experiment_method",
+      title: "External Project Accesstion",
+      dataIndex: ["project_meta", "external_project_accesstion"],
     },
     {
       title: "Species",
-      dataIndex: ["biosample_species_meta", "species"],
-    },
-    {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-      group: "sample_basic_information",
+      dataIndex: ["species_meta", "species"],
     },
     {
       title: "Sex",

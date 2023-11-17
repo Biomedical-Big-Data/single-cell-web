@@ -136,13 +136,13 @@ import {
   DownloadOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue"
-import { BIOSAMPLES_COLUMNS } from "@/constants/biosample.js"
 import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
 import _ from "lodash"
 import { joinTableIndex } from "@/utils/common.js"
 import { titleCase } from "text-case"
+import { GENE_COLUMNS } from "@/constants/gene.js"
 
 const downloading = ref(false)
 const chartLoading = ref(false)
@@ -162,11 +162,6 @@ const columns = ref(
       sorter: false,
     },
     {
-      title: "CellType",
-      dataIndex: ["gene_expression_meta", "cell_type_name"],
-      align: "center",
-    },
-    {
       title: "Analysis ID",
       dataIndex: ["analysis_meta", "id"],
       width: 180,
@@ -177,31 +172,52 @@ const columns = ref(
       dataIndex: ["project_meta", "title"],
       width: 300,
     },
+
+    {
+      title: "Biosample Number",
+      dataIndex: ["project_meta", "biosample_number"],
+    },
+    {
+      title: "External Project Accesstion",
+      dataIndex: ["project_meta", "external_project_accesstion"],
+    },
+
+    {
+      title: "Species",
+      dataIndex: ["species_meta", "species"],
+      align: "center",
+    },
+    {
+      title: "Cell Type ID",
+      dataIndex: ["cell_type_meta", "cell_type_id"],
+      align: "center",
+    },
+    {
+      title: "Cell Type Name",
+      dataIndex: ["cell_type_meta", "cell_type_name"],
+      align: "center",
+    },
     {
       title: "Proportion Expression",
       dataIndex: [
         "gene_expression_meta",
         "cell_proportion_expression_the_gene",
       ],
+      group: "gene_expression",
       customRender: ({ text }) => {
         return text ? `${(text * 100).toFixed(2)}%` : ""
       },
     },
+
     {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-      group: "disease_information",
+      title: "Average Gene Expression",
+      dataIndex: ["gene_expression_meta", "average_gene_expression"],
+      customRender: ({ text }) => {
+        return text ? `${(text * 100).toFixed(2)}%` : ""
+      },
+      group: "gene_expression",
     },
-    {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-      group: "sample_basic_information",
-    },
-    {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
-    },
-    ...BIOSAMPLES_COLUMNS,
+    ...GENE_COLUMNS,
   ].map((item) => ({
     width: 150,
     sorter: true,
@@ -211,26 +227,8 @@ const columns = ref(
 )
 
 const columnSettings = ref({
-  sample_basic_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "sample_basic_information",
-    )
-    .map((item) => item.title),
-  disease_information: columns.value
-    .filter((item) => !item.autoHidden && item.group === "disease_information")
-    .map((item) => item.title),
-  vaccination_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "vaccination_information",
-    )
-    .map((item) => item.title),
-  perturbation_information: columns.value
-    .filter(
-      (item) => !item.autoHidden && item.group === "perturbation_information",
-    )
-    .map((item) => item.title),
-  experiment_method: columns.value
-    .filter((item) => !item.autoHidden && item.group === "experiment_method")
+  gene_expression: columns.value
+    .filter((item) => !item.autoHidden && item.group === "gene_expression")
     .map((item) => item.title),
 })
 
@@ -244,23 +242,8 @@ const columnGroup = computed(() => {
 const columnResult = computed(() => {
   return [
     ...columns.value.filter((item) => {
-      const {
-        sample_basic_information,
-        disease_information,
-        vaccination_information,
-        perturbation_information,
-        experiment_method,
-      } = columnSettings.value
-      return (
-        !item.group ||
-        [
-          ...sample_basic_information,
-          ...disease_information,
-          ...vaccination_information,
-          ...perturbation_information,
-          ...experiment_method,
-        ].includes(item.title)
-      )
+      const { gene_expression } = columnSettings.value
+      return !item.group || [...gene_expression].includes(item.title)
     }),
   ]
 })
@@ -319,16 +302,13 @@ const {
 const list = computed(() => {
   const cellTypeList = dataSource.value?.cell_type_list || []
   return (dataSource.value?.project_list || []).map((item) => {
-    const { gene_expression_meta, ...other } = item
+    const { gene_expression_meta } = item
     const cell_type = cellTypeList.find(
       (cell) => cell.cell_type_id === gene_expression_meta.cell_type_id,
     )
     return {
-      ...other,
-      gene_expression_meta: {
-        ...gene_expression_meta,
-        cell_type_name: cell_type?.cell_type_name,
-      },
+      ...item,
+      cell_type_meta: cell_type,
     }
   })
 })

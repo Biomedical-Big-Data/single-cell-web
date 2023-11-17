@@ -114,6 +114,10 @@ const columns = [
     dataIndex: "file_name",
   },
   {
+    title: "文件大小",
+    dataIndex: "file_size",
+  },
+  {
     title: "上传时间",
     dataIndex: "create_at",
     width: "150px",

@@ -129,6 +129,14 @@ const columns = ref(
       width: 300,
     },
     {
+      title: "Biosample Number",
+      dataIndex: ["project_meta", "biosample_number"],
+    },
+    {
+      title: "External Project Accesstion",
+      dataIndex: ["project_meta", "external_project_accesstion"],
+    },
+    {
       title: "Proportion Of Cell",
       dataIndex: ["cell_proportion_meta", "cell_proportion"],
       align: "center",
@@ -139,19 +147,26 @@ const columns = ref(
       dataIndex: ["cell_proportion_meta", "cell_number"],
       align: "center",
     },
+
     {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-      group: "disease_information",
-    },
-    {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-      group: "sample_basic_information",
+      title: "Donor ID",
+      dataIndex: ["donor_meta", "id"],
     },
     {
       title: "Sex",
       dataIndex: ["donor_meta", "sex"],
+    },
+    {
+      title: "Species",
+      dataIndex: ["species_meta", "species"],
+    },
+    {
+      title: "Cell Type ID",
+      dataIndex: ["cell_type_meta", "cell_type_id"],
+    },
+    {
+      title: "Cell Type Name",
+      dataIndex: ["cell_type_meta", "cell_type_name"],
     },
     ...BIOSAMPLES_COLUMNS,
   ].map((item) => {
@@ -238,7 +253,17 @@ const {
 })
 
 const list = computed(() => {
-  return dataSource?.value?.project_list || []
+  const cellTypeList = dataSource.value?.cell_type_list || []
+  return (dataSource.value?.project_list || []).map((item) => {
+    const { cell_proportion_meta } = item
+    const cell_type = cellTypeList.find(
+      (cell) => cell.cell_type_id === cell_proportion_meta.cell_type_id,
+    )
+    return {
+      ...item,
+      cell_type_meta: cell_type,
+    }
+  })
 })
 
 const pagination = computed(() => ({

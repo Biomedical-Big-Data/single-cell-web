@@ -64,7 +64,7 @@ const handleFetchColumn = async () => {
   options.umapType = data.filter((item) => {
     return !["UMAP_1", "UMAP_2"].includes(item)
   })
-  if (data.length) {
+  if (options.umapType.length) {
     umapType.value = options.umapType[0]
   }
 }
