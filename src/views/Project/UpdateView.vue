@@ -12,8 +12,11 @@
             autocomplete="off"
             :label-col="{ span: 5 }"
           >
-            <a-form-item label="项目名称" name="title" required>
-              <a-input v-model:value="formState.title" placeholder="项目名称" />
+            <a-form-item label="Project Name" name="title" required>
+              <a-input
+                v-model:value="formState.title"
+                placeholder="Project Name"
+              />
             </a-form-item>
             <!-- <a-form-item label="访问权限" name="public">
               <div class="flex items-center">
@@ -30,7 +33,7 @@
                   </template>
                   <a-button
                     type="text"
-                    
+
                     shape="circle"
                     :icon="h(QuestionCircleOutlined)"
                   ></a-button>
@@ -61,11 +64,11 @@
               <a-input v-model:value="formState.organ" placeholder="Organ" />
             </a-form-item>
 
-            <a-form-item label="标签" name="tags">
+            <a-form-item label="Tags" name="tags">
               <a-select
                 v-model:value="formState.tags"
                 mode="tags"
-                placeholder="标签"
+                placeholder="Tags"
                 :options="[]"
               ></a-select>
             </a-form-item>
@@ -376,7 +379,7 @@ const rules = {
   title: [
     {
       required: true,
-      message: "项目名称不能为空",
+      message: "Project Name不能为空",
       trigger: "blur",
     },
   ],

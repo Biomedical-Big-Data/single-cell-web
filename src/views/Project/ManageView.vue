@@ -7,7 +7,7 @@
         <div class="search-container">
           <a-form :model="conditions" autocomplete="off" layout="vertical">
             <a-form-item
-              label="项目名称"
+              label="Project Name"
               name="project_name"
               class="condition-item"
             >
@@ -15,44 +15,34 @@
                 v-model:value="conditions.title"
                 class="w-full"
                 size="large"
-                placeholder="项目名称"
+                placeholder="Project Name"
               ></a-input>
             </a-form-item>
-            <a-form-item label="状态" name="is_publish" class="condition-item">
-              <a-select
-                v-model:value="conditions.is_publish"
-                :options="PROJECT_STATUS_DESC"
-                placeholder="项目状态"
-                class="w-full"
-                size="large"
-                allow-clear
-              ></a-select>
-            </a-form-item>
             <a-form-item
-              label="是否公开"
-              name="is_private"
+              label="Project status"
+              name="is_publish"
               class="condition-item"
             >
               <a-select
-                v-model:value="conditions.is_private"
-                :options="IS_PRIVATE_DESC"
-                placeholder="是否公开"
+                v-model:value="conditions.is_publish"
+                :options="PROJECT_STATUS_DESC"
+                placeholder="Project status"
                 class="w-full"
                 size="large"
                 allow-clear
               ></a-select>
             </a-form-item>
-            <a-form-item label="标签" name="tag" class="condition-item">
+            <a-form-item label="Tags" name="tag" class="condition-item">
               <a-input
                 v-model:value="conditions.tag"
                 class="w-full"
                 size="large"
-                placeholder="项目标签"
+                placeholder="Project tags"
               ></a-input>
             </a-form-item>
             <div class="action">
               <a-button type="primary" class="search" @click="handleSearch">
-                查询
+                Search all
               </a-button>
             </div>
           </a-form>
@@ -84,27 +74,27 @@
                 <a-tag
                   v-for="item in (text || '').split(',').filter((a) => !!a)"
                   :key="item"
+                  class="large-tag"
                 >
                   {{ item }}
                 </a-tag>
               </template>
               <template v-if="dataIndex === 'operation'">
-                <a-button type="primary" @click="handleToProject(record)">
-                  <template #icon>
-                    <EyeOutlined></EyeOutlined>
-                  </template>
-                  详情
+                <a-button
+                  type="link"
+                  size="large"
+                  @click="handleToProject(record)"
+                >
+                  View
                 </a-button>
                 <a-button
                   v-if="isOwner(record)"
                   class="ml-2"
-                  type="primary"
+                  type="link"
+                  size="large"
                   @click="handleToAdminProject(record)"
                 >
-                  <template #icon>
-                    <EditOutlined></EditOutlined>
-                  </template>
-                  编辑
+                  Edit
                 </a-button>
               </template>
             </template>
@@ -117,7 +107,6 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import { EyeOutlined, EditOutlined } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import dayjs from "dayjs"
 import { getMyProjectList } from "@/api/project"
@@ -149,33 +138,33 @@ const getPrivateState = function (state) {
 
 const columns = [
   {
-    title: "项目名称",
+    title: "Project Name",
     dataIndex: "title",
   },
   {
-    title: "是否私有",
+    title: "Private",
     dataIndex: "is_private",
     align: "center",
   },
   {
-    title: "是否发布",
+    title: "Published",
     dataIndex: "is_publish",
     align: "center",
   },
   {
-    title: "标签",
+    title: "Tags",
     dataIndex: "tags",
   },
   {
-    title: "创建时间",
+    title: "Created Date",
     dataIndex: "create_at",
   },
   {
-    title: "更新时间",
+    title: "Updated Date",
     dataIndex: "update_at",
   },
   {
-    title: "操作",
+    title: "Operation",
     dataIndex: "operation",
     width: "230px",
   },

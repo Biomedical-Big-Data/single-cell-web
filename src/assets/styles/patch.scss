@@ -1,0 +1,11 @@
+.large-tag {
+  font-size: 1rem;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .ant-tag-close-icon {
+    margin-left: 4px !important;
+  }
+}

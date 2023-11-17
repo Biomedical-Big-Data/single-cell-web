@@ -4,16 +4,21 @@
       <a-button
         type="primary"
         :loading="loading"
+        class="button-publish"
         @click="handleProjectCreate(true)"
       >
-        {{ formState.isPrivate ? "保存并发布" : "申请公开项目" }}
+        {{
+          formState.isPrivate
+            ? "Save and publish"
+            : "Apply for a public project"
+        }}
       </a-button>
       <a-button
-        class="ml-3"
+        class="button-save ml-3"
         :loading="loading"
         @click="handleProjectCreate(false)"
       >
-        保存为草稿
+        Save as draft
       </a-button>
     </NavBarForProject>
     <div class="content-container">
@@ -338,28 +343,35 @@ const rules = {
   title: [
     {
       required: true,
-      message: "项目名称不能为空",
+      message: "Project name cannot be empty ",
       trigger: "blur",
     },
   ],
   description: [
     {
       required: true,
-      message: "项目描述不能为空",
+      message: "Project description cannot be empty",
       trigger: "blur",
+    },
+  ],
+  h5ad_id: [
+    {
+      required: true,
+      message: "H5AD file cannot be empty",
+      trigger: "change",
     },
   ],
   organ: [
     {
       required: true,
-      message: "Organ不能为空",
+      message: "Organ cannot be empty",
       trigger: "blur",
     },
   ],
   species_id: [
     {
       required: true,
-      message: "Species不能为空",
+      message: "Species cannot be empty",
       trigger: "change",
     },
   ],
@@ -449,74 +461,5 @@ const handleRemoveOtherFile = (file_id, index) => {
 </script>
 
 <style lang="scss" scoped>
-.create-container {
-  background: #f7f8fa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .content-container {
-    padding: 2.25rem 0.75rem;
-    width: 50rem;
-
-    .title {
-      color: #000;
-      font-size: 1.5rem;
-      font-weight: 600;
-      line-height: 1.375rem; /* 91.667% */
-    }
-
-    :deep(.ant-form-item-control-input) {
-      .ant-select-selector,
-      .ant-input {
-        border-radius: 1.25rem;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-      }
-    }
-
-    :deep(.ant-form-item-label) {
-      label {
-        margin-top: 2px;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.375rem;
-      }
-    }
-
-    .upload-button {
-      border-radius: 1.25rem;
-    }
-  }
-}
-
-.button-base {
-  display: flex;
-  width: 8.9375rem;
-  height: 2.25rem;
-  justify-content: center;
-  align-items: center;
-  border-radius: 2.9375rem;
-  box-sizing: border-box;
-}
-
-.button-save {
-  @extend .button-base;
-  background: #ffffff;
-  color: #0062ff;
-  border: 2px solid #0062ff;
-}
-
-.button-publish {
-  @extend .button-base;
-  color: #0062ff;
-  background: #0062ff;
-}
-
-.button-warning {
-  @extend .button-base;
-  background: #ffffff;
-  color: #ff7555;
-  border: 2px solid #ff7555;
-}
+@import "@/assets/styles/screate.scss";
 </style>

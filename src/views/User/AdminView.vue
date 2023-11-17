@@ -189,12 +189,12 @@ const columns = [
     width: "120px",
   },
   {
-    title: "创建时间",
+    title: "Created Date",
     dataIndex: "create_at",
     width: "120px",
   },
   {
-    title: "操作",
+    title: "Operation",
     dataIndex: "operation",
     width: "230px",
   },

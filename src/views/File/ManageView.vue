@@ -33,7 +33,7 @@
                 :loading="uploading"
                 @click="fileRef.click()"
               >
-                上传
+                Upload
               </a-button>
               <input ref="fileRef" type="file" hidden @change="handleUpload" />
             </div>
@@ -60,6 +60,7 @@
   </div>
   <a-modal
     v-model:open="uploading"
+    class="uploading-modal"
     :centered="true"
     title="Uploading"
     :footer="null"
@@ -72,13 +73,14 @@
       <div class="mt-2">
         <a-progress class="w-full" :percent="uploadProgress" />
       </div>
-      <div>
+      <div class="flex justify-center mt-4">
         <a-button
           type="primary"
           :loading="canceling"
+          class="cancel-upload-button"
           @click="handleCancelUpload"
         >
-          取消上传
+          Cancel
         </a-button>
       </div>
     </div>
@@ -105,20 +107,20 @@ const controller = ref(null)
 
 const columns = [
   {
-    title: "文件ID",
+    title: "File ID",
     dataIndex: "file_id",
     width: "200px",
   },
   {
-    title: "文件名称",
+    title: "File name",
     dataIndex: "file_name",
   },
   {
-    title: "文件大小",
+    title: "File size",
     dataIndex: "file_size",
   },
   {
-    title: "上传时间",
+    title: "Upload time",
     dataIndex: "create_at",
     width: "150px",
     align: "center",

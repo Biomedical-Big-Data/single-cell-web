@@ -7,7 +7,7 @@
         <div class="search-container">
           <a-form :model="conditions" layout="vertical" autocomplete="off">
             <a-form-item
-              label="项目名称"
+              label="Project Name"
               name="project_name"
               class="condition-item"
             >
@@ -15,28 +15,32 @@
                 v-model:value="conditions.title"
                 class="w-full"
                 size="large"
-                placeholder="项目名称"
+                placeholder="Project Name"
               ></a-input>
             </a-form-item>
-            <a-form-item label="状态" name="is_publish" class="condition-item">
+            <a-form-item
+              label="Project status"
+              name="is_publish"
+              class="condition-item"
+            >
               <a-select
                 v-model:value="conditions.is_publish"
                 :options="PROJECT_STATUS_DESC"
-                placeholder="项目状态"
+                placeholder="Project status"
                 class="w-full"
                 size="large"
                 allow-clear
               ></a-select>
             </a-form-item>
             <a-form-item
-              label="是否公开"
+              label="is Private"
               name="is_private"
               class="condition-item"
             >
               <a-select
                 v-model:value="conditions.is_private"
                 :options="IS_PRIVATE_DESC"
-                placeholder="是否公开"
+                placeholder="is Private"
                 class="w-full"
                 size="large"
                 allow-clear
@@ -76,16 +80,18 @@
                 <a-tag
                   v-for="item in (text || '').split(',').filter((a) => !!a)"
                   :key="item"
+                  class="large-tag mb-1"
                 >
                   {{ item }}
                 </a-tag>
               </template>
               <template v-if="dataIndex === 'operation'">
-                <a-button type="primary" @click="handleToAdminProject(record)">
-                  <template #icon>
-                    <EyeOutlined></EyeOutlined>
-                  </template>
-                  详情
+                <a-button
+                  type="link"
+                  size="large"
+                  @click="handleToAdminProject(record)"
+                >
+                  View
                 </a-button>
               </template>
             </template>
@@ -98,7 +104,6 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import { EyeOutlined } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import dayjs from "dayjs"
 import { getAdminProjectList } from "@/api/project"
@@ -123,51 +128,51 @@ const getPrivateState = function (state) {
 
 const columns = [
   {
-    title: "项目名称",
+    title: "Project Name",
     dataIndex: "title",
   },
   {
-    title: "细胞数量",
+    title: "Cell number",
     dataIndex: "cell_number",
   },
   {
-    title: "外部继承",
+    title: "External project accesstion",
     dataIndex: "external_project_accesstion",
   },
   {
-    title: "是否私有",
+    title: "Private",
     dataIndex: "is_private",
     width: 100,
     align: "center",
   },
   {
-    title: "是否发布",
+    title: "Published",
     dataIndex: "is_publish",
     width: 100,
     align: "center",
   },
   {
-    title: "标签",
+    title: "Tags",
     dataIndex: "tags",
     width: 200,
   },
   {
-    title: "所属人",
+    title: "User",
     dataIndex: ["project_user_meta", "user_name"],
     width: 120,
   },
   {
-    title: "创建时间",
+    title: "Created Date",
     dataIndex: "create_at",
     width: 120,
   },
   {
-    title: "更新时间",
+    title: "Updated Date",
     dataIndex: "update_at",
     width: 120,
   },
   {
-    title: "操作",
+    title: "Operation",
     dataIndex: "operation",
     width: 40,
     align: "center",
