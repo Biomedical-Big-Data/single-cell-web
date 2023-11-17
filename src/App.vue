@@ -31,12 +31,12 @@
           <RouterLink to="/user/setting">设置</RouterLink>
         </a-menu-item>
         <a-menu-item key="projects_manage">
-          <RouterLink to="/projects/manage">我的项目</RouterLink>
+          <RouterLink to="/projects/manage">私有项目</RouterLink>
         </a-menu-item>
         <a-menu-item key="file_manage">
           <RouterLink to="/files/manage">我的文件</RouterLink>
         </a-menu-item>
-        <a-sub-menu  v-if="userStore.getUser.role === 1" key="admin">
+        <a-sub-menu v-if="userStore.getUser.role === 1" key="admin">
           <template #title>系统管理</template>
           <a-menu-item key="user_admin">
             <RouterLink to="/user/admin">用户管理</RouterLink>

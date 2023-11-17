@@ -136,7 +136,6 @@ import {
   DownloadOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue"
-import { BIOSAMPLES_COLUMNS } from "@/constants/biosample.js"
 import GeneExpressionLevelChart from "@/components/charts/GeneExpressionChart.vue"
 import { useRouter } from "vue-router"
 import { saveAs } from "file-saver"
@@ -162,11 +161,6 @@ const columns = ref(
       sorter: false,
     },
     {
-      title: "CellType",
-      dataIndex: ["gene_expression_meta", "cell_type_name"],
-      align: "center",
-    },
-    {
       title: "Analysis ID",
       dataIndex: ["analysis_meta", "id"],
       width: 180,
@@ -176,6 +170,31 @@ const columns = ref(
       title: "Project",
       dataIndex: ["project_meta", "title"],
       width: 300,
+    },
+
+    {
+      title: "Biosample Number",
+      dataIndex: ["project_meta", "biosample_number"],
+    },
+    {
+      title: "External Project Accesstion",
+      dataIndex: ["project_meta", "external_project_accesstion"],
+    },
+
+    {
+      title: "Species",
+      dataIndex: ["species_meta", "species"],
+      align: "center",
+    },
+    {
+      title: "Cell Type ID",
+      dataIndex: ["cell_type_meta", "cell_type_id"],
+      align: "center",
+    },
+    {
+      title: "Cell Type Name",
+      dataIndex: ["cell_type_meta", "cell_type_name"],
+      align: "center",
     },
     {
       title: "Proportion Expression",
@@ -187,21 +206,18 @@ const columns = ref(
         return text ? `${(text * 100).toFixed(2)}%` : ""
       },
     },
+
     {
-      title: "Disease",
-      dataIndex: ["biosample_meta", "disease"],
-      group: "disease_information",
+      title: "Average Gene Expression",
+      dataIndex: ["gene_expression_meta", "average_gene_expression"],
+      customRender: ({ text }) => {
+        return text ? `${(text * 100).toFixed(2)}%` : ""
+      },
     },
     {
-      title: "Organ",
-      dataIndex: ["biosample_meta", "organ"],
-      group: "sample_basic_information",
+      title: "Gene Symbol",
+      dataIndex: ["gene_expression_meta", "gene_symbol"],
     },
-    {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
-    },
-    ...BIOSAMPLES_COLUMNS,
   ].map((item) => ({
     width: 150,
     sorter: true,
@@ -319,16 +335,13 @@ const {
 const list = computed(() => {
   const cellTypeList = dataSource.value?.cell_type_list || []
   return (dataSource.value?.project_list || []).map((item) => {
-    const { gene_expression_meta, ...other } = item
+    const { gene_expression_meta } = item
     const cell_type = cellTypeList.find(
       (cell) => cell.cell_type_id === gene_expression_meta.cell_type_id,
     )
     return {
-      ...other,
-      gene_expression_meta: {
-        ...gene_expression_meta,
-        cell_type_name: cell_type?.cell_type_name,
-      },
+      ...item,
+      cell_type_meta: cell_type,
     }
   })
 })

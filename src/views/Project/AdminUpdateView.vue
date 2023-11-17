@@ -90,7 +90,6 @@
               v-if="!projectDetail.isPrivate"
               label="Excel文件"
               name="excel_id"
-              required
             >
               <a-button
                 v-if="!formState.excel_id"

@@ -1,21 +1,18 @@
-export const BIOSAMPLES_COLUMNS = [
+export const GENE_COLUMNS = [
   {
     title: "Biosample Id",
     dataIndex: "id",
     group: "sample_basic_information",
-    autoHidden: false,
   },
   {
     title: "Biosample Name",
     dataIndex: "biosample_name",
     group: "sample_basic_information",
-    autoHidden: false,
   },
   {
     title: "External Sample Accesstion",
     dataIndex: "external_sample_accesstion",
     group: "sample_basic_information",
-    autoHidden: false,
   },
   {
     title: "Biosample Type",
@@ -73,16 +70,9 @@ export const BIOSAMPLES_COLUMNS = [
     group: "sample_basic_information",
   },
   {
-    title: "Disease",
-    dataIndex: "disease",
-    group: "disease_information",
-    autoHidden: false,
-  },
-  {
     title: "Disease Ontology Label",
     dataIndex: "disease_ontology_label",
     group: "disease_information",
-    autoHidden: false,
   },
   {
     title: "Disease Intracellular Pathogen",
@@ -158,12 +148,6 @@ export const BIOSAMPLES_COLUMNS = [
     title: "Vaccination Time Since Unit",
     dataIndex: "vaccination_time_since_unit",
     group: "vaccination_information",
-  },
-  {
-    title: "Organ",
-    dataIndex: "organ",
-    group: "sample_basic_information",
-    autoHidden: false,
   },
   {
     title: "Organ Region",
@@ -291,11 +275,6 @@ export const BIOSAMPLES_COLUMNS = [
     group: "experiment_method",
   },
   {
-    title: "Platform",
-    dataIndex: ["biosample_meta", "sequencing_instrument_manufacturer_model"],
-    group: "experiment_method",
-  },
-  {
     title: "Enrichment Facs Markers",
     dataIndex: "enrichment_facs_markers",
     group: "experiment_method",
@@ -365,8 +344,9 @@ export const BIOSAMPLES_COLUMNS = [
     dataIndex: "number_of_reads",
     group: "sample_basic_information",
   },
-].map((item) => ({
+].map(({ title, dataIndex, group }) => ({
+  title,
+  dataIndex: ["gene_meta", dataIndex],
   autoHidden: true,
-  ...item,
-  dataIndex: ["biosample_meta", item.dataIndex],
+  group,
 }))
