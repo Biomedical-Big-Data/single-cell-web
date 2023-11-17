@@ -1,26 +1,32 @@
 <template>
-  <div class="p-5">
-    <div class="p-3 bg-white">
-      <a-table
-        :columns="columns"
-        :row-key="(record) => record.ip"
-        :data-source="dataSource"
-        :pagination="false"
-        :loading="loading"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'entry_list'">
-            <ul>
-              <li v-for="(item, index) in record.entry_list" :key="index">
-                {{ item.name }}
-                <a-button  @click="handleTerminateProcess(item)">
-                  终止
-                </a-button>
-              </li>
-            </ul>
-          </template>
-        </template>
-      </a-table>
+  <div class="list-container">
+    <NavBar></NavBar>
+    <div class="body-container">
+      <div class="title-container">H5AD Process List</div>
+      <div class="content-container">
+        <div class="table-container">
+          <a-table
+            :columns="columns"
+            :row-key="(record) => record.ip"
+            :data-source="dataSource"
+            :pagination="false"
+            :loading="loading"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.dataIndex === 'entry_list'">
+                <ul>
+                  <li v-for="(item, index) in record.entry_list" :key="index">
+                    {{ item.name }}
+                    <a-button @click="handleTerminateProcess(item)">
+                      终止
+                    </a-button>
+                  </li>
+                </ul>
+              </template>
+            </template>
+          </a-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -30,25 +36,26 @@ import { useRequest } from "vue-request"
 import { getSeverList, terminateProcess } from "@/api/process.js"
 import { message } from "ant-design-vue"
 import { ref } from "vue"
+import NavBar from "@/components/NavBar.vue"
 
 const terminating = ref(false)
 
 const columns = [
   {
-    title: "目标IP端口",
+    title: "Target IP",
     dataIndex: "ip",
   },
   {
-    title: "可用内存(G)",
+    title: "Free Memory(G)",
     dataIndex: "available_memory",
   },
   {
-    title: "进程",
+    title: "Entries",
     dataIndex: "entry_list",
   },
 
   {
-    title: "服务器时间",
+    title: "Server Time",
     dataIndex: "server_time",
     width: 200,
   },
@@ -68,12 +75,4 @@ const handleTerminateProcess = async (record) => {
 }
 </script>
 
-<style scoped lang="scss">
-.condition-item {
-  width: 100px !important;
-}
-
-.condition-item-lg {
-  width: 130px !important;
-}
-</style>
+<style scoped lang="scss"></style>

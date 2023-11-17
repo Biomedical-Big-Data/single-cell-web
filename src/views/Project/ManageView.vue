@@ -1,126 +1,130 @@
 <template>
-  <div class="p-5">
-    <div class="bg-white py-2 px-4 rounded-lg">
-      <a-form :model="conditions" layout="inline" autocomplete="off">
-        <a-form-item label="项目名称" name="project_name">
-          <a-input
-            v-model:value="conditions.title"
-            class="w-28"
-            placeholder="项目名称"
-          ></a-input>
-        </a-form-item>
-        <a-form-item label="状态" name="is_publish">
-          <a-select
-            v-model:value="conditions.is_publish"
-            :options="PROJECT_STATUS_DESC"
-            placeholder="项目状态"
-            class="w-28"
-            allow-clear
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="是否公开" name="is_private">
-          <a-select
-            v-model:value="conditions.is_private"
-            :options="IS_PRIVATE_DESC"
-            placeholder="是否公开"
-            class="w-28"
-            allow-clear
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="标签" name="tag">
-          <a-input
-            v-model:value="conditions.tag"
-            class="w-28"
-            placeholder="项目标签"
-          ></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-button
-            type="primary"
-            class="flex items-center"
-            @click="handleSearch"
-          >
-            <template #icon>
-              <SearchOutlined></SearchOutlined>
-            </template>
-            查询
-          </a-button>
-        </a-form-item>
-      </a-form>
-    </div>
+  <div class="list-container">
+    <NavBar></NavBar>
+    <div class="body-container">
+      <div class="title-container">Project List</div>
+      <div class="content-container">
+        <div class="search-container">
+          <a-form :model="conditions" autocomplete="off" layout="vertical">
+            <a-form-item
+              label="项目名称"
+              name="project_name"
+              class="condition-item"
+            >
+              <a-input
+                v-model:value="conditions.title"
+                class="w-full"
+                size="large"
+                placeholder="项目名称"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="状态" name="is_publish" class="condition-item">
+              <a-select
+                v-model:value="conditions.is_publish"
+                :options="PROJECT_STATUS_DESC"
+                placeholder="项目状态"
+                class="w-full"
+                size="large"
+                allow-clear
+              ></a-select>
+            </a-form-item>
+            <a-form-item
+              label="是否公开"
+              name="is_private"
+              class="condition-item"
+            >
+              <a-select
+                v-model:value="conditions.is_private"
+                :options="IS_PRIVATE_DESC"
+                placeholder="是否公开"
+                class="w-full"
+                size="large"
+                allow-clear
+              ></a-select>
+            </a-form-item>
+            <a-form-item label="标签" name="tag" class="condition-item">
+              <a-input
+                v-model:value="conditions.tag"
+                class="w-full"
+                size="large"
+                placeholder="项目标签"
+              ></a-input>
+            </a-form-item>
+            <div class="action">
+              <a-button type="primary" class="search" @click="handleSearch">
+                查询
+              </a-button>
+            </div>
+          </a-form>
+        </div>
 
-    <div class="mt-5 rounded-lg bg-white">
-      <a-table
-        :columns="columns"
-        :row-key="(record) => record.id"
-        :data-source="list"
-        :pagination="pagination"
-        :loading="loading"
-        @change="handleTableChange"
-      >
-        <template #bodyCell="{ column: { dataIndex }, text, record }">
-          <template
-            v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
+        <div class="table-container">
+          <a-table
+            :columns="columns"
+            :row-key="(record) => record.id"
+            :data-source="list"
+            :pagination="pagination"
+            :loading="loading"
+            size="large"
+            @change="handleTableChange"
           >
-            {{ dayjs(text).format("YYYY-MM-DD") }}
-          </template>
-          <template v-if="dataIndex === 'is_publish'">
-            {{ getPublishState(text) }}
-          </template>
-          <template v-if="dataIndex === 'is_private'">
-            {{ getPrivateState(text) }}
-          </template>
-          <template v-if="dataIndex === 'tags'">
-            <a-tag
-              v-for="item in (text || '').split(',').filter((a) => !!a)"
-              :key="item"
-            >
-              {{ item }}
-            </a-tag>
-          </template>
-          <template v-if="dataIndex === 'operation'">
-            <a-button
-              type="primary"
-              
-              @click="handleToProject(record)"
-            >
-              <template #icon>
-                <EyeOutlined></EyeOutlined>
+            <template #bodyCell="{ column: { dataIndex }, text, record }">
+              <template
+                v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
+              >
+                {{ dayjs(text).format("YYYY-MM-DD") }}
               </template>
-              详情
-            </a-button>
-            <a-button
-              v-if="isOwner(record)"
-              class="ml-2"
-              type="primary"
-              
-              @click="handleToAdminProject(record)"
-            >
-              <template #icon>
-                <EditOutlined></EditOutlined>
+              <template v-if="dataIndex === 'is_publish'">
+                {{ getPublishState(text) }}
               </template>
-              编辑
-            </a-button>
-          </template>
-        </template>
-      </a-table>
+              <template v-if="dataIndex === 'is_private'">
+                {{ getPrivateState(text) }}
+              </template>
+              <template v-if="dataIndex === 'tags'">
+                <a-tag
+                  v-for="item in (text || '').split(',').filter((a) => !!a)"
+                  :key="item"
+                >
+                  {{ item }}
+                </a-tag>
+              </template>
+              <template v-if="dataIndex === 'operation'">
+                <a-button type="primary" @click="handleToProject(record)">
+                  <template #icon>
+                    <EyeOutlined></EyeOutlined>
+                  </template>
+                  详情
+                </a-button>
+                <a-button
+                  v-if="isOwner(record)"
+                  class="ml-2"
+                  type="primary"
+                  @click="handleToAdminProject(record)"
+                >
+                  <template #icon>
+                    <EditOutlined></EditOutlined>
+                  </template>
+                  编辑
+                </a-button>
+              </template>
+            </template>
+          </a-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue"
-import {
-  SearchOutlined,
-  EyeOutlined,
-  EditOutlined,
-} from "@ant-design/icons-vue"
+import { EyeOutlined, EditOutlined } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import dayjs from "dayjs"
 import { getMyProjectList } from "@/api/project"
 import { useRouter } from "vue-router"
 import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js"
 import { useUserStore } from "@/stores/user"
+import NavBar from "@/components/NavBar.vue"
 
 const userStore = useUserStore()
 
@@ -226,7 +230,6 @@ const pagination = computed(() => ({
   total: total.value,
   current: current.value,
   pageSize: pageSize.value,
-
 }))
 
 const handleTableChange = (pag, filters, sorter) => {
@@ -269,15 +272,5 @@ const handleToProject = (record) => {
 </script>
 
 <style scoped lang="scss">
-.condition-item {
-  width: 100px !important;
-}
-
-.condition-item-lg {
-  width: 130px !important;
-}
-
-:deep(.w-28) {
-  width: 7rem !important;
-}
+@import "@/assets/styles/stable.scss";
 </style>

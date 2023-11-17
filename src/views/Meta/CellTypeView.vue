@@ -1,70 +1,62 @@
 <template>
-  <div class="p-5">
-    <div class="bg-white py-2 px-4 rounded-lg">
-      <a-form :model="conditions" layout="inline" autocomplete="off">
-        <a-form-item label="名称" name="cell_type_name">
+  <div class="content-container">
+    <div class="search-container">
+      <a-form :model="conditions" layout="vertical" autocomplete="off">
+        <a-form-item
+          label="Cell Type Name"
+          name="cell_type_name"
+          class="condition-item"
+        >
           <a-input
             v-model:value="conditions.cell_type_name"
-            class="w-28"
-            placeholder="名称"
+            class="w-full"
+            size="large"
+            placeholder="Cell Type Name"
           ></a-input>
         </a-form-item>
-        <a-form-item>
+        <div class="action">
           <a-button
             type="primary"
-            class="flex items-center"
+            class="search"
             :loading="loading"
             @click="handleSearch"
           >
-            <template #icon>
-              <SearchOutlined></SearchOutlined>
-            </template>
-            查询
+            Search all
           </a-button>
-        </a-form-item>
-        <a-form-item>
           <a-button
             type="primary"
-            class="flex items-center"
+            class="search"
             @click="handleCellTypeCreateModalShow"
           >
-            <template #icon>
-              <PlusOutlined></PlusOutlined>
-            </template>
-            新增
+            Add New
           </a-button>
-        </a-form-item>
-        <a-form-item>
           <a-button
             type="primary"
-            class="flex items-center"
+            class="reset"
             :loading="uploading"
             @click="handleUpdateFileSelect"
           >
-            <template #icon>
-              <UploadOutlined></UploadOutlined>
-            </template>
             上传更新文件
           </a-button>
           <input ref="fileInputRef" type="file" hidden @change="handleUpdate" />
-        </a-form-item>
-        <a-form-item>
-          示例文件:
-          <a href="./cell_type_meta.xlsx" target="_blank">
-            cell_type_meta.xlsx
-          </a>
-        </a-form-item>
+          <div class="example">
+            示例文件:
+            <a href="./cell_type_meta.xlsx" target="_blank">
+              cell_type_meta.xlsx
+            </a>
+          </div>
+        </div>
       </a-form>
     </div>
 
-    <div class="mt-5 rounded-lg bg-white">
+    <div class="table-container">
       <a-table
         :columns="columns"
         :row-key="(record) => record.id"
         :data-source="list"
         :pagination="pagination"
         :loading="loading"
-        :scroll="{ x: 1500 }"
+        :scroll="{ x: columns.length * 150 }"
         @change="handleTableChange"
       >
         <template #bodyCell="{ column: { dataIndex }, record }">
@@ -89,12 +81,7 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import {
-  SearchOutlined,
-  EditOutlined,
-  UploadOutlined,
-  PlusOutlined,
-} from "@ant-design/icons-vue"
+import { EditOutlined } from "@ant-design/icons-vue"
 import { usePagination } from "vue-request"
 import { getCellTypeList, updateMetaByFile } from "@/api/meta"
 import { message } from "ant-design-vue"
@@ -125,6 +112,7 @@ const columns = [
   ].map((item) => ({
     title: item,
     dataIndex: item,
+    width: 150,
     align: "center",
   })),
   // {
@@ -219,15 +207,15 @@ const handleCellTypeCreateModalShow = () => {
 </script>
 
 <style scoped lang="scss">
-.condition-item {
-  width: 100px !important;
-}
+@import "@/assets/styles/stable.scss";
 
-.condition-item-lg {
-  width: 130px !important;
-}
+.example {
+  text-align: center;
+  font-size: 1rem;
+  color: #fff;
 
-:deep(.w-28) {
-  width: 7rem !important;
+  a {
+    color: #fff;
+  }
 }
 </style>

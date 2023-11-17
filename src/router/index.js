@@ -1,165 +1,165 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import nProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import { createRouter, createWebHashHistory } from "vue-router"
+import nProgress from "nprogress"
+import "nprogress/nprogress.css"
 
 nProgress.configure({ showSpinner: false })
 
 export const constantRoutes = [
   {
-    path: '/',
-    name: 'home',
-    component: () => import('../views/HomeView.vue'),
+    path: "/",
+    name: "home",
+    component: () => import("../views/HomeView.vue"),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/User/LoginView.vue'),
+    path: "/login",
+    name: "login",
+    component: () => import("../views/User/LoginView.vue"),
   },
   {
-    path: '/register',
-    name: 'register',
-    component: () => import('../views/User/RegisterView.vue'),
+    path: "/register",
+    name: "register",
+    component: () => import("../views/User/RegisterView.vue"),
   },
   {
-    path: '/user/setting',
-    name: 'user_setting',
-    component: () => import('../views/User/SettingView.vue'),
+    path: "/user/setting",
+    name: "user_setting",
+    component: () => import("../views/User/SettingView.vue"),
   },
 
   {
-    path: '/user/active',
-    name: 'user_active',
+    path: "/user/active",
+    name: "user_active",
     props: true,
-    component: () => import('../views/User/UserActiveView.vue'),
+    component: () => import("../views/User/UserActiveView.vue"),
   },
 
   {
-    path: '/user/forget',
-    name: 'user_forget_password',
-    component: () => import('../views/User/ForgetPasswordView.vue'),
+    path: "/user/forget",
+    name: "user_forget_password",
+    component: () => import("../views/User/ForgetPasswordView.vue"),
   },
 
   {
-    path: '/user/reset',
-    name: 'user_reset_password',
-    component: () => import('../views/User/ResetPasswordView.vue'),
+    path: "/user/reset",
+    name: "user_reset_password",
+    component: () => import("../views/User/ResetPasswordView.vue"),
   },
   {
-    path: '/files/manage',
-    name: 'files_manage',
+    path: "/files/manage",
+    name: "files_manage",
     meta: {
-      title: '文件管理',
+      title: "文件管理",
     },
-    component: () => import('../views/File/ManageView.vue'),
+    component: () => import("../views/File/ManageView.vue"),
   },
   {
-    path: '/projects',
-    name: 'projects',
-    component: () => import('../views/Project/ListView.vue'),
+    path: "/projects",
+    name: "projects",
+    component: () => import("../views/Project/ListView.vue"),
   },
   {
-    path: '/projects/manage',
-    name: 'projects_manage',
-    component: () => import('../views/Project/ManageView.vue'),
+    path: "/projects/manage",
+    name: "projects_manage",
+    component: () => import("../views/Project/ManageView.vue"),
   },
   {
-    path: '/projects/create',
-    name: 'project_create',
-    component: () => import('../views/Project/CreateView.vue'),
+    path: "/projects/create",
+    name: "project_create",
+    component: () => import("../views/Project/CreateView.vue"),
   },
   {
-    path: '/projects/:id',
-    name: 'project_detail',
+    path: "/projects/:id",
+    name: "project_detail",
     props: true,
-    component: () => import('../views/Project/DetailView.vue'),
+    component: () => import("../views/Project/DetailView.vue"),
   },
   {
-    path: '/projects/update/:id',
-    name: 'project_detail_update',
+    path: "/projects/update/:id",
+    name: "project_detail_update",
     props: true,
-    component: () => import('../views/Project/UpdateView.vue'),
+    component: () => import("../views/Project/UpdateView.vue"),
   },
 ]
 
 export const asyncRoutes = [
   {
-    path: '/user/admin',
-    name: 'user_admin',
+    path: "/user/admin",
+    name: "user_admin",
     meta: {
-      title: '用户管理',
-      roles: ['admin'],
+      title: "用户管理",
+      roles: ["admin"],
     },
-    component: () => import('../views/User/AdminView.vue'),
+    component: () => import("../views/User/AdminView.vue"),
   },
   {
-    path: '/user/setting/:id',
-    name: 'user_setting',
+    path: "/user/setting/:id",
+    name: "user_setting",
     meta: {
-      title: '用户信息更新',
-      roles: ['admin'],
+      title: "用户信息更新",
+      roles: ["admin"],
     },
     props: true,
-    component: () => import('../views/User/SettingView.vue'),
+    component: () => import("../views/User/SettingView.vue"),
   },
 
   {
-    path: '/projects/admin',
-    name: 'projects_admin',
+    path: "/projects/admin",
+    name: "projects_admin",
     meta: {
-      title: '项目管理',
-      roles: ['admin'],
+      title: "项目管理",
+      roles: ["admin"],
     },
-    component: () => import('../views/Project/AdminView.vue'),
+    component: () => import("../views/Project/AdminView.vue"),
   },
   {
-    path: '/projects/admin/update/:id',
-    name: 'project_admin_detail_update',
+    path: "/projects/admin/update/:id",
+    name: "project_admin_detail_update",
     meta: {
-      title: '公开项目更新',
-      roles: ['admin'],
+      title: "公开项目更新",
+      roles: ["admin"],
     },
     props: true,
-    component: () => import('../views/Project/AdminUpdateView.vue'),
+    component: () => import("../views/Project/AdminUpdateView.vue"),
   },
   {
-    path: '/meta',
-    component: () => import('../views/Meta/MainView.vue'),
-    redirect: '/meta/species',
+    path: "/meta",
+    component: () => import("../views/Meta/MainView.vue"),
+    redirect: "/meta/species",
     children: [
       {
-        path: 'species',
+        path: "species",
         meta: {
-          title: 'Species管理',
-          roles: ['admin'],
+          title: "Species Meta",
+          roles: ["admin"],
         },
-        component: () => import('../views/Meta/SpeciesView.vue'),
+        component: () => import("../views/Meta/SpeciesView.vue"),
       },
       {
-        path: 'gene',
+        path: "gene",
         meta: {
-          title: 'Gene管理',
-          roles: ['admin'],
+          title: "Gene Meta",
+          roles: ["admin"],
         },
-        component: () => import('../views/Meta/GeneView.vue'),
+        component: () => import("../views/Meta/GeneView.vue"),
       },
       {
-        path: 'cell_type',
+        path: "cell_type",
         meta: {
-          title: 'CellType管理',
-          roles: ['admin'],
+          title: "CellType Meta",
+          roles: ["admin"],
         },
-        component: () => import('../views/Meta/CellTypeView.vue'),
+        component: () => import("../views/Meta/CellTypeView.vue"),
       },
     ],
   },
   {
-    path: '/process/admin',
-    name: 'project_admin',
+    path: "/process/admin",
+    name: "project_admin",
     meta: {
-      title: '进程管理',
-      roles: ['admin'],
+      title: "进程管理",
+      roles: ["admin"],
     },
-    component: () => import('../views/Process/AdminView.vue'),
+    component: () => import("../views/Process/AdminView.vue"),
   },
 ]
 

@@ -154,7 +154,10 @@ const columns = ref(
       dataIndex: ["donor_meta", "sex"],
     },
     ...BIOSAMPLES_COLUMNS,
-  ].map((item) => ({ width: 150, sorter: true, ...item, resizable: true })),
+  ].map((item) => {
+    console.log(item.dataIndex[1])
+    return { width: 150, sorter: true, ...item, resizable: true }
+  }),
 )
 
 const columnSettings = ref({

@@ -1,13 +1,13 @@
 <template>
   <div class="nav">
-    <div v-if="route.name==='home'">
+    <div v-if="route.name === 'home'">
       <router-link class="project no-underline" :to="{ name: 'projects' }">
-        <img src="@/assets/images/home/icon_project.svg" alt=""/>
+        <img src="@/assets/images/home/icon_project.svg" alt="" />
         <span class="flex-1 text-center">Project</span>
       </router-link>
     </div>
     <div v-else class="back-container" @click="handleGoHome()">
-      <img src="@/assets/icons/icon-back.svg" alt=""/>
+      <img src="@/assets/icons/icon-back.svg" alt="" />
       <span>Home</span>
     </div>
     <div v-if="userStore?.getIsAuthenticated" class="user-container">
@@ -15,7 +15,9 @@
         Create Project
       </a-button>
       <a-dropdown>
-        <a-avatar class="cursor-pointer">{{ userStore.getUser?.user_name }}</a-avatar>
+        <a-avatar class="cursor-pointer">
+          {{ userStore.getUser?.user_name }}
+        </a-avatar>
         <template #overlay>
           <a-menu>
             <a-menu-item key="user_setting">
@@ -48,7 +50,10 @@
       </a-dropdown>
     </div>
     <div v-else class="flex items-center">
-      <router-link class="login no-underline" :to="{ name: 'login',query:{feedback: route.name} }">
+      <router-link
+        class="login no-underline"
+        :to="{ name: 'login', query: { feedback: route.name } }"
+      >
         Login
       </router-link>
       <router-link class="sign-up no-underline" :to="{ name: 'register' }">
@@ -59,8 +64,8 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user.js'
+import { useRoute, useRouter } from "vue-router"
+import { useUserStore } from "@/stores/user.js"
 
 const router = useRouter()
 const route = useRoute()
@@ -68,18 +73,16 @@ const route = useRoute()
 const userStore = useUserStore()
 
 const handleGoHome = () => {
-  router.push({ name: 'home' })
+  router.push({ name: "home" })
 }
 const handleGoProjectCreate = () => {
-  router.push({ name: 'project_create' })
+  router.push({ name: "project_create" })
 }
 
 const logout = function () {
   userStore.setUser(null)
 }
-
 </script>
-
 
 <style scoped lang="scss">
 .nav {
@@ -98,7 +101,7 @@ const logout = function () {
     display: flex;
     width: 11.25rem;
     height: 2.25rem;
-    padding: 0rem 1.25rem;
+    padding: 0 1.25rem;
     align-items: center;
     flex-shrink: 0;
     border-radius: 2.9375rem;
@@ -113,7 +116,7 @@ const logout = function () {
     display: flex;
     width: 7.5rem;
     height: 2.25rem;
-    padding: 0rem 0.625rem 0.125rem 0.625rem;
+    padding: 0 0.625rem 0.125rem 0.625rem;
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
@@ -129,7 +132,7 @@ const logout = function () {
     display: flex;
     width: 7.5rem;
     height: 2.25rem;
-    padding: 0rem 0.625rem 0.125rem 0.625rem;
+    padding: 0 0.625rem 0.125rem 0.625rem;
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
@@ -138,7 +141,6 @@ const logout = function () {
     color: #fff;
     font-size: 1rem;
   }
-
 
   .back-container {
     display: flex;
@@ -149,7 +151,8 @@ const logout = function () {
     cursor: pointer;
 
     &:hover {
-      filter: brightness(0) saturate(100%) invert(41%) sepia(100%) saturate(4465%) hue-rotate(186deg) brightness(96%) contrast(102%);
+      filter: brightness(0) saturate(100%) invert(41%) sepia(100%)
+        saturate(4465%) hue-rotate(186deg) brightness(96%) contrast(102%);
     }
 
     img {
