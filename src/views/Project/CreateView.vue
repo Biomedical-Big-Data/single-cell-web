@@ -14,6 +14,7 @@
         }}
       </a-button>
       <a-button
+        v-if="formState.isPrivate"
         class="button-save ml-3"
         :loading="loading"
         @click="handleProjectCreate(false)"

@@ -42,6 +42,7 @@ const chartData = computed(() => {
     .groupBy("cell_type_name")
     .toPairs()
     .map(([name, values]) => {
+      values.map((item) => item[props.valueKey])
       const index = keys.value.indexOf(name)
       return {
         x: values.map((item) => item[props.valueKey]),
@@ -60,17 +61,18 @@ const chartData = computed(() => {
 })
 
 const layout = computed(() => {
-  const temp = ["", ...keys.value]
+  const temp = [...keys.value, ""]
   return {
     responsive: true,
     title: props.title,
     autosize: true,
     height: 700,
+    width: 950,
     showlegend: false,
     xaxis: {
       side: "top",
       ticklabelposition: "outside top",
-      tickformat: ".00%",
+      tickformat: ".0000%",
     },
     yaxis: {
       automargin: true,

@@ -83,7 +83,7 @@
       >
         <template #bodyCell="{ text, column, record }">
           <template v-if="column.dataIndex === 'marker_gene_symbol'">
-            <div>
+            <div class="gene_symbol">
               <span v-for="item in text.split(',')" :key="item" class="symbol">
                 <span
                   :class="{
@@ -134,7 +134,6 @@ const columns = [
   {
     title: "Marker Gene Symbol",
     dataIndex: "marker_gene_symbol",
-    width: 600,
   },
   {
     title: "Score",
@@ -260,5 +259,10 @@ defineExpose({
   :deep(.ant-tag-close-icon) {
     margin-left: 4px;
   }
+}
+
+.gene_symbol {
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 </style>

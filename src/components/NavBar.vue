@@ -81,6 +81,7 @@ const handleGoProjectCreate = () => {
 
 const logout = function () {
   userStore.setUser(null)
+  router.replace({ name: "home" })
 }
 </script>
 

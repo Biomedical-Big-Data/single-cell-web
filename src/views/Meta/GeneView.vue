@@ -10,6 +10,14 @@
             placeholder="Gene Name"
           ></a-input>
         </a-form-item>
+        <a-form-item label="Gene Symbol" name="name" class="condition-item">
+          <a-input
+            v-model:value="conditions.symbol"
+            class="w-full"
+            size="large"
+            placeholder="Gene Symbol"
+          ></a-input>
+        </a-form-item>
         <div class="action">
           <a-button
             type="primary"
@@ -76,6 +84,7 @@ import { message } from "ant-design-vue"
 
 const conditions = ref({
   name: "",
+  symbol: "",
 })
 
 const fileInputRef = ref(null)
@@ -136,10 +145,13 @@ const list = computed(() => {
 
 const getConditions = function () {
   const result = {}
-  const { name } = conditions.value
+  const { name, symbol } = conditions.value
 
   if (name) {
     result.gene_name = name
+  }
+  if (symbol) {
+    result.gene_symbol = symbol
   }
   return result
 }

@@ -91,7 +91,7 @@
                   size="large"
                   @click="handleToAdminProject(record)"
                 >
-                  View
+                  Edit
                 </a-button>
               </template>
             </template>

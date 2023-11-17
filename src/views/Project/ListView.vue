@@ -106,11 +106,11 @@
               </a-form-item>
               <a-form-item
                 label="External Accession"
-                name="external_sample_accession"
+                name="external_sample_accesstion"
                 class="condition-item"
               >
                 <a-input
-                  v-model:value="sample.external_sample_accession"
+                  v-model:value="sample.external_sample_accesstion"
                   placeholder="External Accession"
                   size="large"
                 ></a-input>
@@ -563,7 +563,7 @@ const projectTableRef = ref()
 const sample = ref({
   species: undefined,
   organ: undefined,
-  external_sample_accession: "",
+  external_sample_accesstion: "",
   disease: "",
   development_stage: "",
 })
@@ -612,7 +612,7 @@ const getSampleConditions = () => {
   const {
     species,
     organ,
-    external_sample_accession,
+    external_sample_accesstion,
     disease,
     development_stage,
   } = sample.value
@@ -626,7 +626,7 @@ const getSampleConditions = () => {
   return {
     ...(species ? { species_id: species } : {}),
     ...(organ ? { organ } : {}),
-    ...(external_sample_accession ? { external_sample_accession } : {}),
+    ...(external_sample_accesstion ? { external_sample_accesstion } : {}),
     ...(disease ? { disease } : {}),
     ...(development_stage ? { development_stage } : {}),
   }

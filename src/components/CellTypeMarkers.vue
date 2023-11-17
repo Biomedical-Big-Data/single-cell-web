@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-spin :spinning="loading">
     <div class="flex justify-end action-container">
       <a-popover trigger="click" placement="bottom">
         <template #content>
@@ -33,7 +33,7 @@
       <a-table
         :columns="columnResult"
         :data-source="result"
-        :scroll="{ x: columnSettings.length * 150, y: 393 }"
+        :scroll="{ x: totalWidth, y: 393 }"
       >
         <template #headerCell="{ title }">
           <div>{{ title }}</div>
@@ -47,7 +47,7 @@
         </template>
       </a-table>
     </div>
-  </div>
+  </a-spin>
 </template>
 
 <script setup>
@@ -56,6 +56,7 @@ import csvtojson from "csvtojson"
 import { SettingOutlined } from "@ant-design/icons-vue"
 import { saveAs } from "file-saver"
 import { getCellMarkerFile } from "../api/file"
+import _ from "lodash"
 
 const props = defineProps({
   fileId: {
@@ -64,6 +65,7 @@ const props = defineProps({
   },
 })
 
+const loading = ref(false)
 const downloading = ref(false)
 const condition = ref({})
 const columns = ref([])
@@ -93,25 +95,35 @@ const columnResult = computed(() => {
   })
 })
 
+const totalWidth = computed(() => {
+  return _.sumBy(columnResult.value, "width")
+})
+
 const handleCellTypeMarkersFetch = async () => {
-  const data = await getCellMarkerFile(props.fileId)
-  dataSource.value = await csvtojson({ output: "json" })
-    .on("header", (header) => {
-      columnSettings.value = header
-      columns.value = header.map((item) => {
-        return {
-          title: item,
-          key: item,
-          dataIndex: item,
-          align: "center",
-          sorter: (a, b) => {
-            return a[item] > b[item] ? 1 : -1
-          },
-          sortDirections: ["descend", "ascend"],
-        }
+  try {
+    loading.value = true
+    const data = await getCellMarkerFile(props.fileId)
+    dataSource.value = await csvtojson({ output: "json" })
+      .on("header", (header) => {
+        columnSettings.value = header
+        columns.value = header.map((item) => {
+          return {
+            title: item,
+            width: item.length * 16 + 20,
+            key: item,
+            dataIndex: item,
+            align: "center",
+            sorter: (a, b) => {
+              return a[item] > b[item] ? 1 : -1
+            },
+            sortDirections: ["descend", "ascend"],
+          }
+        })
       })
-    })
-    .fromString(data)
+      .fromString(data)
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleFileDownload = async () => {

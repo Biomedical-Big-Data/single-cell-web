@@ -49,9 +49,20 @@
             :loading="loading"
             @change="handleTableChange"
           >
-            <template #bodyCell="{ column: { dataIndex }, text }">
+            <template #bodyCell="{ column: { dataIndex }, record, text }">
               <template v-if="dataIndex === 'create_at'">
                 {{ dayjs(text).format("YYYY-MM-DD") }}
+              </template>
+              <template v-if="dataIndex === 'operation'">
+                <a-button
+                  type="text"
+                  size="large"
+                  :loading="removing"
+                  danger
+                  @click="handleRemoveFile(record)"
+                >
+                  Remove
+                </a-button>
               </template>
             </template>
           </a-table>
@@ -91,12 +102,18 @@
 <script setup>
 import { computed, ref } from "vue"
 import { usePagination } from "vue-request"
-import { getMyProjectFile, uploadProjectFile } from "@/api/project"
-import { message } from "ant-design-vue"
+import {
+  getMyProjectFile,
+  removeMyProjectFile,
+  uploadProjectFile,
+} from "@/api/project"
+import { message, Modal } from "ant-design-vue"
 import dayjs from "dayjs"
 import NavBar from "@/components/NavBar.vue"
+import { filesize } from "filesize"
 
 const fileRef = ref()
+const removing = ref(false)
 const uploading = ref(false)
 const canceling = ref(false)
 const uploadFileName = ref("")
@@ -119,11 +136,20 @@ const columns = [
   {
     title: "File size",
     dataIndex: "file_size",
+    customRender: ({ text }) => {
+      return filesize(text)
+    },
   },
   {
     title: "Upload time",
     dataIndex: "create_at",
-    width: "150px",
+    width: 150,
+    align: "center",
+  },
+  {
+    title: "Operation",
+    dataIndex: "operation",
+    width: 150,
     align: "center",
   },
 ]
@@ -218,6 +244,23 @@ const handleCancelUpload = async () => {
 
 const updateProgress = (progress) => {
   uploadProgress.value = +(progress * 100).toFixed(2)
+}
+
+const handleRemoveFile = async (record) => {
+  Modal.confirm({
+    title: "删除确认?",
+    content: "文件删除后不可恢复，是否确认？",
+    onOk: async () => {
+      try {
+        removing.value = true
+        await removeMyProjectFile(record.file_id)
+        message.success("删除成功")
+        handleSearch()
+      } finally {
+        removing.value = false
+      }
+    },
+  })
 }
 </script>
 

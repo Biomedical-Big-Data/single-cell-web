@@ -233,9 +233,9 @@
 import { onMounted, ref } from "vue"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import {
+  adminProjectTransfer,
   getAdminProjectDetail,
   offlineProject,
-  transferProject,
   updateAdminProject,
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
@@ -398,7 +398,7 @@ const handleProjectTransfer = async () => {
   }
   try {
     saving.value = true
-    await transferProject(props.id, transferMail.value)
+    await adminProjectTransfer(props.id, transferMail.value)
     message.success("转移项目成功")
     await handleProjectFetch()
     open.value = false

@@ -109,6 +109,7 @@ import { usePagination } from "vue-request"
 import { getMyProjectFile, uploadProjectFile } from "@/api/project"
 import { message } from "ant-design-vue"
 import dayjs from "dayjs"
+import { filesize } from "filesize"
 
 const emits = defineEmits(["selected"])
 
@@ -137,6 +138,9 @@ const columns = [
   {
     title: "File size",
     dataIndex: "file_size",
+    customRender: ({ text }) => {
+      return filesize(text)
+    },
   },
   {
     title: "Upload time",

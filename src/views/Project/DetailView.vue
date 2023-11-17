@@ -107,7 +107,7 @@ import DownloadTable from "@/components/charts/DownloadTable.vue"
 const route = useRoute()
 // const activeKey = ref('score')
 const loading = ref(true)
-const activeKey = ref("umap")
+const activeKey = ref("celltype")
 const projectDetail = ref(null)
 const props = defineProps({
   id: {
