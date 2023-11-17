@@ -47,6 +47,7 @@
     <div class="table-container">
       <a-table
         class="w-full"
+        bordered
         size="large"
         :columns="columns"
         :row-key="(record) => record.id"

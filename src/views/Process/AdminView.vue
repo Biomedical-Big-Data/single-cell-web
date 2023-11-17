@@ -8,6 +8,7 @@
           <a-table
             size="large"
             :columns="columns"
+            bordered
             :row-key="(record) => record.ip"
             :data-source="dataSource"
             :pagination="false"

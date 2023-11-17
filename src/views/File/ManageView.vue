@@ -46,6 +46,7 @@
             :row-key="(record) => record.id"
             :data-source="list"
             :pagination="pagination"
+            bordered
             :loading="loading"
             @change="handleTableChange"
           >

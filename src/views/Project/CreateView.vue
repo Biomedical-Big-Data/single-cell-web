@@ -47,7 +47,7 @@
               <div class="flex items-center">
                 <a-switch
                   v-model:checked="formState.isPrivate"
-                  size="large"
+                  class="switch-large"
                   checked-children="Private"
                   un-checked-children="Public"
                 />

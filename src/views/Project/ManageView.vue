@@ -51,6 +51,7 @@
         <div class="table-container">
           <a-table
             :columns="columns"
+            bordered
             :row-key="(record) => record.id"
             :data-source="list"
             :pagination="pagination"
@@ -65,10 +66,10 @@
                 {{ dayjs(text).format("YYYY-MM-DD") }}
               </template>
               <template v-if="dataIndex === 'is_publish'">
-                {{ getPublishState(text) }}
+                <span :class="`publish-${text}`"> {{ getPublishState(text) }}</span>
               </template>
               <template v-if="dataIndex === 'is_private'">
-                {{ getPrivateState(text) }}
+                <span :class="`private-${text}`">{{ getPrivateState(text) }}</span>
               </template>
               <template v-if="dataIndex === 'tags'">
                 <a-tag

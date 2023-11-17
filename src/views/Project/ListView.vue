@@ -5,39 +5,39 @@
       <div class="top">
         <div class="type">
           <a-dropdown
-            size="large"
-            placement="bottom"
-            class="selector"
-            arrow
-            trigger="click"
+              size="large"
+              placement="bottom"
+              class="selector"
+              arrow
+              trigger="click"
           >
             <div class="selector-name">
               Search by
               <span class="capitalize">{{ filter }}</span>
-              <CaretDownOutlined />
+              <CaretDownOutlined/>
             </div>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
                   <a
-                    class="selector-item"
-                    @click="handleTableTypeChange('sample')"
+                      class="selector-item"
+                      @click="handleTableTypeChange('sample')"
                   >
                     sample
                   </a>
                 </a-menu-item>
                 <a-menu-item>
                   <a
-                    class="selector-item"
-                    @click="handleTableTypeChange('cell')"
+                      class="selector-item"
+                      @click="handleTableTypeChange('cell')"
                   >
                     cell
                   </a>
                 </a-menu-item>
                 <a-menu-item>
                   <a
-                    class="selector-item"
-                    @click="handleTableTypeChange('gene')"
+                      class="selector-item"
+                      @click="handleTableTypeChange('gene')"
                   >
                     gene
                   </a>
@@ -47,28 +47,28 @@
           </a-dropdown>
         </div>
         <ColumnSetting
-          v-model:columns="columnsSetting[filter]"
-          class="columns"
-          :total-columns="columnsTotal[filter]"
+            v-model:columns="columnsSetting[filter]"
+            class="columns"
+            :total-columns="columnsTotal[filter]"
         ></ColumnSetting>
         <a-button
-          v-if="isChartAvailable"
-          class="chart"
-          @click="handleChartModalOpen"
+            v-if="isChartAvailable"
+            class="chart"
+            @click="handleChartModalOpen"
         >
           <template #icon>
-            <DotChartOutlined />
+            <DotChartOutlined/>
           </template>
           Chart
         </a-button>
         <a-button
-          class="download"
-          :loading="downloading"
-          @click="handleListDownload"
+            class="download"
+            :loading="downloading"
+            @click="handleListDownload"
         >
           Download CSV
         </a-button>
-        <div class="fill" />
+        <div class="fill"/>
       </div>
       <div class="bottom">
         <div class="left">
@@ -76,95 +76,95 @@
             <a-form ref="sampleFormRef" layout="vertical" :model="sample">
               <a-form-item label="Organ" name="organ" class="condition-item">
                 <a-select
-                  v-model:value="sample.organ"
-                  size="large"
-                  show-search
-                  placeholder="Organ"
-                  :options="options.organ"
-                  allow-clear
-                  @search="handleOrganSearch"
+                    v-model:value="sample.organ"
+                    size="large"
+                    show-search
+                    placeholder="Organ"
+                    :options="options.organ"
+                    allow-clear
+                    @search="handleOrganSearch"
                 >
                   <template v-if="state.organFetching" #notFoundContent>
-                    <a-spin />
+                    <a-spin/>
                   </template>
                 </a-select>
               </a-form-item>
 
               <a-form-item
-                label="Species"
-                name="species"
-                class="condition-item"
+                  label="Species"
+                  name="species"
+                  class="condition-item"
               >
                 <a-select
-                  v-model:value="sample.species"
-                  :options="options.species"
-                  size="large"
-                  placeholder="Species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  allow-clear
+                    v-model:value="sample.species"
+                    :options="options.species"
+                    size="large"
+                    placeholder="Species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    allow-clear
                 ></a-select>
               </a-form-item>
               <a-form-item
-                label="External Accession"
-                name="external_sample_accesstion"
-                class="condition-item"
+                  label="External Accession"
+                  name="external_sample_accesstion"
+                  class="condition-item"
               >
                 <a-input
-                  v-model:value="sample.external_sample_accesstion"
-                  placeholder="External Accession"
-                  size="large"
+                    v-model:value="sample.external_sample_accesstion"
+                    placeholder="External Accession"
+                    size="large"
                 ></a-input>
               </a-form-item>
               <a-form-item
-                label="Disease"
-                name="disease"
-                class="condition-item"
+                  label="Disease"
+                  name="disease"
+                  class="condition-item"
               >
                 <a-input
-                  v-model:value="sample.disease"
-                  placeholder="Disease"
-                  size="large"
+                    v-model:value="sample.disease"
+                    placeholder="Disease"
+                    size="large"
                 ></a-input>
               </a-form-item>
               <a-form-item
-                label="Development Stage"
-                name="development_stage"
-                class="condition-item"
+                  label="Development Stage"
+                  name="development_stage"
+                  class="condition-item"
               >
                 <a-input
-                  v-model:value="sample.development_stage"
-                  placeholder="Development Stage"
-                  size="large"
+                    v-model:value="sample.development_stage"
+                    placeholder="Development Stage"
+                    size="large"
                 ></a-input>
               </a-form-item>
             </a-form>
           </div>
           <div v-if="filter === 'cell'">
             <a-form
-              ref="cellFormRef"
-              layout="vertical"
-              :model="cell"
-              :rules="cellRules"
+                ref="cellFormRef"
+                layout="vertical"
+                :model="cell"
+                :rules="cellRules"
             >
               <a-form-item
-                label="Species"
-                name="species"
-                class="condition-item"
+                  label="Species"
+                  name="species"
+                  class="condition-item"
               >
                 <a-select
-                  v-model:value="cell.species"
-                  :options="options.species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  placeholder="Species"
-                  allow-clear
-                  size="large"
+                    v-model:value="cell.species"
+                    :options="options.species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    placeholder="Species"
+                    allow-clear
+                    size="large"
                 ></a-select>
               </a-form-item>
               <template v-if="cell.species">
                 <a-form-item
-                  label="Search By"
-                  name="searchBy"
-                  class="condition-item"
+                    label="Search By"
+                    name="searchBy"
+                    class="condition-item"
                 >
                   <a-radio-group v-model:value="cell.searchBy">
                     <a-radio value="id">ID</a-radio>
@@ -173,51 +173,51 @@
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item
-                  v-if="cell.searchBy === 'id'"
-                  label="Name"
-                  name="name"
-                  class="condition-item"
+                    v-if="cell.searchBy === 'id'"
+                    label="Name"
+                    name="name"
+                    class="condition-item"
                 >
                   <a-select
-                    v-model:value="cell.ct_id"
-                    placeholder="Search Cell"
-                    show-search
-                    :options="options.cellIds"
-                    allow-clear
-                    size="large"
-                    @search="handleCellIDSearch"
+                      v-model:value="cell.ct_id"
+                      placeholder="Search Cell"
+                      show-search
+                      :options="options.cellIds"
+                      allow-clear
+                      size="large"
+                      @search="handleCellIDSearch"
                   >
                     <template v-if="state.cellIDFetching" #notFoundContent>
-                      <a-spin />
+                      <a-spin/>
                     </template>
                   </a-select>
                 </a-form-item>
                 <a-form-item
-                  v-else-if="cell.searchBy === 'name'"
-                  label="Name"
-                  name="name"
-                  class="condition-item"
+                    v-else-if="cell.searchBy === 'name'"
+                    label="Name"
+                    name="name"
+                    class="condition-item"
                 >
                   <a-input
-                    ref="cellNameInput"
-                    v-model:value="cell.name"
-                    placeholder="Click to search"
-                    size="large"
-                    @focus="handleCellNameSearch"
+                      ref="cellNameInput"
+                      v-model:value="cell.name"
+                      placeholder="Click to search"
+                      size="large"
+                      @focus="handleCellNameSearch"
                   />
                 </a-form-item>
                 <a-form-item
-                  v-else
-                  label="Name"
-                  name="names"
-                  class="condition-item"
+                    v-else
+                    label="Name"
+                    name="names"
+                    class="condition-item"
                 >
                   <a-textarea
-                    ref="geneNameInput"
-                    v-model:value="cell.names"
-                    placeholder="Click to search"
-                    size="large"
-                    @focus="handleGeneNameSearch"
+                      ref="geneNameInput"
+                      v-model:value="cell.names"
+                      placeholder="Click to search"
+                      size="large"
+                      @focus="handleGeneNameSearch"
                   />
                 </a-form-item>
               </template>
@@ -225,41 +225,41 @@
           </div>
           <div v-if="filter === 'gene'">
             <a-form
-              ref="geneFormRef"
-              layout="vertical"
-              :model="gene"
-              :rules="geneRules"
+                ref="geneFormRef"
+                layout="vertical"
+                :model="gene"
+                :rules="geneRules"
             >
               <a-form-item
-                label="Species"
-                name="species"
-                class="condition-item"
+                  label="Species"
+                  name="species"
+                  class="condition-item"
               >
                 <a-select
-                  v-model:value="gene.species"
-                  :options="options.species"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  placeholder="Species"
-                  allow-clear
-                  size="large"
+                    v-model:value="gene.species"
+                    :options="options.species"
+                    :field-names="{ label: 'species', value: 'id' }"
+                    placeholder="Species"
+                    allow-clear
+                    size="large"
                 ></a-select>
               </a-form-item>
               <a-form-item
-                label="Search by gene symbol"
-                name="symbol"
-                class="condition-item"
+                  label="Search by gene symbol"
+                  name="symbol"
+                  class="condition-item"
               >
                 <a-select
-                  v-model:value="gene.symbol"
-                  show-search
-                  size="large"
-                  placeholder="Gene Symbol"
-                  :options="options.geneSymbol"
-                  allow-clear
-                  @search="handleGeneSymbolSearch"
+                    v-model:value="gene.symbol"
+                    show-search
+                    size="large"
+                    placeholder="Gene Symbol"
+                    :options="options.geneSymbol"
+                    allow-clear
+                    @search="handleGeneSymbolSearch"
                 >
                   <template v-if="state.geneSymbolFetching" #notFoundContent>
-                    <a-spin />
+                    <a-spin/>
                   </template>
                 </a-select>
               </a-form-item>
@@ -276,23 +276,23 @@
         </div>
         <div class="right">
           <ProjectTable
-            ref="projectTableRef"
-            :columns="columns"
-            :conditions="searchCondition"
-            :search="searchFunc"
+              ref="projectTableRef"
+              :columns="columns"
+              :conditions="searchCondition"
+              :search="searchFunc"
           ></ProjectTable>
         </div>
       </div>
     </div>
   </div>
 
-  <CellNameModal ref="cellNameRef" @confirm="handleCellNameChange" />
-  <GeneNameModal ref="geneNameRef" @confirm="handleGeneNameChange" />
-  <GeneChartModal ref="geneChartRef" />
+  <CellNameModal ref="cellNameRef" @confirm="handleCellNameChange"/>
+  <GeneNameModal ref="geneNameRef" @confirm="handleGeneNameChange"/>
+  <GeneChartModal ref="geneChartRef"/>
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue"
-import { CaretDownOutlined, DotChartOutlined } from "@ant-design/icons-vue"
+import { computed, nextTick, onMounted, ref } from 'vue'
+import { CaretDownOutlined, DotChartOutlined } from '@ant-design/icons-vue'
 import {
   downloadCellProjectList,
   downloadGeneProjectList,
@@ -301,59 +301,59 @@ import {
   getGeneProjectList,
   getOrganList,
   getSampleProjectList,
-} from "@/api/project"
-import ProjectTable from "@/components/projects/ProjectTable.vue"
+} from '@/api/project'
+import ProjectTable from '@/components/projects/ProjectTable.vue'
 import {
   getCellTypeList,
   getGeneSymbolList,
   getSpecieList,
-} from "@/api/options.js"
-import CellNameModal from "@/components/projects/CellNameModal.vue"
-import GeneNameModal from "@/components/projects/GeneNameModal.vue"
-import GeneChartModal from "@/components/charts/GeneChartModal.vue"
-import { useRoute } from "vue-router"
-import ColumnSetting from "@/components/ColumnSetting.vue"
-import { BIOSAMPLES_COLUMNS } from "@/constants/biosample.js"
-import { saveAs } from "file-saver"
-import NavBar from "@/components/NavBar.vue"
-import { GENE_COLUMNS } from "@/constants/gene.js"
+} from '@/api/options.js'
+import CellNameModal from '@/components/projects/CellNameModal.vue'
+import GeneNameModal from '@/components/projects/GeneNameModal.vue'
+import GeneChartModal from '@/components/charts/GeneChartModal.vue'
+import { useRoute } from 'vue-router'
+import ColumnSetting from '@/components/ColumnSetting.vue'
+import { BIOSAMPLES_COLUMNS } from '@/constants/biosample.js'
+import { saveAs } from 'file-saver'
+import NavBar from '@/components/NavBar.vue'
+import { GENE_COLUMNS } from '@/constants/gene.js'
 
 const route = useRoute()
 
 const columnsTotal = ref({
   sample: [
     {
-      title: "Result",
-      dataIndex: "index",
-      align: "center",
+      title: 'Result',
+      dataIndex: 'index',
+      align: 'center',
       sorter: false,
     },
     {
-      title: "Analysis ID",
-      dataIndex: ["analysis_meta", "id"],
+      title: 'Analysis ID',
+      dataIndex: ['analysis_meta', 'id'],
       width: 180,
       sorter: false,
     },
     {
-      title: "Project",
-      dataIndex: ["project_meta", "title"],
+      title: 'Project',
+      dataIndex: ['project_meta', 'title'],
       width: 400,
     },
     {
-      title: "Biosample Number",
-      dataIndex: ["project_meta", "biosample_number"],
+      title: 'Biosample Number',
+      dataIndex: ['project_meta', 'biosample_number'],
     },
     {
-      title: "External Project Accesstion",
-      dataIndex: ["project_meta", "external_project_accesstion"],
+      title: 'External Project Accesstion',
+      dataIndex: ['project_meta', 'external_project_accesstion'],
     },
     {
-      title: "Species",
-      dataIndex: ["species_meta", "species"],
+      title: 'Species',
+      dataIndex: ['species_meta', 'species'],
     },
     {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
+      title: 'Sex',
+      dataIndex: ['donor_meta', 'sex'],
     },
     ...BIOSAMPLES_COLUMNS,
   ].map((item) => ({
@@ -364,126 +364,126 @@ const columnsTotal = ref({
   })),
   cell: [
     {
-      title: "Result",
-      dataIndex: "index",
-      align: "center",
+      title: 'Result',
+      dataIndex: 'index',
+      align: 'center',
       sorter: false,
     },
     {
-      title: "Analysis ID",
-      dataIndex: ["analysis_meta", "id"],
+      title: 'Analysis ID',
+      dataIndex: ['analysis_meta', 'id'],
       width: 180,
       sorter: false,
     },
     {
-      title: "Project",
-      dataIndex: ["project_meta", "title"],
+      title: 'Project',
+      dataIndex: ['project_meta', 'title'],
       width: 300,
     },
     {
-      title: "Biosample Number",
-      dataIndex: ["project_meta", "biosample_number"],
+      title: 'Biosample Number',
+      dataIndex: ['project_meta', 'biosample_number'],
     },
     {
-      title: "External Project Accesstion",
-      dataIndex: ["project_meta", "external_project_accesstion"],
+      title: 'External Project Accesstion',
+      dataIndex: ['project_meta', 'external_project_accesstion'],
     },
     {
-      title: "Proportion Of Cell",
-      dataIndex: ["cell_proportion_meta", "cell_proportion"],
-      align: "center",
+      title: 'Proportion Of Cell',
+      dataIndex: ['cell_proportion_meta', 'cell_proportion'],
+      align: 'center',
       customRender: ({ text }) => `${(text * 100).toFixed(2)}%`,
     },
     {
-      title: "Cell Number",
-      dataIndex: ["cell_proportion_meta", "cell_number"],
-      align: "center",
+      title: 'Cell Number',
+      dataIndex: ['cell_proportion_meta', 'cell_number'],
+      align: 'center',
     },
 
     {
-      title: "Donor ID",
-      dataIndex: ["donor_meta", "id"],
+      title: 'Donor ID',
+      dataIndex: ['donor_meta', 'id'],
     },
     {
-      title: "Sex",
-      dataIndex: ["donor_meta", "sex"],
+      title: 'Sex',
+      dataIndex: ['donor_meta', 'sex'],
     },
     {
-      title: "Species",
-      dataIndex: ["species_meta", "species"],
+      title: 'Species',
+      dataIndex: ['species_meta', 'species'],
     },
     {
-      title: "Cell Type ID",
-      dataIndex: ["cell_type_meta", "cell_type_id"],
+      title: 'Cell Type ID',
+      dataIndex: ['cell_type_meta', 'cell_type_id'],
     },
     {
-      title: "Cell Type Name",
-      dataIndex: ["cell_type_meta", "cell_type_name"],
+      title: 'Cell Type Name',
+      dataIndex: ['cell_type_meta', 'cell_type_name'],
     },
     ...BIOSAMPLES_COLUMNS,
   ].map((item) => ({ width: 150, sorter: true, ...item, resizable: true })),
   gene: [
     {
-      title: "Result",
-      dataIndex: "index",
-      align: "center",
+      title: 'Result',
+      dataIndex: 'index',
+      align: 'center',
       sorter: false,
     },
     {
-      title: "Analysis ID",
-      dataIndex: ["analysis_meta", "id"],
+      title: 'Analysis ID',
+      dataIndex: ['analysis_meta', 'id'],
       width: 180,
       sorter: false,
     },
     {
-      title: "Project",
-      dataIndex: ["project_meta", "title"],
+      title: 'Project',
+      dataIndex: ['project_meta', 'title'],
       width: 300,
     },
 
     {
-      title: "Biosample Number",
-      dataIndex: ["project_meta", "biosample_number"],
+      title: 'Biosample Number',
+      dataIndex: ['project_meta', 'biosample_number'],
     },
     {
-      title: "External Project Accesstion",
-      dataIndex: ["project_meta", "external_project_accesstion"],
+      title: 'External Project Accesstion',
+      dataIndex: ['project_meta', 'external_project_accesstion'],
     },
 
     {
-      title: "Species",
-      dataIndex: ["species_meta", "species"],
-      align: "center",
+      title: 'Species',
+      dataIndex: ['species_meta', 'species'],
+      align: 'center',
     },
     {
-      title: "Cell Type ID",
-      dataIndex: ["cell_type_meta", "cell_type_id"],
-      align: "center",
+      title: 'Cell Type ID',
+      dataIndex: ['cell_type_meta', 'cell_type_id'],
+      align: 'center',
     },
     {
-      title: "Cell Type Name",
-      dataIndex: ["cell_type_meta", "cell_type_name"],
-      align: "center",
+      title: 'Cell Type Name',
+      dataIndex: ['cell_type_meta', 'cell_type_name'],
+      align: 'center',
     },
     {
-      title: "Proportion Expression",
+      title: 'Proportion Expression',
       dataIndex: [
-        "gene_expression_meta",
-        "cell_proportion_expression_the_gene",
+        'gene_expression_meta',
+        'cell_proportion_expression_the_gene',
       ],
-      group: "gene_expression",
+      group: 'gene_expression',
       customRender: ({ text }) => {
-        return text ? `${(text * 100).toFixed(2)}%` : ""
+        return text ? `${(text * 100).toFixed(2)}%` : ''
       },
     },
 
     {
-      title: "Average Gene Expression",
-      dataIndex: ["gene_expression_meta", "average_gene_expression"],
+      title: 'Average Gene Expression',
+      dataIndex: ['gene_expression_meta', 'average_gene_expression'],
       customRender: ({ text }) => {
-        return text ? `${(text * 100).toFixed(2)}%` : ""
+        return text ? `${(text * 100).toFixed(2)}%` : ''
       },
-      group: "gene_expression",
+      group: 'gene_expression',
     },
     ...GENE_COLUMNS,
   ].map((item) => ({
@@ -496,14 +496,14 @@ const columnsTotal = ref({
 
 const columnsSetting = ref({
   sample: columnsTotal.value.sample
-    .filter((item) => !item.autoHidden)
-    .map(({ title }) => title),
+      .filter((item) => !item.autoHidden)
+      .map(({ title }) => title),
   cell: columnsTotal.value.cell
-    .filter((item) => !item.autoHidden)
-    .map(({ title }) => title),
+      .filter((item) => !item.autoHidden)
+      .map(({ title }) => title),
   gene: columnsTotal.value.gene
-    .filter((item) => !item.autoHidden)
-    .map(({ title }) => title),
+      .filter((item) => !item.autoHidden)
+      .map(({ title }) => title),
 })
 
 const columns = computed(() => {
@@ -515,14 +515,14 @@ const columns = computed(() => {
 
 const isChartAvailable = computed(() => {
   const { species, symbol } = gene.value
-  return filter.value === "gene" && species && symbol
+  return filter.value === 'gene' && species && symbol
 })
 
 const cellRules = {
   species: [
     {
       required: true,
-      message: "Please select species",
+      message: 'Please select species',
     },
   ],
 }
@@ -531,13 +531,13 @@ const geneRules = {
   species: [
     {
       required: true,
-      message: "Please select species",
+      message: 'Please select species',
     },
   ],
   symbol: [
     {
       required: true,
-      message: "Please select gene symbol",
+      message: 'Please select gene symbol',
     },
   ],
 }
@@ -557,15 +557,15 @@ const state = ref({
 })
 
 const downloading = ref(false)
-const filter = ref("sample")
+const filter = ref('sample')
 const projectTableRef = ref()
 
 const sample = ref({
   species: undefined,
   organ: undefined,
-  external_sample_accesstion: "",
-  disease: "",
-  development_stage: "",
+  external_sample_accesstion: '',
+  disease: '',
+  development_stage: '',
 })
 
 const sampleFormRef = ref()
@@ -579,11 +579,11 @@ const geneNameInput = ref()
 const cell = ref({
   species: undefined,
   ct_id: undefined,
-  cl_cell_id: "",
+  cl_cell_id: '',
   ct_gene_ids: [],
-  searchBy: "name",
-  name: "",
-  names: "",
+  searchBy: 'name',
+  name: '',
+  names: '',
 })
 
 const cellFormRef = ref()
@@ -597,11 +597,11 @@ const geneFormRef = ref()
 
 const searchCondition = computed(() => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       return getSampleConditions()
-    case "cell":
+    case 'cell':
       return getCellConditions()
-    case "gene":
+    case 'gene':
       return getGeneCondition()
     default:
       return {}
@@ -638,15 +638,15 @@ const getCellConditions = () => {
   if (species) {
     result.species_id = species
   }
-  if (searchBy === "id") {
+  if (searchBy === 'id') {
     if (ct_id) {
       result.ct_id = ct_id
     }
-  } else if (searchBy === "name") {
+  } else if (searchBy === 'name') {
     if (cl_cell_id) {
       result.cl_id = cl_cell_id
     }
-  } else if (searchBy === "gene") {
+  } else if (searchBy === 'gene') {
     if (ct_gene_ids) {
       result.ct_id = ct_gene_ids.join()
     }
@@ -664,11 +664,11 @@ const getGeneCondition = () => {
 
 const searchFunc = computed(() => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       return getSampleProjectList
-    case "cell":
+    case 'cell':
       return getCellProjectList
-    case "gene":
+    case 'gene':
       return getGeneProjectList
     default:
       return () => {}
@@ -677,13 +677,13 @@ const searchFunc = computed(() => {
 
 const resetForm = () => {
   switch (filter.value) {
-    case "sample":
+    case 'sample':
       sampleFormRef.value.resetFields()
       break
-    case "cell":
+    case 'cell':
       cellFormRef.value.resetFields()
       break
-    case "gene":
+    case 'gene':
       geneFormRef.value.resetFields()
       break
     default:
@@ -732,9 +732,9 @@ const handleGeneSymbolSearch = async (keywords) => {
 
 const validate = () => {
   switch (filter.value) {
-    case "cell":
+    case 'cell':
       return cellFormRef.value.validate()
-    case "gene":
+    case 'gene':
       return geneFormRef.value.validate()
     default:
       return Promise.resolve()
@@ -782,6 +782,11 @@ const handleTableTypeChange = (type) => {
   filter.value = type
   columns.value[type] = columnsTotal.value[type]
   projectTableRef.value.handleReset()
+  nextTick(() => {
+    if (type === 'sample') {
+      handleSearch()
+    }
+  })
 }
 
 const getOptions = () => {

@@ -76,6 +76,7 @@
           <a-table
             size="large"
             :columns="columns"
+            bordered
             :row-key="(record) => record.id"
             :data-source="list"
             :pagination="pagination"

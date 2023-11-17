@@ -13,6 +13,8 @@ export function getGeneCellTaxonomy({
   genes_positive,
   genes_negative,
   asc,
+  page,
+  page_size,
 }) {
   return request.get("/project/view/table/cell_taxonomy", {
     params: {
@@ -20,6 +22,8 @@ export function getGeneCellTaxonomy({
       genes_positive,
       genes_negative,
       asc,
+      page,
+      page_size,
     },
   })
 }
