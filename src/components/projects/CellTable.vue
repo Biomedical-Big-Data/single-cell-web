@@ -250,17 +250,7 @@ const {
 })
 
 const list = computed(() => {
-  const cellTypeList = dataSource.value?.cell_type_list || []
-  return (dataSource.value?.project_list || []).map((item) => {
-    const { cell_proportion_meta } = item
-    const cell_type = cellTypeList.find(
-      (cell) => cell.cell_type_id === cell_proportion_meta.cell_type_id,
-    )
-    return {
-      ...item,
-      cell_type_meta: cell_type,
-    }
-  })
+  return dataSource.value?.project_list || []
 })
 
 const pagination = computed(() => ({
