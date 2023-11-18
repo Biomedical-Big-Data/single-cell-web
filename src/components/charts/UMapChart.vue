@@ -1,50 +1,57 @@
 <template>
+  <div class="top">
+    <div class="fill" />
+    <a
+      v-for="item in analysis"
+      :key="item.id"
+      class="interactive"
+      @click="handleOpenCellxgene(item)"
+    >
+      Interactive Viewer
+    </a>
+    <div class="group-desc">
+      Static UMAP group by
+      <a-dropdown :trigger="['click']">
+        <a class="type" @click.prevent>
+          {{ getTypeName(umapType) }}
+          <CaretDownOutlined />
+        </a>
+        <template #overlay>
+          <a-menu>
+            <a-menu-item v-for="item in options.umapType" :key="item">
+              <a class="type" @click="handleUMapTypeChange(item)">
+                {{ getTypeName(item) }}
+              </a>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+    </div>
+  </div>
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
         <img v-show="!!umapUrl" :src="umapUrl" class="w-full umap" alt="" />
       </a-spin>
     </div>
-    <div class="umap-types">
-      <div
-        v-for="item in options.umapType"
-        :key="item"
-        class="type"
-        :class="{
-          active: item === umapType,
-        }"
-        @click="handleUMapTypeChange(item)"
-      >
-        {{ item }}
-      </div>
-    </div>
-  </div>
-  <div v-if="false" class="h-full flex flex-col">
-    <a-spin :spinning="loading">
-      <div class="flex items-center px-4 p-2">
-        <span class="mr-4 font text-sm">Static UMAP group by</span>
-        <a-select
-          v-model:value="umapType"
-          class="w-40"
-          :options="options.umapType"
-          @change="handleFileFetch"
-        ></a-select>
-      </div>
-      <div class="flex-1">
-        <img v-show="!!umapUrl" :src="umapUrl" class="w-full umap" alt="" />
-      </div>
-    </a-spin>
+    <div class="umap-types"></div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { getUmap, getUmapColumn } from "@/api/file.js"
+import { CaretDownOutlined } from "@ant-design/icons-vue"
+import { titleCase } from "text-case"
 
 const props = defineProps({
   fileId: {
     type: String,
     required: true,
+  },
+  analysis: {
+    type: Array,
+    default: () => [],
   },
 })
 
@@ -54,6 +61,10 @@ const umapUrl = ref("")
 const options = reactive({
   umapType: [],
 })
+
+const getTypeName = (type) => {
+  return titleCase((type || "").replace(/_+/, " "))
+}
 
 onMounted(() => {
   handleFetchColumn().then(handleFileFetch)
@@ -88,6 +99,13 @@ const handleFileFetch = async () => {
     loading.value = false
   }
 }
+
+const handleOpenCellxgene = (record) => {
+  window.open(
+    `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
+    "_blank",
+  )
+}
 </script>
 
 <style scoped lang="scss">
@@ -98,13 +116,57 @@ img {
   padding: 0 !important;
 }
 
+.top {
+  display: flex;
+  height: 4rem;
+  align-items: stretch;
+  flex-shrink: 0;
+  gap: 0.38rem;
+  border-radius: 0 2.5rem 0 0;
+  overflow: hidden;
+
+  .fill {
+    background: #0081d8;
+    width: 1.625rem;
+  }
+
+  .interactive {
+    display: flex;
+    padding: 0 1.25rem;
+    align-items: center;
+    background: #00a9dd;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .group-desc {
+    flex: 1;
+    background: #0081d8;
+    display: flex;
+    padding: 1rem 1.25rem;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: stretch;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 500;
+
+    .type {
+      color: white;
+    }
+  }
+}
+
 .bottom {
   background: #0081d8;
   display: flex;
   align-items: stretch;
 
   .umap {
-    width: 30.75rem;
+    width: 45rem;
     height: 36.75rem;
     padding: 1.5rem;
     box-sizing: border-box;
@@ -114,23 +176,7 @@ img {
 
   .umap-types {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-
-    .type {
-      color: #fff;
-      padding: 0.75rem;
-      font-size: 1rem;
-      font-weight: 400;
-      text-transform: capitalize;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      text-align: center;
-      cursor: pointer;
-
-      &.active {
-        background: #ff7555;
-      }
-    }
+    width: 10px;
   }
 }
 </style>

@@ -25,19 +25,8 @@
         </div>
         <div class="project-body">
           <div class="left">
-            <div class="top">
-              <div class="fill" />
-              <a
-                v-for="item in analysis"
-                :key="item.id"
-                class="interactive"
-                @click="handleOpenCellxgene(item)"
-              >
-                Interactive Viewer
-              </a>
-              <div class="group-desc">Static UMAP group by</div>
-            </div>
             <UMapChart
+              :analysis="analysis"
               :file-id="projectDetail.project_analysis_meta[0].umap_id"
             />
           </div>
@@ -157,13 +146,6 @@ const handleProjectDetailFetch = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const handleOpenCellxgene = (record) => {
-  window.open(
-    `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
-    "_blank",
-  )
 }
 </script>
 <style scoped lang="scss">

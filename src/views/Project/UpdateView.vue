@@ -568,7 +568,8 @@ const handleTransferToPublic = () => {
   const project = projectDetail.value
   Modal.confirm({
     title: "Apply for public project confirmation?",
-    content: "Are you sure to apply for the public project? After application, the administrator will contact you for more project information",
+    content:
+      "Are you sure to apply for the public project? After application, the administrator will contact you for more project information",
     onOk: async () => {
       await updateProject({
         ...project,
