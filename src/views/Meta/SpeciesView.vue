@@ -25,11 +25,11 @@
             :loading="uploading"
             @click="handleUpdateFileSelect"
           >
-            上传更新文件
+            Upload update file
           </a-button>
           <input ref="fileInputRef" type="file" hidden @change="handleUpdate" />
           <div class="example">
-            示例文件:
+            Example file:
             <a href="./species_meta.xlsx" target="_blank">species_meta.xlsx</a>
           </div>
         </div>
@@ -57,7 +57,7 @@
               <template #icon>
                 <EditOutlined></EditOutlined>
               </template>
-              编辑
+              Edit
             </a-button>
           </template>
         </template>
@@ -173,13 +173,15 @@ const handleUpdate = async (event) => {
     try {
       uploading.value = true
       await updateMetaByFile("species", files[0])
-      message.success("上传更新文件成功，结果将以邮件形式通知")
+      message.success(
+        "Successfully uploaded the updated file, the result will be notified via email",
+      )
     } finally {
       fileInputRef.value.value = null
       uploading.value = false
     }
   } else {
-    message.error("请选择文件")
+    message.error("Please select file ")
   }
 }
 </script>

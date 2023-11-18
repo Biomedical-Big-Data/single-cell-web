@@ -1,7 +1,7 @@
-import axios from 'axios'
-import { message } from 'ant-design-vue'
-import { useUserStore } from '@/stores/user'
-import Router from '@/router'
+import axios from "axios"
+import { message } from "ant-design-vue"
+import { useUserStore } from "@/stores/user"
+import Router from "@/router"
 
 const userStore = useUserStore()
 
@@ -25,7 +25,7 @@ request.interceptors.response.use(
   (response) => {
     const res = response.data
     if (res.status) {
-      if (res.status === '0000') {
+      if (res.status === "0000") {
         return res.data
       } else {
         message.error(res.message)
@@ -36,7 +36,8 @@ request.interceptors.response.use(
     }
   },
   async (error) => {
-    const msg = error.response?.data?.message || error.message || '服务器错误'
+    const msg =
+      error.response?.data?.message || error.message || "Service Error"
     if (error.response?.status === 401) {
       Router.push({ name: "login" })
     }

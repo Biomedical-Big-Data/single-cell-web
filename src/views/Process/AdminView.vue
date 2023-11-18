@@ -20,7 +20,7 @@
                   <li v-for="(item, index) in record.entry_list" :key="index">
                     {{ item.name }}
                     <a-button @click="handleTerminateProcess(item)">
-                      终止
+                      Terminate
                     </a-button>
                   </li>
                 </ul>
@@ -69,7 +69,7 @@ const handleTerminateProcess = async (record) => {
   try {
     terminating.value = true
     await terminateProcess(record)
-    message.success("终止进程成功")
+    message.success("Terminate process success")
     run()
   } finally {
     terminating.value = false

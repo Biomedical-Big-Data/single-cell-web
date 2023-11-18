@@ -93,7 +93,7 @@ const handleOk = async () => {
     loading.value = true
     await cellTypeFormRef.value.validate()
     await createCellType(form.value)
-    message.success("保存成功")
+    message.success("Save success")
     handleCancel()
   } finally {
     loading.value = false

@@ -2,50 +2,50 @@
   <div class="create-container">
     <NavBarForProject>
       <a-button
-          v-if="!projectDetail.isPublish"
-          type="primary"
-          class="mr-3 button-publish"
-          :saving="saving"
-          @click="handleProjectUpdate(true)"
+        v-if="!projectDetail.isPublish"
+        type="primary"
+        class="mr-3 button-publish"
+        :saving="saving"
+        @click="handleProjectUpdate(true)"
       >
-        保存并发布
+        Save and publish
       </a-button>
       <a-button
-          v-if="projectDetail.isPrivate"
-          class="mr-3 button-save"
-          :saving="saving"
-          @click="handleProjectUpdate(false)"
+        v-if="projectDetail.isPrivate"
+        class="mr-3 button-save"
+        :saving="saving"
+        @click="handleProjectUpdate(false)"
       >
-        保存
+        Save
       </a-button>
       <a-button
-          v-if="projectDetail.isPublish"
-          class="mr-3 button-save"
-          :saving="saving"
-          @click="handleProjectOffline()"
+        v-if="projectDetail.isPublish"
+        class="mr-3 button-save"
+        :saving="saving"
+        @click="handleProjectOffline()"
       >
-        下线项目
+        Offline
       </a-button>
       <a-button
-          class="mr-3 button-save"
-          :saving="saving"
-          @click="handleTransferModalShow('copy')"
+        class="mr-3 button-save"
+        :saving="saving"
+        @click="handleTransferModalShow('copy')"
       >
-        拷贝项目
+        Copy
       </a-button>
       <a-button
-          class="mr-3 button-warning"
-          :saving="saving"
-          @click="handleTransferModalShow('transfer')"
+        class="mr-3 button-warning"
+        :saving="saving"
+        @click="handleTransferModalShow('transfer')"
       >
-        转移项目
+        Transfer
       </a-button>
       <a-button
-          class="mr-3 button-warning"
-          :saving="saving"
-          @click="handleTransferToPublic()"
+        class="mr-3 button-warning"
+        :saving="saving"
+        @click="handleTransferToPublic()"
       >
-        申请为公开项目
+        Apply for public
       </a-button>
     </NavBarForProject>
     <div class="content-container">
@@ -53,81 +53,81 @@
       <div class="flex items-center flex-col w-full">
         <div class="max-w-screen-lg w-full mt-6">
           <a-form
-              ref="formRef"
-              label-align="left"
-              :disabled="!projectDetail.isPrivate"
-              :model="formState"
-              name="basic"
-              :rules="rules"
-              autocomplete="off"
-              :label-col="{ style: { width: '8.75rem' } }"
+            ref="formRef"
+            label-align="left"
+            :disabled="!projectDetail.isPrivate"
+            :model="formState"
+            name="basic"
+            :rules="rules"
+            autocomplete="off"
+            :label-col="{ style: { width: '8.75rem' } }"
           >
-            <a-form-item label="Project Name" name="title" required>
+            <a-form-item label="Project name" name="title" required>
               <a-input
-                  v-model:value="formState.title"
-                  placeholder="Project Name"
-                  size="large"
+                v-model:value="formState.title"
+                placeholder="Project name"
+                size="large"
               />
             </a-form-item>
             <a-form-item
-                v-if="!formState.isPrivate"
-                label="Species"
-                name="species_id"
-                required
+              v-if="!formState.isPrivate"
+              label="Species"
+              name="species_id"
+              required
             >
               <a-select
-                  v-model:value="formState.species_id"
-                  :options="options.species"
-                  size="large"
-                  :field-names="{ label: 'species', value: 'id' }"
-                  placeholder="Species"
+                v-model:value="formState.species_id"
+                :options="options.species"
+                size="large"
+                :field-names="{ label: 'species', value: 'id' }"
+                placeholder="Species"
               ></a-select>
             </a-form-item>
 
             <a-form-item
-                v-if="!formState.isPrivate"
-                label="Organ"
-                name="organ"
-                required
+              v-if="!formState.isPrivate"
+              label="Organ"
+              name="organ"
+              required
             >
               <a-input
-                  v-model:value="formState.organ"
-                  size="large"
-                  placeholder="Organ"
+                v-model:value="formState.organ"
+                size="large"
+                placeholder="Organ"
               />
             </a-form-item>
 
             <a-form-item label="Tags" name="tags">
               <a-select
-                  v-model:value="formState.tags"
-                  mode="tags"
-                  placeholder="Tags"
-                  size="large"
-                  :options="[]"
+                v-model:value="formState.tags"
+                mode="tags"
+                placeholder="Tags"
+                size="large"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
             <a-form-item
-                v-if="!!formState.isPrivate"
-                label="Invitee"
-                name="public"
+              v-if="!!formState.isPrivate"
+              label="Invitee"
+              name="public"
             >
               <a-select
-                  v-model:value="formState.members"
-                  size="large"
-                  mode="tags"
-                  placeholder="Invitee"
-                  :options="[]"
+                v-model:value="formState.members"
+                size="large"
+                mode="tags"
+                placeholder="Invitee"
+                :options="[]"
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="H5AD文件" name="h5ad_id" required>
+            <a-form-item label="H5AD file" name="h5ad_id" required>
               <a-button
-                  v-if="!formState.h5ad_id"
-                  size="large"
-                  class="w-full flex items-center justify-center upload-button"
-                  type="dashed"
-                  @click="fileModalRef?.open('h5ad_id')"
+                v-if="!formState.h5ad_id"
+                size="large"
+                class="w-full flex items-center justify-center upload-button"
+                type="dashed"
+                @click="fileModalRef?.open('h5ad_id')"
               >
                 <template #icon>
                   <PlusOutlined></PlusOutlined>
@@ -135,12 +135,12 @@
                 H5AD file
               </a-button>
               <a-button
-                  v-else
-                  size="large"
-                  class="w-full flex items-center justify-center upload-button"
-                  type="dashed"
-                  danger
-                  @click="formState.h5ad_id = null"
+                v-else
+                size="large"
+                class="w-full flex items-center justify-center upload-button"
+                type="dashed"
+                danger
+                @click="formState.h5ad_id = null"
               >
                 <template #icon>
                   <MinusOutlined></MinusOutlined>
@@ -148,14 +148,14 @@
                 {{ formState.h5ad_id }}
               </a-button>
             </a-form-item>
-            <a-form-item label="UMap文件" name="umap_id">
+            <a-form-item label="UMap file" name="umap_id">
               <div>
                 <a-button
-                    v-if="!formState.umap_id"
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    @click="fileModalRef?.open('umap_id')"
+                  v-if="!formState.umap_id"
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  @click="fileModalRef?.open('umap_id')"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -163,12 +163,12 @@
                   UMap file
                 </a-button>
                 <a-button
-                    v-else
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    danger
-                    @click="formState.umap_id = null"
+                  v-else
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  danger
+                  @click="formState.umap_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -185,11 +185,11 @@
             <a-form-item label="CellMarker file" name="cell_marker_id">
               <div>
                 <a-button
-                    v-if="!formState.cell_marker_id"
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    @click="fileModalRef?.open('cell_marker_id')"
+                  v-if="!formState.cell_marker_id"
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  @click="fileModalRef?.open('cell_marker_id')"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -197,12 +197,12 @@
                   CellMarker file
                 </a-button>
                 <a-button
-                    v-else
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    danger
-                    @click="formState.cell_marker_id = null"
+                  v-else
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  danger
+                  @click="formState.cell_marker_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -217,17 +217,17 @@
             </a-form-item>
 
             <a-form-item
-                v-if="formState.isPrivate"
-                label="Pathway file"
-                name="pathway_id"
+              v-if="formState.isPrivate"
+              label="Pathway file"
+              name="pathway_id"
             >
               <div>
                 <a-button
-                    v-if="!formState.pathway_id"
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    @click="fileModalRef?.open('pathway_id')"
+                  v-if="!formState.pathway_id"
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  @click="fileModalRef?.open('pathway_id')"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -235,12 +235,12 @@
                   PathWay file
                 </a-button>
                 <a-button
-                    v-else
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    danger
-                    @click="formState.pathway_id = null"
+                  v-else
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  danger
+                  @click="formState.pathway_id = null"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -257,13 +257,13 @@
             <a-form-item label="Other file" name="other_file_ids">
               <div>
                 <a-button
-                    v-for="(item, index) in formState.other_file_ids"
-                    :key="item"
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button mb-2"
-                    type="dashed"
-                    danger
-                    @click="handleRemoveOtherFile(item, index)"
+                  v-for="(item, index) in formState.other_file_ids"
+                  :key="item"
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button mb-2"
+                  type="dashed"
+                  danger
+                  @click="handleRemoveOtherFile(item, index)"
                 >
                   <template #icon>
                     <MinusOutlined></MinusOutlined>
@@ -271,11 +271,11 @@
                   {{ item }}
                 </a-button>
                 <a-button
-                    v-if="formState.other_file_ids.length < 5"
-                    size="large"
-                    class="w-full flex items-center justify-center upload-button"
-                    type="dashed"
-                    @click="fileModalRef?.open('other_file_ids')"
+                  v-if="formState.other_file_ids.length < 5"
+                  size="large"
+                  class="w-full flex items-center justify-center upload-button"
+                  type="dashed"
+                  @click="fileModalRef?.open('other_file_ids')"
                 >
                   <template #icon>
                     <PlusOutlined></PlusOutlined>
@@ -288,56 +288,56 @@
 
             <a-form-item label="Description" name="description" required>
               <a-textarea
-                  v-model:value="formState.description"
-                  show-count
-                  size="large"
-                  :maxlength="1000"
-                  :auto-size="{ minRows: 4 }"
+                v-model:value="formState.description"
+                show-count
+                size="large"
+                :maxlength="1000"
+                :auto-size="{ minRows: 4 }"
               />
             </a-form-item>
           </a-form>
         </div>
       </div>
       <a-modal
-          v-model:open="open"
-          :title="modelTitle"
-          width="400px"
-          :confirm-loading="saving"
-          :ok-button-props="{shape:'round'}"
-          :cancel-button-props="{shape:'round'}"
-          @ok="handleProjectTransfer"
+        v-model:open="open"
+        :title="modelTitle"
+        width="400px"
+        :confirm-loading="saving"
+        :ok-button-props="{ shape: 'round' }"
+        :cancel-button-props="{ shape: 'round' }"
+        @ok="handleProjectTransfer"
       >
         <div class="py-5">
           <a-input
-              v-model:value="transferMail"
-              size="large"
-              :placeholder="modelPlaceholder"
+            v-model:value="transferMail"
+            size="large"
+            :placeholder="modelPlaceholder"
           ></a-input>
         </div>
       </a-modal>
     </div>
   </div>
   <FileModalView
-      ref="fileModalRef"
-      @selected="handleFileSelected"
+    ref="fileModalRef"
+    @selected="handleFileSelected"
   ></FileModalView>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue'
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import { getSpecieList } from '@/api/options.js'
+import { onMounted, ref, computed } from "vue"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
+import { getSpecieList } from "@/api/options.js"
 import {
   getProjectDetail,
   offlineProject,
   transferProject,
   copyProject,
   updateProject,
-} from '@/api/project.js'
-import { message, Modal } from 'ant-design-vue'
-import FileModalView from '@/views/File/ModalView.vue'
-import { useRouter } from 'vue-router'
-import NavBarForProject from '@/components/NavBarForProject.vue'
+} from "@/api/project.js"
+import { message, Modal } from "ant-design-vue"
+import FileModalView from "@/views/File/ModalView.vue"
+import { useRouter } from "vue-router"
+import NavBarForProject from "@/components/NavBarForProject.vue"
 
 const router = useRouter()
 
@@ -346,13 +346,13 @@ const props = defineProps({
 })
 
 const formState = ref({
-  title: '',
+  title: "",
   h5ad_id: null,
   species_id: undefined,
-  organ: '',
+  organ: "",
   tags: [],
   members: [],
-  description: '',
+  description: "",
   isPrivate: true,
   other_file_ids: [],
   umap_id: null,
@@ -361,10 +361,10 @@ const formState = ref({
 })
 const projectDetail = ref({})
 
-const transferMail = ref('')
+const transferMail = ref("")
 
 const open = ref(false)
-const transferMethod = ref('transfer')
+const transferMethod = ref("transfer")
 const loading = ref(false)
 const saving = ref(false)
 const formRef = ref()
@@ -378,44 +378,44 @@ const rules = {
   title: [
     {
       required: true,
-      message: 'Project Name不能为空',
-      trigger: 'blur',
+      message: "Project name can not be blank",
+      trigger: "blur",
     },
   ],
   description: [
     {
       required: true,
-      message: '项目描述不能为空',
-      trigger: 'blur',
+      message: "Description can not be blank",
+      trigger: "blur",
     },
   ],
   organ: [
     {
       required: true,
-      message: 'Organ不能为空',
-      trigger: 'blur',
+      message: "Organ can not be blank",
+      trigger: "blur",
     },
   ],
   species_id: [
     {
       required: true,
-      message: 'Species不能为空',
-      trigger: 'change',
+      message: "Species can not be blank",
+      trigger: "change",
     },
   ],
 }
 
 const modelTitle = computed(() => {
   return {
-    transfer: '转移项目',
-    copy: '拷贝项目',
+    transfer: "Transfer project",
+    copy: "Copy project",
   }[transferMethod.value]
 })
 
 const modelPlaceholder = computed(() => {
   return {
-    transfer: '请输入新管理员邮箱',
-    copy: '请输入接受人邮箱',
+    transfer: "Please enter the new administrator's email address",
+    copy: "Please enter the recipient's email address",
   }[transferMethod.value]
 })
 
@@ -431,27 +431,27 @@ const handleProjectFetch = async () => {
       project_id: data.id,
       title: data.title,
       species_id:
-      data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
+        data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
           .species_id,
       organ:
-      data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
+        data.project_project_biosample_meta[0]?.project_biosample_biosample_meta
           .organ,
-      tags: data.tags ? data.tags.split(',') : [],
+      tags: data.tags ? data.tags.split(",") : [],
       members: data.project_project_user_meta
-          .filter(
-              (item) =>
-                  item.project_user_user_meta.id !== data.project_user_meta.id,
-          )
-          .map((item) => item.project_user_user_meta.email_address),
+        .filter(
+          (item) =>
+            item.project_user_user_meta.id !== data.project_user_meta.id,
+        )
+        .map((item) => item.project_user_user_meta.email_address),
       description: data.description,
       isPrivate: !!data.is_private,
       isPublish: data.is_publish,
       h5ad_id: data.project_analysis_meta[0].h5ad_id,
       umap_id: data.project_analysis_meta[0].umap_id,
       cell_marker_id: data.project_analysis_meta[0].cell_marker_id,
-      other_file_ids: (data.project_analysis_meta[0].other_file_ids || '')
-          .split(',')
-          .filter((item) => item),
+      other_file_ids: (data.project_analysis_meta[0].other_file_ids || "")
+        .split(",")
+        .filter((item) => item),
       pathway_id: data.project_analysis_meta[0].pathway_id,
     }
     formState.value = result
@@ -491,18 +491,18 @@ const handleProjectUpdate = async (isPublish) => {
       cell_marker_id,
       pathway_id,
       umap_id,
-      tags: tags.join(','),
+      tags: tags.join(","),
       is_private: isPrivate,
       is_publish: isPublish ? true : projectDetail.value.isPublish,
       members: isPrivate ? members : [],
-      other_file_ids: other_file_ids.join(','),
+      other_file_ids: other_file_ids.join(","),
       description,
     })
 
     if (isPublish) {
-      message.success('保存并发布成功')
+      message.success("Save and publish success")
     } else {
-      message.success('保存成功')
+      message.success("Save success")
     }
     await handleProjectFetch()
   } finally {
@@ -517,16 +517,16 @@ const handleTransferModalShow = (method) => {
 
 const handleProjectTransfer = async () => {
   if (!transferMail.value) {
-    return message.error('邮箱不能为空')
+    return message.error("Email can not be blank")
   }
   try {
     saving.value = true
-    if (transferMethod.value === 'transfer') {
+    if (transferMethod.value === "transfer") {
       await transferProject(props.id, transferMail.value)
-      message.success('转移项目成功')
-    } else if (transferMethod.value === 'copy') {
+      message.success("Transfer project success")
+    } else if (transferMethod.value === "copy") {
       await copyProject(props.id, transferMail.value)
-      message.success('拷贝项目成功')
+      message.success("Copy project success")
     }
     await handleProjectFetch()
     open.value = false
@@ -537,11 +537,11 @@ const handleProjectTransfer = async () => {
 
 const handleProjectOffline = () => {
   Modal.confirm({
-    title: '下线确认?',
-    content: '您确认现在下线改项目吗？',
+    title: "Offline confirm?",
+    content: "Are you sure you are going offline now to change the project?",
     onOk: async () => {
       await offlineProject(props.id)
-      message.success('下线项目成功')
+      message.success("Offline project success")
       await handleProjectFetch()
     },
   })
@@ -567,8 +567,8 @@ const handleRemoveOtherFile = (file_id, index) => {
 const handleTransferToPublic = () => {
   const project = projectDetail.value
   Modal.confirm({
-    title: '申请公开项目确认?',
-    content: '您确认申请公开项目吗？申请后管理员会联系您获取更多项目信息',
+    title: "Apply for public project confirmation?",
+    content: "Are you sure to apply for the public project? After application, the administrator will contact you for more project information",
     onOk: async () => {
       await updateProject({
         ...project,
@@ -577,9 +577,9 @@ const handleTransferToPublic = () => {
         other_file_ids: project.other_file_ids.join(),
         tags: project.tags.join(),
       })
-      message.success('申请公开项目成功')
+      message.success("Apply public project success")
       router.replace({
-        name: 'projects_manage',
+        name: "projects_manage",
       })
     },
   })

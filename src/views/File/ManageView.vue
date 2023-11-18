@@ -228,7 +228,7 @@ const handleUpload = async (event) => {
           updateProgress(progress)
         },
       })
-      message.success("上传成功")
+      message.success("Upload success")
       handleSearch()
     } finally {
       fileRef.value.value = null
@@ -249,13 +249,13 @@ const updateProgress = (progress) => {
 
 const handleRemoveFile = async (record) => {
   Modal.confirm({
-    title: "删除确认?",
-    content: "文件删除后不可恢复，是否确认？",
+    title: "Remove confirm?",
+    content: "The file cannot be restored after deletion. Are you sure?",
     onOk: async () => {
       try {
         removing.value = true
         await removeMyProjectFile(record.file_id)
-        message.success("删除成功")
+        message.success("Remove success")
         handleSearch()
       } finally {
         removing.value = false

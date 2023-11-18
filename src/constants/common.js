@@ -34,14 +34,14 @@ export const IS_PRIVATE_DESC = [
 export const AUDIT_STATUS_DESC = [
   {
     value: AUDIT_STATUS.PENDING,
-    label: "待审核",
+    label: "Pending",
   },
   {
     value: AUDIT_STATUS.APPROVED,
-    label: "审核通过",
+    label: "Approved",
   },
   {
     value: AUDIT_STATUS.REJECTED,
-    label: "审核不通过",
+    label: "Rejected",
   },
 ]

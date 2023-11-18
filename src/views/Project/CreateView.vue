@@ -54,7 +54,8 @@
                 <a-tooltip placement="right" class="ml-2">
                   <template #title>
                     <span>
-                      私有项目，仅受邀人可看，公开项目需要管理员审核后才可见
+                      Private projects, only invitees can see, public projects
+                      require administrator review before they can be seen
                     </span>
                   </template>
                   <a-button
@@ -146,7 +147,7 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label="UMap文件" name="umap_id">
+            <a-form-item label="UMap file" name="umap_id">
               <div>
                 <a-button
                   v-if="!formState.umap_id"
@@ -432,13 +433,13 @@ const handleProjectCreate = async (isPublish) => {
           },
         })
       } else {
-        message.success("申请成功")
+        message.success("Apply success")
         router.replace({
           name: "projects",
         })
       }
     } else {
-      message.success("保存成功")
+      message.success("Save success")
       await router.replace({
         name: "project_detail_update",
         params: {

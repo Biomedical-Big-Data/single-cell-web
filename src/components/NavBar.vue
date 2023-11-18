@@ -2,12 +2,12 @@
   <div class="nav">
     <div v-if="route.name === 'home'">
       <router-link class="project no-underline" :to="{ name: 'projects' }">
-        <img src="@/assets/images/home/icon_project.svg" alt=""/>
+        <img src="@/assets/images/home/icon_project.svg" alt="" />
         <span class="flex-1 text-center">Project</span>
       </router-link>
     </div>
     <div v-else class="back-container" @click="handleGoHome()">
-      <img src="@/assets/icons/icon-back.svg" alt=""/>
+      <img src="@/assets/icons/icon-back.svg" alt="" />
       <span>Home</span>
     </div>
     <div v-if="userStore?.getIsAuthenticated" class="user-container">
@@ -15,44 +15,50 @@
         Create Project
       </a-button>
       <a-dropdown>
-        <a-avatar class="cursor-pointer avatar" >
+        <a-avatar class="cursor-pointer avatar">
           {{ userStore.getUser?.user_name?.[0] }}
         </a-avatar>
         <template #overlay>
           <a-menu>
             <a-menu-item key="user_setting" class="large-menu">
-              <RouterLink to="/user/setting">设置</RouterLink>
+              <RouterLink to="/user/setting">User setting</RouterLink>
             </a-menu-item>
             <a-menu-item key="projects_manage" class="large-menu">
-              <RouterLink to="/projects/manage">私有项目</RouterLink>
+              <RouterLink to="/projects/manage">Personal projects</RouterLink>
             </a-menu-item>
             <a-menu-item key="file_manage" class="large-menu">
-              <RouterLink to="/files/manage">我的文件</RouterLink>
+              <RouterLink to="/files/manage">My files</RouterLink>
             </a-menu-item>
-            <a-sub-menu v-if="userStore.getUser.role === 1" key="admin" class="large-menu">
-              <template #title><span>系统管理</span></template>
+            <a-sub-menu
+              v-if="userStore.getUser.role === 1"
+              key="admin"
+              class="large-menu"
+            >
+              <template #title><span>System manage</span></template>
               <a-menu-item key="user_admin" class="large-menu">
-                <RouterLink to="/user/admin">用户管理</RouterLink>
+                <RouterLink to="/user/admin">User manage</RouterLink>
               </a-menu-item>
               <a-menu-item key="project_admin" class="large-menu">
-                <RouterLink to="/projects/admin">项目管理</RouterLink>
+                <RouterLink to="/projects/admin">Project manage</RouterLink>
               </a-menu-item>
               <a-menu-item key="process_admin" class="large-menu">
-                <RouterLink to="/process/admin">进程管理</RouterLink>
+                <RouterLink to="/process/admin">Process manage</RouterLink>
               </a-menu-item>
               <a-menu-item key="meta_admin" class="large-menu">
-                <RouterLink to="/meta">Meta管理</RouterLink>
+                <RouterLink to="/meta">Meta manage</RouterLink>
               </a-menu-item>
             </a-sub-menu>
-            <a-menu-item key="logout" class="large-menu" @click="logout()">登出</a-menu-item>
+            <a-menu-item key="logout" class="large-menu" @click="logout()">
+              Logout
+            </a-menu-item>
           </a-menu>
         </template>
       </a-dropdown>
     </div>
     <div v-else class="flex items-center">
       <router-link
-          class="login no-underline"
-          :to="{ name: 'login', query: { feedback: route.name } }"
+        class="login no-underline"
+        :to="{ name: 'login', query: { feedback: route.name } }"
       >
         Login
       </router-link>
@@ -64,8 +70,8 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user.js'
+import { useRoute, useRouter } from "vue-router"
+import { useUserStore } from "@/stores/user.js"
 
 const router = useRouter()
 const route = useRoute()
@@ -73,15 +79,15 @@ const route = useRoute()
 const userStore = useUserStore()
 
 const handleGoHome = () => {
-  router.push({ name: 'home' })
+  router.push({ name: "home" })
 }
 const handleGoProjectCreate = () => {
-  router.push({ name: 'project_create' })
+  router.push({ name: "project_create" })
 }
 
 const logout = function () {
   userStore.setUser(null)
-  router.replace({ name: 'home' })
+  router.replace({ name: "home" })
 }
 </script>
 
@@ -152,7 +158,8 @@ const logout = function () {
     cursor: pointer;
 
     &:hover {
-      filter: brightness(0) saturate(100%) invert(41%) sepia(100%) saturate(4465%) hue-rotate(186deg) brightness(96%) contrast(102%);
+      filter: brightness(0) saturate(100%) invert(41%) sepia(100%)
+        saturate(4465%) hue-rotate(186deg) brightness(96%) contrast(102%);
     }
 
     img {
@@ -190,14 +197,11 @@ const logout = function () {
       line-height: 1.375rem;
     }
 
-
-    .avatar{
+    .avatar {
       font-size: 1.1rem;
     }
   }
 }
-
-
 </style>
 <style lang="scss">
 .large-menu {

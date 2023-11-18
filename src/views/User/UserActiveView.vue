@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading">
-    <a-result title="正在激活用户" sub-title="请稍后...">
+    <a-result title="Activating user" sub-title="please wait...">
       <template #icon>
         <LoadingOutlined />
       </template>
@@ -10,14 +10,14 @@
     <a-result
       v-if="success"
       status="success"
-      title="用户激活成功"
-      sub-title="请返回登录页面进行登录"
+      title="User activation successful"
+      sub-title="Please return to the login page to log in"
     ></a-result>
     <a-result
       v-else
       status="error"
-      title="用户激活失败"
-      sub-title="请确认您未激活，或联系管理员获取更多信息"
+      title="User activation failed"
+      sub-title="Please confirm if you have activated or contact the administrator for more information"
     ></a-result>
   </div>
 </template>

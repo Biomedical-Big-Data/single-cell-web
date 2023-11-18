@@ -48,7 +48,7 @@ export const constantRoutes = [
     path: "/files/manage",
     name: "files_manage",
     meta: {
-      title: "文件管理",
+      title: "File Manage",
     },
     component: () => import("../views/File/ManageView.vue"),
   },
@@ -86,7 +86,7 @@ export const asyncRoutes = [
     path: "/user/admin",
     name: "user_admin",
     meta: {
-      title: "用户管理",
+      title: "User Manage",
       roles: ["admin"],
     },
     component: () => import("../views/User/AdminView.vue"),
@@ -95,7 +95,7 @@ export const asyncRoutes = [
     path: "/user/setting/:id",
     name: "user_setting",
     meta: {
-      title: "用户信息更新",
+      title: "User Setting",
       roles: ["admin"],
     },
     props: true,
@@ -106,7 +106,7 @@ export const asyncRoutes = [
     path: "/projects/admin",
     name: "projects_admin",
     meta: {
-      title: "项目管理",
+      title: "Project Manage",
       roles: ["admin"],
     },
     component: () => import("../views/Project/AdminView.vue"),
@@ -115,7 +115,7 @@ export const asyncRoutes = [
     path: "/projects/admin/update/:id",
     name: "project_admin_detail_update",
     meta: {
-      title: "公开项目更新",
+      title: "Public project update",
       roles: ["admin"],
     },
     props: true,
@@ -156,7 +156,7 @@ export const asyncRoutes = [
     path: "/process/admin",
     name: "project_admin",
     meta: {
-      title: "进程管理",
+      title: "Process Manage",
       roles: ["admin"],
     },
     component: () => import("../views/Process/AdminView.vue"),

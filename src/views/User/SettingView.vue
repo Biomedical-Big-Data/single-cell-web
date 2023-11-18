@@ -6,11 +6,11 @@
         :loading="loading"
         @click="handleUpdateUser"
       >
-        保存
+        Save
       </a-button>
     </NavBarForProject>
     <div class="content-container">
-      <div class="title">修改个人信息</div>
+      <div class="title">Personal information setting</div>
 
       <div class="flex items-center flex-col w-full">
         <div class="max-w-screen-lg w-full mt-6">
@@ -29,20 +29,20 @@
                 size="large"
               />
             </a-form-item>
-            <a-form-item label="组织" name="organization">
+            <a-form-item label="Organization" name="organization">
               <a-input
                 v-model:value="userInfo.organization"
                 size="large"
                 class="simple-input"
               />
             </a-form-item>
-            <a-form-item label="新密码" name="password">
+            <a-form-item label="New password" name="password">
               <a-input-password
                 v-model:value="userInfo.password"
                 size="large"
               />
             </a-form-item>
-            <a-form-item label="确认密码" name="confirm_password">
+            <a-form-item label="Confirm password" name="confirm_password">
               <a-input-password
                 v-model:value="userInfo.confirm_password"
                 size="large"
@@ -65,12 +65,18 @@ const loading = ref(false)
 const userInfo = ref({})
 const formRef = ref()
 const rules = {
-  organization: [{ required: true, message: "请输入组织", trigger: "blur" }],
+  organization: [
+    {
+      required: true,
+      message: "Please input your organization",
+      trigger: "blur",
+    },
+  ],
   confirm_password: [
     {
       validator: (rule, value, callback) => {
         if (value !== userInfo.value.password) {
-          callback(new Error("两次输入密码不一致"))
+          callback(new Error("The password entered twice is inconsistent"))
         } else {
           callback()
         }
@@ -93,7 +99,7 @@ const handleUpdateUser = async function () {
     loading.value = true
     const { password, organization } = userInfo.value
     await updateMyUserInfo({ password, organization })
-    message.success("修改用户信息成功")
+    message.success("Save user info success")
   } finally {
     loading.value = false
   }

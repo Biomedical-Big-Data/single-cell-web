@@ -96,7 +96,7 @@
                   size="large"
                   @click="handleUpdateUserPasswordModalOpen(record)"
                 >
-                  重设密码
+                  Reset password
                 </a-button>
                 <a-button
                   v-if="record.state === 1"
@@ -106,7 +106,7 @@
                   class="ml-2"
                   @click="handleUpdateUserState(record, -1)"
                 >
-                  禁用
+                  Disable
                 </a-button>
                 <a-button
                   v-if="record.state === -1"
@@ -116,7 +116,7 @@
                   class="ml-2"
                   @click="handleUpdateUserState(record, 1)"
                 >
-                  启用
+                  Enable
                 </a-button>
               </template>
             </template>
@@ -127,14 +127,14 @@
   </div>
   <a-modal
     v-model:open="open"
-    title="重置密码"
+    title="Reset password"
     @ok="handleUpdateUserPassword"
     @cancel="handleClearCurrentUser"
   >
     <div class="py-4">
       <a-input-password
         v-model:value="currentUser.password"
-        placeholder="输入重置密码"
+        placeholder="Enter reset password"
       ></a-input-password>
     </div>
   </a-modal>
@@ -162,15 +162,15 @@ const currentUser = ref({})
 
 const USER_STATUS = [
   {
-    label: "正常",
+    label: "Enable",
     value: 1,
   },
   {
-    label: "未激活",
+    label: "Inactivated",
     value: 0,
   },
   {
-    label: "禁用",
+    label: "Disable",
     value: -1,
   },
 ]
@@ -294,7 +294,7 @@ const handleClearCurrentUser = async () => {
 const handleUpdateUserPassword = async () => {
   try {
     await updateUserPassword(currentUser.value.id, currentUser.value.password)
-    message.success("操作成功")
+    message.success("Operation success")
     return true
   } finally {
     open.value = false
@@ -306,19 +306,19 @@ const handleUpdateUserState = (record, nextState) => {
   Modal.confirm({
     title:
       nextState === -1
-        ? `确认禁用${record.user_name}?`
-        : `确认启用${record.user_name}?`,
+        ? `Confirm disable ${record.user_name}?`
+        : `Confirm enable${record.user_name}?`,
     icon: createVNode(ExclamationCircleOutlined),
     content:
       nextState === -1
-        ? "该操作会禁止用户登录和项目操作"
-        : "该操作会允许用户登录和项目操作",
+        ? "This operation will prohibit user login and project operations"
+        : "This operation will allow user login and project operations",
     okButtonProps: {},
     cancelButtonProps: {},
     onOk: async () => {
       try {
         await updateUserState(record.id, nextState)
-        message.success("操作成功")
+        message.success("Operation success")
         return true
       } finally {
         run({
