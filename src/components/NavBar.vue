@@ -15,9 +15,10 @@
         Create Project
       </a-button>
       <a-dropdown>
-        <a-avatar class="cursor-pointer avatar">
-          {{ userStore.getUser?.user_name?.[0] }}
-        </a-avatar>
+        <div class="cursor-pointer avatar">
+          <UserOutlined class="mr-2" />
+          {{ userStore.getUser?.user_name }}
+        </div>
         <template #overlay>
           <a-menu>
             <a-menu-item key="user_setting" class="large-menu">
@@ -72,6 +73,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router"
 import { useUserStore } from "@/stores/user.js"
+import { UserOutlined } from "@ant-design/icons-vue"
 
 const router = useRouter()
 const route = useRoute()
@@ -199,6 +201,14 @@ const logout = function () {
 
     .avatar {
       font-size: 1.1rem;
+      height: 2.25rem;
+      min-width: 2.25rem;
+      display: flex;
+      align-items: center;
+      padding: 0 1.75rem 0.125rem 1.75rem;
+      border-radius: 2.9375rem;
+      background: rgba(#0062ff, 0.1);
+      color: #0062ff;
     }
   }
 }

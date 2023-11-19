@@ -29,7 +29,7 @@
       </a-button>
       <div class="empty-fill" />
     </div>
-    <div class="mt-4">
+    <div class="mt-4 bg-white">
       <a-table
         :columns="columnResult"
         :data-source="result"

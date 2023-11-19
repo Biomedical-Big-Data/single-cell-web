@@ -194,52 +194,6 @@ const handleProjectDetailFetch = async () => {
       height: 40rem;
       flex-direction: column;
       align-items: stretch;
-
-      .top {
-        display: flex;
-        height: 4rem;
-        align-items: stretch;
-        flex-shrink: 0;
-        gap: 0.38rem;
-        border-radius: 0 2.5rem 0 0;
-        overflow: hidden;
-
-        .fill {
-          background: #0081d8;
-          width: 1.625rem;
-        }
-
-        .interactive {
-          display: flex;
-          padding: 0 1.25rem;
-          align-items: center;
-          background: #00a9dd;
-          color: #fff;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        .group-desc {
-          flex: 1;
-          background: #0081d8;
-          display: flex;
-          padding: 1rem 1.25rem;
-          justify-content: flex-end;
-          align-items: center;
-          gap: 0.625rem;
-          align-self: stretch;
-          color: #fff;
-          font-size: 1.25rem;
-          font-weight: 500;
-        }
-      }
-
-      .bottom {
-        background: #0081d8;
-        display: flex;
-        align-items: stretch;
-      }
     }
 
     .right {

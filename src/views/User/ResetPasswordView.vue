@@ -8,21 +8,21 @@
         <a-form-item class="w-full form-item" name="password">
           <div class="label">Password</div>
           <div>
-            <a-input
+            <a-input-password
               v-model:value="formState.password"
               class="simple-input"
               placeholder="Enter your password"
-            ></a-input>
+            ></a-input-password>
           </div>
         </a-form-item>
         <a-form-item class="w-full form-item" name="confirm_password">
           <div class="label">Confirm password</div>
           <div>
-            <a-input
+            <a-input-password
               v-model:value="formState.confirm_password"
               class="simple-input"
               placeholder="Confirm your password"
-            ></a-input>
+            ></a-input-password>
           </div>
         </a-form-item>
       </a-form>

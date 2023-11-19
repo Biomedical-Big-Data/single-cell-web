@@ -31,7 +31,13 @@
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
-        <img v-show="!!umapUrl" :src="umapUrl" class="w-full umap" alt="" />
+        <img
+          v-show="!!umapUrl"
+          v-preview
+          :src="umapUrl"
+          class="w-full umap"
+          alt=""
+        />
       </a-spin>
     </div>
     <div class="umap-types"></div>
@@ -122,7 +128,7 @@ img {
   align-items: stretch;
   flex-shrink: 0;
   gap: 0.38rem;
-  border-radius: 0 2.5rem 0 0;
+  border-radius: 0 0.625rem 0 0;
   overflow: hidden;
 
   .fill {
@@ -168,7 +174,9 @@ img {
   .umap {
     width: 45rem;
     height: 36.75rem;
-    padding: 1.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
     box-sizing: border-box;
     background: #fff;
     overflow: hidden;
@@ -176,7 +184,7 @@ img {
 
   .umap-types {
     display: flex;
-    width: 10px;
+    width: 0.75rem;
   }
 }
 </style>
