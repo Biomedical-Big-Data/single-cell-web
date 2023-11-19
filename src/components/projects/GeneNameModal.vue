@@ -80,9 +80,35 @@
         :pagination="pagination"
         :loading="loading"
         :scroll="{ y: '50vh' }"
+        :show-sorter-tooltip="false"
         @change="handleTableChange"
       >
+        <template #headerCell="{ title, column }">
+          <template v-if="column.dataIndex === 'cell_type_id'">
+            {{ title }}
+            <a-tooltip placement="bottom">
+              <template #title>
+                <span>高亮表示该ID存在公开数据</span>
+              </template>
+              <QuestionCircleOutlined />
+            </a-tooltip>
+          </template>
+          <template v-if="column.dataIndex === 'score'">
+            {{ title }}
+            <a-tooltip placement="bottom">
+              <template #title>
+                <span>Score值计算公式为命中数量/该条数据的symbol总数量</span>
+              </template>
+              <QuestionCircleOutlined />
+            </a-tooltip>
+          </template>
+        </template>
         <template #bodyCell="{ text, column, record }">
+          <template v-if="column.dataIndex === 'cell_type_id'">
+            <span :class="{ 'id-highlighted': record.is_exist }">
+              {{ text }}
+            </span>
+          </template>
           <template v-if="column.dataIndex === 'marker_gene_symbol'">
             <div class="gene_symbol">
               <span v-for="item in text.split(',')" :key="item" class="symbol">
@@ -117,6 +143,7 @@ import { usePagination } from "vue-request"
 import { getGeneCellTaxonomy } from "@/api/cell.js"
 import _ from "lodash"
 import { Empty } from "ant-design-vue"
+import { QuestionCircleOutlined } from "@ant-design/icons-vue"
 
 const emits = defineEmits(["confirm"])
 const selectedCells = ref([])
@@ -131,7 +158,7 @@ const columns = [
   {
     title: "ID",
     dataIndex: "cell_type_id",
-    width: 100,
+    width: 120,
   },
   {
     title: "Name",
@@ -145,7 +172,7 @@ const columns = [
   {
     title: "Score",
     dataIndex: "score",
-    width: 90,
+    width: 110,
     sorter: true,
     customRender: ({ text }) => {
       return text.toFixed(4)
@@ -251,6 +278,10 @@ defineExpose({
 
 .highlighted {
   background: #efb041;
+}
+
+.id-highlighted {
+  background: rgba(95, 255, 70, 0.5);
 }
 
 .selection {

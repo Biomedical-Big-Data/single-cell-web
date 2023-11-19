@@ -1,44 +1,44 @@
 <template>
   <a-modal
-      v-model:open="open"
-      class="simple-modal"
-      title="Search Cell Name"
-      :width="900"
-      :mask-closable="false"
-      :ok-button-props="{
+    v-model:open="open"
+    class="simple-modal"
+    title="Search Cell Name"
+    :width="900"
+    :mask-closable="false"
+    :ok-button-props="{
       class: 'ok-button',
       disabled: !selectedKeys.length,
     }"
-      :cancel-button-props="{
+    :cancel-button-props="{
       class: 'cancel-button',
     }"
-      @ok="confirm"
+    @ok="confirm"
   >
     <div class="searchbar-container">
       <a-input-search
-          class="searchbar"
-          placeholder="Search"
-          :loading="loading"
-          size="large"
-          @search="handleSearch"
+        class="searchbar"
+        placeholder="Search"
+        :loading="loading"
+        size="large"
+        @search="handleSearch"
       />
     </div>
     <div v-if="!treeData.length" class="content py-4">
-      <a-empty/>
+      <a-empty />
     </div>
     <div v-else class="flex content">
       <div class="flex-2 flex flex-col">
         <div class="p-4 overflow-y-auto">
           <a-tree
-              v-if="treeData.length"
-              v-model:selectedKeys="selectedKeys"
-              :tree-data="treeData"
-              :show-line="true"
-              :default-expand-all="true"
-              @select="handleNodeSelected"
+            v-if="treeData.length"
+            v-model:selectedKeys="selectedKeys"
+            :tree-data="treeData"
+            :show-line="true"
+            :default-expand-all="true"
+            @select="handleNodeSelected"
           >
             <template
-                #title="{
+              #title="{
                 title,
                 data: {
                   data: { cell_number, is_exist },
@@ -47,10 +47,10 @@
             >
               <div :class="{ highlighted: is_exist }">
                 <Highlighter
-                    highlight-class-name="highlight"
-                    :search-words="keywords"
-                    :text-to-highlight="title"
-                    :auto-escape="false"
+                  highlight-class-name="highlight"
+                  :search-words="keywords"
+                  :text-to-highlight="title"
+                  :auto-escape="false"
                 />
                 <span v-if="cell_number">({{ cell_number }})</span>
               </div>
@@ -64,16 +64,16 @@
             <div v-if="relations.length">
               <a-tag v-for="item in relations" :key="item.id" class="mr-2 mb-2">
                 <a
-                    target="_blank"
-                    :href="getLink(item.cell_marker)"
-                    class="cell-marker"
+                  target="_blank"
+                  :href="getLink(item.cell_marker)"
+                  class="cell-marker"
                 >
                   {{ item.cell_marker }}
                 </a>
               </a-tag>
             </div>
             <div v-else class="flex justify-center w-full pt-8">
-              <a-empty/>
+              <a-empty />
             </div>
           </div>
         </a-spin>
@@ -83,14 +83,14 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import Highlighter from 'vue-highlight-words'
+import { computed, ref } from "vue"
+import Highlighter from "vue-highlight-words"
 
-import { getCellTaxonomy, getTaxonomyDetail } from '@/api/cell.js'
-import arrayToTree from 'array-to-tree'
-import _ from 'lodash'
+import { getCellTaxonomy, getTaxonomyDetail } from "@/api/cell.js"
+import arrayToTree from "array-to-tree"
+import _ from "lodash"
 
-const emits = defineEmits(['confirm'])
+const emits = defineEmits(["confirm"])
 const markLoading = ref(false)
 const keywords = ref([])
 const open = ref(false)
@@ -109,7 +109,7 @@ const confirm = () => {
   open.value = false
 
   if (selectedKeys.value.length) {
-    emits('confirm', current.value)
+    emits("confirm", current.value)
   }
 }
 
@@ -124,16 +124,16 @@ const handleSearch = async (keyword) => {
     const data = await getCellTaxonomy(keyword)
     cache.value = data
     treeData.value = arrayToTree(
-        data.map(({ cl_id, cl_pid, name, cell_number, is_exist }) => ({
-          title: name,
-          data: { is_exist, cell_number },
-          key: cl_id,
-          pid: cl_pid,
-        })),
-        {
-          parentProperty: 'pid',
-          customID: 'key',
-        },
+      data.map(({ cl_id, cl_pid, name, cell_number, is_exist }) => ({
+        title: name,
+        data: { is_exist, cell_number },
+        key: cl_id,
+        pid: cl_pid,
+      })),
+      {
+        parentProperty: "pid",
+        customID: "key",
+      },
     )
     keywords.value = [keyword]
   } finally {
@@ -146,12 +146,11 @@ const handleNodeSelected = async (event) => {
     try {
       markLoading.value = true
       const data = await getTaxonomyDetail(event[0])
-      relations.value = _.uniqBy(data, 'cell_marker')
+      relations.value = _.uniqBy(data, "cell_marker")
     } finally {
       markLoading.value = false
     }
   }
-
 }
 
 const getLink = (cell_marker) => {
@@ -235,7 +234,6 @@ defineExpose({
     }
   }
 }
-
 </style>
 <style>
 .highlight {
@@ -247,6 +245,4 @@ defineExpose({
   background: rgba(95, 255, 70, 0.2);
   padding: 0;
 }
-
-
 </style>
