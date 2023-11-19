@@ -19,7 +19,7 @@
         <template #overlay>
           <a-menu>
             <a-menu-item v-for="item in options.umapType" :key="item">
-              <a class="type" @click="handleUMapTypeChange(item)">
+              <a class="type selector-item" @click="handleUMapTypeChange(item)">
                 {{ getTypeName(item) }}
               </a>
             </a-menu-item>

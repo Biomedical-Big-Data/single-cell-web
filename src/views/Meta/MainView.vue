@@ -47,15 +47,6 @@ const handleToRouter = ({ router_name, name }) => {
 </script>
 <style>
 @import "@/assets/styles/stable.scss";
-
-.selector-item {
-  color: #5f5f5f;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: capitalize;
-  padding: 7px 0.75rem;
-  display: inline-block;
-}
 </style>
 
 <!--<a-menu mode="horizontal">-->
