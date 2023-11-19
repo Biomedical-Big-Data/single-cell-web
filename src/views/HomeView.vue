@@ -1,14 +1,18 @@
 <template>
   <video autoplay loop muted class="background">
-    <source src="/background.mp4" type="video/mp4"/>
+    <source src="/background.mp4" type="video/mp4" />
   </video>
   <NavBar></NavBar>
   <div class="h-screen relative">
     <div class="sologn">
-      <div>Welcome to My Amazing <br> scRNA-seq Database !</div>
+      <div>
+        Welcome to My Amazing
+        <br />
+        scRNA-seq Database !
+      </div>
       <div class="flex items-center justify-center">
         <div class="more animate-bounce" @click="handleScroll">
-          <img src="@/assets/images/home/icon_more.svg" alt=""/>
+          <img src="@/assets/images/home/icon_more.svg" alt="" />
         </div>
       </div>
     </div>
@@ -20,14 +24,14 @@
       <div class="items">
         <a-row justify="center">
           <a-col
-              v-for="item in species"
-              :key="item.id"
-              :span="3"
-              class="item"
-              @click="toSpecies(item)"
+            v-for="item in species"
+            :key="item.id"
+            :span="3"
+            class="item"
+            @click="toSpecies(item)"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt=""/>
+              <img :src="item.icon" alt="" />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
@@ -45,14 +49,14 @@
       <div class="items">
         <a-row justify="center" :gutter="[0, 48]">
           <a-col
-              v-for="item in organs"
-              :key="item.id"
-              :span="3"
-              class="item"
-              @click="toOrgan(item)"
+            v-for="item in organs"
+            :key="item.id"
+            :span="3"
+            class="item"
+            @click="toOrgan(item)"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt=""/>
+              <img :src="item.icon" alt="" />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
@@ -70,13 +74,13 @@
       <div class="items">
         <a-row justify="center" :gutter="[0, 48]">
           <a-col
-              v-for="item in statical"
-              :key="item.id"
-              :span="4"
-              class="item none"
+            v-for="item in statical"
+            :key="item.id"
+            :span="4"
+            class="item none"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt=""/>
+              <img :src="item.icon" alt="" />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
@@ -94,39 +98,37 @@
       <div class="items">
         <a-row justify="center" class="flex-nowrap">
           <a-col
-              v-for="item in projects"
-              :key="item.id"
-              :span="8"
-              class="project"
-              @click="toProject(item)"
+            v-for="item in projects"
+            :key="item.id"
+            :span="8"
+            class="project"
+            @click="toProject(item)"
           >
-            <div class="text-center title line-clamp-2">
+            <div class="title line-clamp-2">
               {{ item.title }}
             </div>
-            <div class="text-center desc line-clamp-3">
+            <div class="desc line-clamp-3">
               {{ item.description }}
             </div>
-            <div class="date text-center">
-              {{ dayjs(item.create_at).format('YYYY-MM-DD') }}
+            <div class="date">
+              {{ dayjs(item.create_at).format("YYYY-MM-DD") }}
             </div>
           </a-col>
         </a-row>
       </div>
     </div>
   </div>
-  <div class="footer">
-    scRNA-seq Database © 2023
-  </div>
+  <div class="footer">scRNA-seq Database © 2023</div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { getHomeData } from '@/api/home.js'
-import icons from '@/icons/index.js'
-import { useRouter } from 'vue-router'
-import dayjs from 'dayjs'
-import { titleCase, snakeCase } from 'text-case'
-import NavBar from '@/components/NavBar.vue'
+import { onMounted, ref } from "vue"
+import { getHomeData } from "@/api/home.js"
+import icons from "@/icons/index.js"
+import { useRouter } from "vue-router"
+import dayjs from "dayjs"
+import { titleCase, snakeCase } from "text-case"
+import NavBar from "@/components/NavBar.vue"
 
 const router = useRouter()
 
@@ -149,13 +151,13 @@ const handleFetchHomeData = async () => {
 
   species.value = Object.entries(icons.species).map(([key, icon]) => {
     const result = data.species_list.find(
-        (a) =>
-            snakeCase(a.species || '') === key ||
-            snakeCase(a.species_label || '') === key,
+      (a) =>
+        snakeCase(a.species || "") === key ||
+        snakeCase(a.species_label || "") === key,
     )
     return {
       icon: icon,
-      name: titleCase(key.replace(/_/g, ' ')),
+      name: titleCase(key.replace(/_/g, " ")),
       count: result?.count || 0,
       key: result?.species || key,
       id: result?.id,
@@ -163,10 +165,10 @@ const handleFetchHomeData = async () => {
   })
 
   organs.value = Object.entries(icons.organ).map(([key, icon]) => {
-    const result = data.organ_list.find((a) => snakeCase(a.organ || '') === key)
+    const result = data.organ_list.find((a) => snakeCase(a.organ || "") === key)
     return {
       icon: icon,
-      name: titleCase(key.replace(/_/g, ' ')),
+      name: titleCase(key.replace(/_/g, " ")),
       key: result?.organ || key,
       count: result?.count || 0,
     }
@@ -174,11 +176,11 @@ const handleFetchHomeData = async () => {
 
   statical.value = Object.entries(icons.statical).map(([key, icon]) => {
     const result = (data.statical_list || []).find(
-        (a) => snakeCase(a.statical || '') === key,
+      (a) => snakeCase(a.statical || "") === key,
     )
     return {
       icon: icon,
-      name: titleCase(key.replace(/_/g, ' ')),
+      name: titleCase(key.replace(/_/g, " ")),
       key: result?.statical || key,
       count: result?.count || 0,
     }
@@ -189,7 +191,7 @@ const handleFetchHomeData = async () => {
 
 const toOrgan = (organ) => {
   router.push({
-    name: 'projects',
+    name: "projects",
     query: {
       organ: organ.key,
     },
@@ -199,7 +201,7 @@ const toOrgan = (organ) => {
 const toSpecies = (species) => {
   if (species.id) {
     router.push({
-      name: 'projects',
+      name: "projects",
       query: {
         species: species.id,
       },
@@ -209,7 +211,7 @@ const toSpecies = (species) => {
 
 const toProject = (project) => {
   router.push({
-    name: 'project_detail',
+    name: "project_detail",
     params: {
       id: project.id,
     },
@@ -219,7 +221,7 @@ const toProject = (project) => {
 const handleScroll = () => {
   window.scrollTo({
     top: window.innerHeight - 120,
-    behavior: 'smooth',
+    behavior: "smooth",
   })
 }
 </script>
@@ -248,7 +250,6 @@ const handleScroll = () => {
   z-index: -1;
 }
 
-
 .sologn {
   position: absolute;
   top: 50%;
@@ -257,7 +258,9 @@ const handleScroll = () => {
   z-index: 1;
   color: rgba(255, 255, 255, 0.9);
   text-align: center;
-  font-family: Source Serif Pro, serif;
+  font-family:
+    Source Serif Pro,
+    serif;
   font-size: 4rem;
   font-weight: bold;
   backdrop-filter: blur(1.5px);
@@ -298,7 +301,7 @@ const handleScroll = () => {
       color: rgba(0, 0, 0, 0.88);
       font-size: 1.25rem;
       font-weight: 500;
-      line-height: 2rem;
+      line-height: 1.5rem;
       text-transform: uppercase;
     }
 
@@ -341,7 +344,6 @@ const handleScroll = () => {
           font-size: 1rem;
           margin-top: -0.46rem;
         }
-
       }
 
       .project {
