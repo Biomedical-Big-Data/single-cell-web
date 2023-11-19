@@ -29,7 +29,7 @@
     "vue-highlight-words": "^3.0.1",
     "vue-request": "^2.0.3",
     "vue-router": "^4.2.4",
-    "vue3-image-preview": "^0.2.7",
+    "vue3-photo-preview": "^0.3.0",
     "vue3-plotly": "^0.0.7"
   },
   "devDependencies": {

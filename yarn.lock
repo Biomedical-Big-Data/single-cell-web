@@ -1669,7 +1669,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash-es@^4.17.15:
+lodash-es@^4.17.15, lodash-es@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmmirror.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
@@ -2600,10 +2600,12 @@ vue-types@^3.0.0:
   dependencies:
     is-plain-object "3.0.1"
 
-vue3-image-preview@^0.2.7:
-  version "0.2.7"
-  resolved "https://registry.npmmirror.com/vue3-image-preview/-/vue3-image-preview-0.2.7.tgz#9b4a882e9effa5be79cce31da27fe392dcb2294d"
-  integrity sha512-XlHO6O8jFCz82+Q40rOfY2f2jCt+gnd3/NspqADVaAuoGP3GwTMVdU+iVkPUHQyDHlMeVSc/epNcsI1Varsadw==
+vue3-photo-preview@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmmirror.com/vue3-photo-preview/-/vue3-photo-preview-0.3.0.tgz#082941ccbaad8504adcc6bd6a02560eb125d515e"
+  integrity sha512-DeZ076yN85RcfWdhcgSYVEj5Y721mi6rmDoShDb4Bt7z7Q5Rfs4Y8PlP66OIrsyE0x4KVLdE0auJGxrxXRJXjA==
+  dependencies:
+    lodash-es "^4.17.21"
 
 vue3-plotly@^0.0.7:
   version "0.0.7"

@@ -31,13 +31,11 @@
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
-        <img
-          v-show="!!umapUrl"
-          v-preview
-          :src="umapUrl"
-          class="w-full umap"
-          alt=""
-        />
+        <photo-provider v-if="!!umapUrl" :download-method="handleDownloadUmap">
+          <photo-consumer :src="umapUrl">
+            <img :src="umapUrl" class="w-full umap" alt="" />
+          </photo-consumer>
+        </photo-provider>
       </a-spin>
     </div>
     <div class="umap-types"></div>
@@ -48,7 +46,8 @@
 import { onMounted, reactive, ref } from "vue"
 import { getUmap, getUmapColumn } from "@/api/file.js"
 import { CaretDownOutlined } from "@ant-design/icons-vue"
-import { titleCase } from "text-case"
+import { titleCase, snakeCase } from "text-case"
+import { saveAs } from "file-saver"
 
 const props = defineProps({
   fileId: {
@@ -111,6 +110,10 @@ const handleOpenCellxgene = (record) => {
     `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
     "_blank",
   )
+}
+
+const handleDownloadUmap = (item) => {
+  saveAs(item.src, `umap_by_${snakeCase(umapType.value)}.jpg`)
 }
 </script>
 
@@ -177,6 +180,7 @@ img {
     padding: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     background: #fff;
     overflow: hidden;
