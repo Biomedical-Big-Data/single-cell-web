@@ -128,3 +128,11 @@ export function getCellNumber(analysis_id) {
 export function getPathwayData(analysis_id) {
   return request.get(`/project/${analysis_id}/graph/pathway`)
 }
+
+export function searchItemsByType(keywords, type) {
+  return request.get("/project/sample/list", {
+    params: {
+      [type]: keywords,
+    },
+  })
+}

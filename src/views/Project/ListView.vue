@@ -120,22 +120,38 @@
                 name="disease"
                 class="condition-item"
               >
-                <a-input
+                <a-auto-complete
                   v-model:value="sample.disease"
                   placeholder="Disease"
                   size="large"
-                ></a-input>
+                  :options="options.disease"
+                  @search="
+                    handleSearchConditionByType(
+                      $event,
+                      'disease',
+                      'diseaseFetching',
+                    )
+                  "
+                ></a-auto-complete>
               </a-form-item>
               <a-form-item
                 label="Development Stage"
                 name="development_stage"
                 class="condition-item"
               >
-                <a-input
+                <a-auto-complete
                   v-model:value="sample.development_stage"
                   placeholder="Development Stage"
                   size="large"
-                ></a-input>
+                  :options="options.development_stage"
+                  @search="
+                    handleSearchConditionByType(
+                      $event,
+                      'development_stage',
+                      'developmentStageFetching',
+                    )
+                  "
+                ></a-auto-complete>
               </a-form-item>
             </a-form>
           </div>
@@ -301,6 +317,7 @@ import {
   getGeneProjectList,
   getOrganList,
   getSampleProjectList,
+  searchItemsByType,
 } from "@/api/project"
 import ProjectTable from "@/components/projects/ProjectTable.vue"
 import {
@@ -548,12 +565,17 @@ const options = ref({
   cell: [],
   geneSymbol: [],
   cellIds: [],
+  external_sample_accesstion: [],
+  development_stage: [],
+  disease: [],
 })
 
 const state = ref({
   organFetching: false,
   geneSymbolFetching: false,
   cellIDFetching: false,
+  diseaseFetching: false,
+  developmentStageFetching: false,
 })
 
 const downloading = ref(false)
@@ -777,6 +799,21 @@ onMounted(() => {
     handleSearch()
   })
 })
+
+const handleSearchConditionByType = async (key, type, loadingKey) => {
+  try {
+    state.value[loadingKey] = true
+    if (key) {
+      const data = await searchItemsByType(key, type)
+      console.log(data)
+      options.value[type] = data.biosample_list.map((item) => ({ value: item }))
+    } else {
+      options.value[type] = []
+    }
+  } finally {
+    state.value[loadingKey] = false
+  }
+}
 
 const handleTableTypeChange = (type) => {
   filter.value = type
