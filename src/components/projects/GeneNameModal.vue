@@ -169,16 +169,19 @@ const columns = [
   {
     title: "ID",
     dataIndex: "cell_type_id",
+    sorter: true,
     width: 120,
   },
   {
     title: "Name",
     dataIndex: "cell_type_name",
+    sorter: true,
     width: 200,
   },
   {
     title: "Cell Number",
     dataIndex: "cell_number",
+    sorter: true,
     width: 120,
   },
   {
@@ -242,6 +245,7 @@ const handleTableChange = (pag, filters, sorter) => {
   run({
     page_size: pag.pageSize,
     page: pag?.current,
+    order_by: sorter.field,
     asc: sorter.order === "ascend",
     ...getConditions(),
     ...filters,
