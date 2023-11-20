@@ -236,9 +236,9 @@
 import { onMounted, ref } from "vue"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons-vue"
 import {
+  adminOfflineProject,
   adminProjectTransfer,
   getAdminProjectDetail,
-  offlineProject,
   updateAdminProject,
 } from "@/api/project.js"
 import { message, Modal } from "ant-design-vue"
@@ -415,7 +415,7 @@ const handleProjectOffline = () => {
     title: "Offline confirm?",
     content: "Are you sure you are going offline now to change the project?",
     onOk: async () => {
-      await offlineProject(props.id)
+      await adminOfflineProject(props.id)
       message.success("Offline project success")
       await handleProjectFetch()
     },

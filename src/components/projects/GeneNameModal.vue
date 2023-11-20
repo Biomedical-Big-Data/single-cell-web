@@ -97,7 +97,13 @@
             {{ title }}
             <a-tooltip placement="bottom">
               <template #title>
-                <span>Score值计算公式为命中数量/该条数据的symbol总数量</span>
+                <span>
+                  The similarity score, ranging from 0 to 1, is computed for two
+                  cell types based on the common markers normalized by the union
+                  of marker set sizes. A score of 1 indicates identical marker
+                  sets, while 0 signifies the absence of shared markers between
+                  the two cell types.
+                </span>
               </template>
               <QuestionCircleOutlined />
             </a-tooltip>
@@ -108,6 +114,11 @@
             <span :class="{ 'id-highlighted': record.is_exist }">
               {{ text }}
             </span>
+          </template>
+          <template v-if="column.dataIndex === 'cell_type_name'">
+            <a @click="handleOpenInCellTree(record)">
+              {{ text }}
+            </a>
           </template>
           <template v-if="column.dataIndex === 'marker_gene_symbol'">
             <div class="gene_symbol">
@@ -145,7 +156,7 @@ import _ from "lodash"
 import { Empty } from "ant-design-vue"
 import { QuestionCircleOutlined } from "@ant-design/icons-vue"
 
-const emits = defineEmits(["confirm"])
+const emits = defineEmits(["confirm", "treeOpen"])
 const selectedCells = ref([])
 const open = ref(false)
 const condition = ref({
@@ -164,6 +175,11 @@ const columns = [
     title: "Name",
     dataIndex: "cell_type_name",
     width: 200,
+  },
+  {
+    title: "Cell Number",
+    dataIndex: "cell_number",
+    width: 120,
   },
   {
     title: "Marker Gene Symbol",
@@ -258,6 +274,11 @@ const showModal = (specie_id) => {
 const confirm = () => {
   open.value = false
   emits("confirm", selectedCells.value)
+}
+
+const handleOpenInCellTree = (record) => {
+  open.value = false
+  emits("treeOpen", record)
 }
 
 defineExpose({

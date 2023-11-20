@@ -24,7 +24,10 @@
           </div>
         </div>
         <div class="project-body">
-          <div class="left">
+          <div
+            v-if="projectDetail.project_analysis_meta[0].umap_id"
+            class="left"
+          >
             <UMapChart
               :analysis="analysis"
               :file-id="projectDetail.project_analysis_meta[0].umap_id"
@@ -41,7 +44,11 @@
               <template #leftExtra>
                 <div class="fix-fill"></div>
               </template>
-              <a-tab-pane key="celltype" tab="Celltype Markers">
+              <a-tab-pane
+                v-if="projectDetail.project_analysis_meta[0].cell_marker_id"
+                key="celltype"
+                tab="Celltype Markers"
+              >
                 <CellTypeMarkers
                   :file-id="
                     projectDetail.project_analysis_meta[0].cell_marker_id
@@ -143,6 +150,15 @@ const handleProjectDetailFetch = async () => {
     loading.value = true
     const data = await getProjectDetail(props.id)
     projectDetail.value = data
+    if (data.project_analysis_meta[0].cell_marker_id) {
+      activeKey.value = "celltype"
+    } else if (!data.is_private) {
+      activeKey.value = "barplot"
+    } else if (pathWayVisiable.value) {
+      activeKey.value = "score"
+    } else {
+      activeKey.value = "download"
+    }
   } finally {
     loading.value = false
   }

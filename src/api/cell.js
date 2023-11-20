@@ -1,9 +1,10 @@
 import request from "@/utils/request.js"
 
-export function getCellTaxonomy(cell_standard = "") {
+export function getCellTaxonomy({ cell_standard, cell_type_id } = {}) {
   return request.get("/project/view/tree/cell_taxonomy", {
     params: {
       cell_standard,
+      cell_type_id,
     },
   })
 }

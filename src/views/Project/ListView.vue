@@ -214,9 +214,10 @@
                   name="name"
                   class="condition-item"
                 >
-                  <a-input
+                  <a-textarea
                     ref="cellNameInput"
                     v-model:value="cell.name"
+                    :auto-size="true"
                     placeholder="Click to search"
                     size="large"
                     @focus="handleCellNameSearch"
@@ -231,6 +232,7 @@
                   <a-textarea
                     ref="geneNameInput"
                     v-model:value="cell.names"
+                    :auto-size="true"
                     placeholder="Click to search"
                     size="large"
                     @focus="handleGeneNameSearch"
@@ -303,7 +305,11 @@
   </div>
 
   <CellNameModal ref="cellNameRef" @confirm="handleCellNameChange" />
-  <GeneNameModal ref="geneNameRef" @confirm="handleGeneNameChange" />
+  <GeneNameModal
+    ref="geneNameRef"
+    @confirm="handleGeneNameChange"
+    @tree-open="handleTreeOpen"
+  />
   <GeneChartModal ref="geneChartRef" />
 </template>
 <script setup>
@@ -789,6 +795,11 @@ const handleGeneNameChange = (result) => {
   cell.value.ct_gene_ids = result.map((item) => item.cell_type_id)
 }
 
+const handleTreeOpen = (cell_record) => {
+  cell.value.searchBy = "name"
+  cellNameRef.value.showModal(cell_record)
+}
+
 onMounted(() => {
   getOptions().then(() => {
     const { organ, species } = route.query
@@ -827,7 +838,7 @@ const handleTableTypeChange = (type) => {
 }
 
 const getOptions = () => {
-  return Promise.all([getSpecieOptions()])
+  return Promise.all([getSpecieOptions(), handleOrganSearch()])
 }
 
 const getSpecieOptions = async () => {

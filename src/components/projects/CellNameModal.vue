@@ -16,11 +16,12 @@
   >
     <div class="searchbar-container">
       <a-input-search
+        v-model:value="cell_name"
         class="searchbar"
         placeholder="Search"
         :loading="loading"
         size="large"
-        @search="handleSearch"
+        @search="handleSearch({ keyword: $event })"
       />
     </div>
     <div v-if="!treeData.length" class="content py-4">
@@ -31,6 +32,7 @@
         <div class="p-4 overflow-y-auto">
           <a-tree
             v-if="treeData.length"
+            ref="treeRef"
             v-model:selectedKeys="selectedKeys"
             :tree-data="treeData"
             :show-line="true"
@@ -83,7 +85,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue"
+import { computed, nextTick, ref } from "vue"
 import Highlighter from "vue-highlight-words"
 
 import { getCellTaxonomy, getTaxonomyDetail } from "@/api/cell.js"
@@ -93,16 +95,29 @@ import _ from "lodash"
 const emits = defineEmits(["confirm"])
 const markLoading = ref(false)
 const keywords = ref([])
+const cell_name = ref("")
 const open = ref(false)
 const loading = ref(false)
 const selectedKeys = ref([])
 const treeData = ref([])
 const relations = ref([])
+const treeRef = ref()
 
 const cache = ref([])
 
-const showModal = () => {
+const showModal = async (cell) => {
   open.value = true
+  if (cell) {
+    await handleSearch({ cell_type_id: cell.cell_type_id })
+    await nextTick(() => {
+      const current = _.find(cache.value, { cell_type_id: cell.cell_type_id })
+      if (current) {
+        treeRef.value.scrollTo({ key: current.cl_id })
+        selectedKeys.value = [current.cl_id]
+        handleNodeSelected(selectedKeys.value)
+      }
+    })
+  }
 }
 
 const confirm = () => {
@@ -117,11 +132,14 @@ const current = computed(() => {
   return _.find(cache.value, { cl_id: selectedKeys.value[0] })
 })
 
-const handleSearch = async (keyword) => {
+const handleSearch = async ({ keyword, cell_type_id }) => {
   try {
     loading.value = true
     treeData.value = []
-    const data = await getCellTaxonomy(keyword)
+    const data = await getCellTaxonomy({
+      cell_standard: keyword,
+      cell_type_id,
+    })
     cache.value = data
     treeData.value = arrayToTree(
       data.map(({ cl_id, cl_pid, name, cell_number, is_exist }) => ({

@@ -26,6 +26,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  tickformat: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const keys = computed(() => {
@@ -72,7 +76,7 @@ const layout = computed(() => {
     xaxis: {
       side: "top",
       ticklabelposition: "outside top",
-      tickformat: ".0000%",
+      ...(props.tickformat ? { tickformat: ".0000%" } : {}),
     },
     yaxis: {
       automargin: true,

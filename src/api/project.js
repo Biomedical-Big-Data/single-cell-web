@@ -96,6 +96,9 @@ export function updateAdminProject(data) {
 export function offlineProject(id) {
   return request.post(`/project/${id}/offline`)
 }
+export function adminOfflineProject(id) {
+  return request.post(`/admin/project/${id}/offline`)
+}
 
 export function approveProject(id) {
   return request.post(`/admin/project/${id}/status/update`, {
