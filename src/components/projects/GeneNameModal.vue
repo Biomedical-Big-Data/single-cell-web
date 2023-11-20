@@ -116,7 +116,7 @@
             </span>
           </template>
           <template v-if="column.dataIndex === 'cell_type_name'">
-            <a @click="handleOpenInCellTree(record)">
+            <a class="underline" @click="handleOpenInCellTree(record)">
               {{ text }}
             </a>
           </template>
