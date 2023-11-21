@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <div class="footer-fixed">scRNA-seq Database © 2023</div>
+    <div class="footer-fixed">Single cell © 2023</div>
   </div>
 </template>
 <script setup>

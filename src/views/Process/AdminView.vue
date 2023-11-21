@@ -77,4 +77,6 @@ const handleTerminateProcess = async (record) => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "@/assets/styles/stable.scss";
+</style>

@@ -3,7 +3,7 @@
     <div class="content-container">
       <div class="title-container">
         <div class="title">Login</div>
-        <div class="sub-title">Welcome to scRNA-seq Database</div>
+        <div class="sub-title">Welcome to the Single cell</div>
       </div>
       <a-form ref="formRef" :model="loginForm" :rules="rules">
         <a-form-item class="w-full form-item" name="email_address">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="footer-fixed">
-      scRNA-seq Database © 2023
+      Single cell © 2023
     </div>
   </div>
 

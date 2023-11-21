@@ -1,24 +1,30 @@
 <template>
-  <div v-if="loading">
-    <a-result title="Activating user" sub-title="please wait...">
-      <template #icon>
-        <LoadingOutlined />
-      </template>
-    </a-result>
-  </div>
-  <div v-else>
-    <a-result
-      v-if="success"
-      status="success"
-      title="User activation successful"
-      sub-title="Please return to the login page to log in"
-    ></a-result>
-    <a-result
-      v-else
-      status="error"
-      title="User activation failed"
-      sub-title="Please confirm if you have activated or contact the administrator for more information"
-    ></a-result>
+  <div class="h-screen w-screen flex items-center justify-center">
+    <div v-if="loading">
+      <a-result title="Activating user" sub-title="please wait...">
+        <template #icon>
+          <LoadingOutlined />
+        </template>
+      </a-result>
+    </div>
+    <div v-else>
+      <a-result
+          v-if="success"
+          status="success"
+          title="User activation successful"
+          sub-title="Please return to the login page to log in"
+      >
+        <template #extra>
+          <router-link :to="{name:'login'}" replace>Go to login</router-link>
+        </template>
+      </a-result>
+      <a-result
+          v-else
+          status="error"
+          title="User activation failed"
+          sub-title="Please confirm if you have activated or contact the administrator for more information"
+      ></a-result>
+    </div>
   </div>
 </template>
 
