@@ -79,7 +79,15 @@
             Publication:
             {{ dayjs(projectDetail.update_at).format("YYYY-MM-DD HH:mm") }}
           </div>
-          <div>Email: {{ projectDetail.project_user_meta.email_address }}</div>
+          <div>
+            Email:
+            <span v-if="projectDetail.is_private">
+              {{ projectDetail.project_user_meta.email_address }}
+            </span>
+            <a v-else href="mailto:CasSF_aDM.siais@shanghaitech.edu.cn">
+              CasSF_aDM.siais@shanghaitech.edu.cn
+            </a>
+          </div>
         </div>
       </div>
     </a-spin>
