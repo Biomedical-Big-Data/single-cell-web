@@ -27,14 +27,13 @@
   font-style: normal;
   font-weight: 400;
   display: inline-block;
+  word-wrap: normal;
 }
 
 .publish-1 {
   @extend .publish-base;
   color: #0062FFCC;
   border: 1px solid #0062FFCC;
-
-
 }
 
 
@@ -46,9 +45,12 @@
 }
 
 .private-base {
-  padding-left: 1rem;
+  padding-left: 0.25rem;
   position: relative;
   color: #5F5F5F;
+  display: inline-block;
+  width: 4.5rem;
+
 
   &:before {
     position: absolute;
