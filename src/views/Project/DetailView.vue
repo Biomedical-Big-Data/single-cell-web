@@ -24,10 +24,7 @@
           </div>
         </div>
         <div class="project-body">
-          <div
-            v-if="projectDetail.project_analysis_meta[0].umap_id"
-            class="left"
-          >
+          <div class="left">
             <UMapChart
               :analysis="analysis"
               :file-id="projectDetail.project_analysis_meta[0].umap_id"

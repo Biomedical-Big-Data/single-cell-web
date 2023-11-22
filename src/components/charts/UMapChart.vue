@@ -9,7 +9,7 @@
     >
       Interactive Viewer
     </a>
-    <div class="group-desc">
+    <div v-if="umapType.length" class="group-desc">
       Static UMAP group by
       <a-dropdown :trigger="['click']">
         <a class="type" @click.prevent>
@@ -27,11 +27,13 @@
         </template>
       </a-dropdown>
     </div>
+    <div v-else class="group-desc"></div>
   </div>
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
-        <photo-provider v-if="!!umapUrl" :download-method="handleDownloadUmap">
+        <a-empty v-if="!umapUrl" />
+        <photo-provider v-else :download-method="handleDownloadUmap">
           <photo-consumer :src="umapUrl">
             <img :src="umapUrl" class="w-full umap" alt="" />
           </photo-consumer>
@@ -95,11 +97,13 @@ const handleUMapTypeChange = (type) => {
 const handleFileFetch = async () => {
   try {
     loading.value = true
-    const response = await getUmap(props.fileId, umapType.value)
-    const arrayBufferView = new Uint8Array(response)
-    const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
-    const urlCreator = window.URL || window.webkitURL
-    umapUrl.value = urlCreator.createObjectURL(blob)
+    if (umapType.value) {
+      const response = await getUmap(props.fileId, umapType.value)
+      const arrayBufferView = new Uint8Array(response)
+      const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
+      const urlCreator = window.URL || window.webkitURL
+      umapUrl.value = urlCreator.createObjectURL(blob)
+    }
   } finally {
     loading.value = false
   }
