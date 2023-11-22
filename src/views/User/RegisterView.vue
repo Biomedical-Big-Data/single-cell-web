@@ -84,6 +84,7 @@
   </div>
 </template>
 <script setup>
+import { Modal } from "ant-design-vue"
 import { ref } from "vue"
 import { register } from "@/api/user"
 import { message } from "ant-design-vue"
@@ -163,8 +164,14 @@ const handleUserRegister = async function () {
     const { user_name, user_password, organization, email_address } =
       registerForm.value
     await register({ user_name, user_password, organization, email_address })
-    message.success("Registration successful, please check email activation")
-    await router.replace({ name: "login" })
+    message.success("")
+    Modal.success({
+      title: "Registration successful",
+      content: "please check email activation",
+      onOk() {
+        router.replace({ name: "login" })
+      },
+    })
   } finally {
     loading.value = false
   }
