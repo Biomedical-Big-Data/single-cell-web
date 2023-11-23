@@ -1,37 +1,43 @@
 <template>
   <div class="top">
-    <div class="fill" />
-    <a
+    <div
       v-for="item in analysis"
       :key="item.id"
       class="interactive"
       @click="handleOpenCellxgene(item)"
     >
-      Interactive Viewer
-    </a>
-    <div class="group-desc">
-      Static UMAP group by
-      <a-dropdown :trigger="['click']">
-        <a class="type" @click.prevent>
-          {{ getTypeName(umapType) }}
-          <CaretDownOutlined />
-        </a>
-        <template #overlay>
-          <a-menu>
-            <a-menu-item v-for="item in options.umapType" :key="item">
-              <a class="type selector-item" @click="handleUMapTypeChange(item)">
-                {{ getTypeName(item) }}
-              </a>
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
+      <a-button class="action">Interactive Viewer</a-button>
     </div>
+    <div v-if="umapType.length" class="group-desc">
+      <div class="desc">Static UMAP</div>
+      <div>
+        <a-dropdown :trigger="['click']">
+          <a class="type" @click.prevent>
+            group by: {{ getTypeName(umapType) }}
+            <CaretDownOutlined />
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item v-for="item in options.umapType" :key="item">
+                <a
+                  class="type selector-item"
+                  @click="handleUMapTypeChange(item)"
+                >
+                  {{ getTypeName(item) }}
+                </a>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </div>
+    </div>
+    <div v-else class="group-desc"></div>
   </div>
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
-        <photo-provider v-if="!!umapUrl" :download-method="handleDownloadUmap">
+        <a-empty v-if="!umapUrl" />
+        <photo-provider v-else :download-method="handleDownloadUmap">
           <photo-consumer :src="umapUrl">
             <img :src="umapUrl" class="w-full umap" alt="" />
           </photo-consumer>
@@ -95,11 +101,13 @@ const handleUMapTypeChange = (type) => {
 const handleFileFetch = async () => {
   try {
     loading.value = true
-    const response = await getUmap(props.fileId, umapType.value)
-    const arrayBufferView = new Uint8Array(response)
-    const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
-    const urlCreator = window.URL || window.webkitURL
-    umapUrl.value = urlCreator.createObjectURL(blob)
+    if (umapType.value) {
+      const response = await getUmap(props.fileId, umapType.value)
+      const arrayBufferView = new Uint8Array(response)
+      const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
+      const urlCreator = window.URL || window.webkitURL
+      umapUrl.value = urlCreator.createObjectURL(blob)
+    }
   } finally {
     loading.value = false
   }
@@ -129,42 +137,51 @@ img {
   display: flex;
   height: 4rem;
   align-items: stretch;
+  background: #0081d8;
   flex-shrink: 0;
-  gap: 0.38rem;
+  padding-left: 0.75rem;
+  gap: 1.25rem;
   border-radius: 0 0.625rem 0 0;
   overflow: hidden;
 
-  .fill {
-    background: #0081d8;
-    width: 1.625rem;
-  }
-
   .interactive {
     display: flex;
-    padding: 0 1.25rem;
     align-items: center;
-    background: #00a9dd;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
+
+    .action {
+      display: flex;
+      align-items: center;
+      height: 2.25rem;
+      padding: 1rem 1.25rem;
+      border-radius: 3.125rem;
+      background: #00a9dd;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      flex: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
   }
 
   .group-desc {
     flex: 1;
-    background: #0081d8;
+
+    flex-direction: column;
     display: flex;
     padding: 1rem 1.25rem;
-    justify-content: flex-end;
     align-items: center;
     gap: 0.625rem;
     align-self: stretch;
     color: #fff;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 500;
+    align-content: center;
+    justify-content: center;
 
     .type {
       color: white;
+      font-size: 0.875rem;
     }
   }
 }

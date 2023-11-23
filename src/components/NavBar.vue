@@ -1,9 +1,12 @@
 <template>
   <div class="nav">
-    <div v-if="route.name === 'home'">
+    <div v-if="route.name === 'home'" class="nav-project">
       <router-link class="project no-underline" :to="{ name: 'projects' }">
-        <img src="@/assets/images/home/icon_project.svg" alt="" />
-        <span class="flex-1 text-center">Project</span>
+        <span class="text-center">Public Project</span>
+        <span class="button-desc">exploring</span>
+      </router-link>
+      <router-link v-if="false" :to="{ name: 'home' }" class="about">
+        <span>about</span>
       </router-link>
     </div>
     <div v-else class="back-container" @click="handleGoHome()">
@@ -12,6 +15,7 @@
     </div>
     <div v-if="userStore?.getIsAuthenticated" class="user-container">
       <a-button class="create-action" @click="handleGoProjectCreate()">
+        <PlusOutlined />
         Create Project
       </a-button>
       <a-dropdown>
@@ -61,10 +65,12 @@
         class="login no-underline"
         :to="{ name: 'login', query: { feedback: route.name } }"
       >
-        Login
+        <span>Login</span>
+        <span class="button-desc">To manage projects</span>
       </router-link>
       <router-link class="sign-up no-underline" :to="{ name: 'register' }">
-        Sign up
+        <span>Sign up</span>
+        <span class="button-desc">To create or share private projects</span>
       </router-link>
     </div>
   </div>
@@ -73,7 +79,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router"
 import { useUserStore } from "@/stores/user.js"
-import { UserOutlined } from "@ant-design/icons-vue"
+import { UserOutlined, PlusOutlined } from "@ant-design/icons-vue"
 
 const router = useRouter()
 const route = useRoute()
@@ -105,14 +111,20 @@ const logout = function () {
   width: 100vw;
   z-index: 99;
 
+  &-project {
+    display: flex;
+    gap: 0.75rem;
+  }
+
   .project {
     border: none;
     display: flex;
+    flex-direction: column;
     width: 11.25rem;
-    height: 2.25rem;
-    padding: 0 1.25rem;
+    height: 3.375rem;
+    padding: 0.5rem 1.875rem 0.625rem 1.875rem;
     align-items: center;
-    flex-shrink: 0;
+    justify-content: center;
     border-radius: 2.9375rem;
     background: #ff7555;
     backdrop-filter: blur(7px);
@@ -120,17 +132,35 @@ const logout = function () {
     font-size: 1rem;
   }
 
+  .about {
+    display: flex;
+    width: 6.25rem;
+    justify-content: center;
+    align-items: center;
+    height: 3.375rem;
+    border: 1px solid #d2d2d2;
+    color: #7e7e7e;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 2.9375rem;
+    backdrop-filter: blur(7px);
+  }
+
+  .button-desc {
+    font-size: 0.875rem;
+  }
+
   .login {
     background: transparent;
     display: flex;
-    width: 7.5rem;
-    height: 2.25rem;
-    padding: 0 0.625rem 0.125rem 0.625rem;
+    height: 3.375rem;
+    flex-direction: column;
+    padding: 0.5rem 1.875rem 0.625rem 1.875rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
     border-radius: 2.9375rem;
     border: 2px solid #0062ff;
+
     color: #0062ff;
     font-size: 1rem;
   }
@@ -139,43 +169,15 @@ const logout = function () {
     margin-left: 0.75rem;
     border: none;
     display: flex;
-    width: 7.5rem;
-    height: 2.25rem;
-    padding: 0 0.625rem 0.125rem 0.625rem;
+    height: 3.375rem;
+    flex-direction: column;
+    padding: 0.5rem 1.875rem 0.625rem 1.875rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
     border-radius: 2.9375rem;
     background: #0062ff;
     color: #fff;
     font-size: 1rem;
-  }
-
-  .back-container {
-    display: flex;
-    height: 2.25rem;
-    padding: 0 0.75rem;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(0) saturate(100%) invert(41%) sepia(100%)
-        saturate(4465%) hue-rotate(186deg) brightness(96%) contrast(102%);
-    }
-
-    img {
-      width: 1.125rem;
-      height: 1.125rem;
-    }
-
-    span {
-      color: #5f5f5f;
-      font-size: 1rem;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 1.375rem; /* 137.5% */
-    }
   }
 
   .user-container {
@@ -186,8 +188,8 @@ const logout = function () {
 
     .create-action {
       display: flex;
-      height: 2.25rem;
-      padding: 0 1.75rem 0.125rem 1.75rem;
+      height: 3.375rem;
+      padding: 0.5rem 1.875rem 0.625rem 1.875rem;
       justify-content: center;
       align-items: center;
       gap: 0.625rem;
@@ -201,11 +203,11 @@ const logout = function () {
 
     .avatar {
       font-size: 1.1rem;
-      height: 2.25rem;
+      height: 3.375rem;
+      padding: 0.5rem 1.875rem 0.625rem 1.875rem;
       min-width: 2.25rem;
       display: flex;
       align-items: center;
-      padding: 0 1.75rem 0.125rem 1.75rem;
       border-radius: 2.9375rem;
       background: rgba(#0062ff, 0.1);
       color: #0062ff;

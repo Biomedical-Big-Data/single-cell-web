@@ -1007,7 +1007,7 @@ const handleListDownload = async () => {
 
           :deep(.ant-form-item-explain-error) {
             text-align: center;
-            color: #ff7555;
+            color: #ffffff;
           }
         }
 

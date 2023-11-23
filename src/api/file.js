@@ -19,7 +19,11 @@ export function getUmap(file_id, group_by) {
 }
 
 export function getUmapColumn(file_id) {
-  return request.get(`/project/view/file/umap/${file_id}/column`)
+  if (file_id) {
+    return request.get(`/project/view/file/umap/${file_id}/column`)
+  } else {
+    return Promise.resolve([])
+  }
 }
 
 export function getDownloadFileToken(id) {

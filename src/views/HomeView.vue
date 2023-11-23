@@ -6,9 +6,9 @@
   <div class="h-screen relative">
     <div class="sologn">
       <div>
-        Welcome to My Amazing
+        Welcome to the
         <br />
-        scRNA-seq Database !
+        Single cell !
       </div>
       <div class="flex items-center justify-center">
         <div class="more animate-bounce" @click="handleScroll">
@@ -118,7 +118,7 @@
       </div>
     </div>
   </div>
-  <div class="footer">scRNA-seq Database © 2023</div>
+  <div class="footer">Single cell © 2023</div>
 </template>
 
 <script setup>
