@@ -1,6 +1,12 @@
 <template>
   <div class="create-container">
     <NavBarForProject>
+      <template #back>
+        <div class="back-container" @click="handleGoPrivateProject()">
+          <img src="@/assets/icons/icon-back.svg" alt="" />
+          <span>Back to my personal projects</span>
+        </div>
+      </template>
       <a-button
         v-if="!projectDetail.isPublish"
         type="primary"
@@ -45,7 +51,7 @@
         :saving="saving"
         @click="handleTransferToPublic()"
       >
-        Apply for public
+        Apply for public release
       </a-button>
     </NavBarForProject>
     <div class="content-container">
@@ -538,7 +544,8 @@ const handleProjectTransfer = async () => {
 const handleProjectOffline = () => {
   Modal.confirm({
     title: "Offline confirm?",
-    content: "Are you sure you are going offline now to change the project?",
+    content:
+      "Are you sure to bring this project offline as draft, no more shared with others?",
     onOk: async () => {
       await offlineProject(props.id)
       message.success("Offline project success")
@@ -567,9 +574,11 @@ const handleRemoveOtherFile = (file_id, index) => {
 const handleTransferToPublic = () => {
   const project = projectDetail.value
   Modal.confirm({
-    title: "Apply for public project confirmation?",
+    title: "Apply for public release confirmation",
     content:
-      "Are you sure to apply for the public project? After application, the administrator will contact you for more project information",
+      "Are you sure you are going to release this project as publicly accessible? " +
+      "After application, the administrator may contact you for more meta information and handle with the release procedure.  " +
+      "We will minimize your burden of work.",
     onOk: async () => {
       await updateProject({
         ...project,
@@ -583,6 +592,12 @@ const handleTransferToPublic = () => {
         name: "projects_manage",
       })
     },
+  })
+}
+
+const handleGoPrivateProject = () => {
+  router.replace({
+    name: "projects_manage",
   })
 }
 </script>

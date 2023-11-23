@@ -413,7 +413,8 @@ const handleProjectTransfer = async () => {
 const handleProjectOffline = () => {
   Modal.confirm({
     title: "Offline confirm?",
-    content: "Are you sure you are going offline now to change the project?",
+    content:
+      "Are you sure to bring this project offline as draft, no more shared with others? ",
     onOk: async () => {
       await adminOfflineProject(props.id)
       message.success("Offline project success")
