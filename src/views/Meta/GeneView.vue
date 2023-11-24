@@ -110,7 +110,6 @@ const columns = [
   ].map((item) => ({
     title: item,
     dataIndex: item,
-    align: "center",
     width: 150,
   })),
   // {

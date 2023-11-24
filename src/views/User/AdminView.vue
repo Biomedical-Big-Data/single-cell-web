@@ -91,7 +91,9 @@
                 {{ getStateName(text) }}
               </template>
               <template v-if="dataIndex === 'role'">
-                <span :class="getRoleName(text).toLowerCase()">{{ getRoleName(text) }}</span>
+                <span
+                    class="role large cursor-pointer" :class="getRoleName(text).toLowerCase()"
+                    @click="handleUpdateUserRoleModalOpen(record)">{{ getRoleName(text) }}</span>
               </template>
               <template v-if="dataIndex === 'operation'">
                 <a-button
@@ -102,18 +104,10 @@
                   Reset password
                 </a-button>
                 <a-button
-                    type="link"
-                    size="large"
-                    @click="handleUpdateUserRoleModalOpen(record)"
-                >
-                  Set Role
-                </a-button>
-                <a-button
                     v-if="record.state === 1"
                     type="link"
                     danger
                     size="large"
-                    class="ml-2"
                     @click="handleUpdateUserState(record, -1)"
                 >
                   Disable
@@ -123,7 +117,6 @@
                     type="link"
                     size="large"
                     danger
-                    class="ml-2"
                     @click="handleUpdateUserState(record, 1)"
                 >
                   Enable
@@ -232,7 +225,7 @@ const columns = [
   {
     title: 'Operation',
     dataIndex: 'operation',
-    width: '500px',
+    width: '280px',
   },
 ]
 
@@ -314,8 +307,7 @@ const handleUpdateUserPasswordModalOpen = (record) => {
 
 const handleUpdateUserRoleModalOpen = (record) => {
   open.value.role = true
-  currentUser.value = record
-
+  currentUser.value = { ...record }
 }
 
 const handleClearCurrentUser = async () => {
@@ -343,6 +335,7 @@ const handleUpdateUserRole = async () => {
   try {
     await updateUserInfoByAdmin(currentUser.value.id, { role: currentUser.value.role })
     message.success('Operation success')
+    handleSearch()
     return true
   } finally {
     open.value.role = false

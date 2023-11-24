@@ -82,3 +82,7 @@ export function updateUserState (user_id, state) {
 export function updateUserInfoByAdmin (user_id, data) {
   return request.post(`/admin/user/${user_id}/edit`, data)
 }
+
+export function getUserSpace () {
+  return request.get(`/project/me/memory_cost`)
+}

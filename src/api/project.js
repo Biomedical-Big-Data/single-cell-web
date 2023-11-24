@@ -67,6 +67,10 @@ export function getMyProjectFile(params) {
   return request.get("/project/file/me", { params })
 }
 
+export function removeProject(id){
+  return request.delete(`/project/${id}`)
+}
+
 export function removeMyProjectFile(id) {
   return request.delete(`/project/file/${id}`)
 }

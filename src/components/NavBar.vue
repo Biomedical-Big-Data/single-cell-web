@@ -10,21 +10,22 @@
       </router-link>
     </div>
     <div v-else class="back-container" @click="handleGoHome()">
-      <img src="@/assets/icons/icon-back.svg" alt="" />
+      <img src="@/assets/icons/icon-back.svg" alt=""/>
       <span>Home</span>
     </div>
     <div v-if="userStore?.getIsAuthenticated" class="user-container">
       <a-button class="create-action" @click="handleGoProjectCreate()">
-        <PlusOutlined />
+        <PlusOutlined/>
         Create Project
       </a-button>
       <a-dropdown>
         <div class="cursor-pointer avatar">
-          <UserOutlined class="mr-2" />
+          <UserOutlined/>
           {{ userStore.getUser?.user_name }}
+          <span v-if="showRoleLabel" class="role" :class="roleName">{{ roleName }}</span>
         </div>
         <template #overlay>
-          <a-menu>
+          <a-menu class="user-menu">
             <a-menu-item key="user_setting" class="large-menu">
               <RouterLink to="/user/setting">User setting</RouterLink>
             </a-menu-item>
@@ -35,9 +36,9 @@
               <RouterLink to="/files/manage">My files</RouterLink>
             </a-menu-item>
             <a-sub-menu
-              v-if="userStore.getUser.role === 1"
-              key="admin"
-              class="large-menu"
+                v-if="userStore.getUser.role === 1"
+                key="admin"
+                class="large-menu"
             >
               <template #title><span>System manage</span></template>
               <a-menu-item key="user_admin" class="large-menu">
@@ -62,8 +63,8 @@
     </div>
     <div v-else class="flex items-center">
       <router-link
-        class="login no-underline"
-        :to="{ name: 'login', query: { feedback: route.name } }"
+          class="login no-underline"
+          :to="{ name: 'login', query: { feedback: route.name } }"
       >
         <span>Login</span>
         <span class="button-desc">To manage projects</span>
@@ -77,25 +78,37 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router"
-import { useUserStore } from "@/stores/user.js"
-import { UserOutlined, PlusOutlined } from "@ant-design/icons-vue"
+import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user.js'
+import { UserOutlined, PlusOutlined } from '@ant-design/icons-vue'
+import { USER_ROLE_DESC } from '@/constants/user.js'
+import { computed } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
 
 const userStore = useUserStore()
 
+
+const showRoleLabel = computed(() => {
+  return userStore?.getUser.role
+})
+
+
+const roleName = computed(() => {
+  return (USER_ROLE_DESC.find((item) => item.value === userStore?.getUser.role)?.label || 'Normal').toLocaleLowerCase()
+})
+
 const handleGoHome = () => {
-  router.push({ name: "home" })
+  router.push({ name: 'home' })
 }
 const handleGoProjectCreate = () => {
-  router.push({ name: "project_create" })
+  router.push({ name: 'project_create' })
 }
 
 const logout = function () {
   userStore.setUser(null)
-  router.replace({ name: "home" })
+  router.replace({ name: 'home' })
 }
 </script>
 
@@ -204,25 +217,46 @@ const logout = function () {
     .avatar {
       font-size: 1.1rem;
       height: 3.375rem;
-      padding: 0.5rem 1.875rem 0.625rem 1.875rem;
+      padding: 0.25rem 0.9375rem;
       min-width: 2.25rem;
       display: flex;
       align-items: center;
+      gap: 0.5rem;
       border-radius: 2.9375rem;
       background: rgba(#0062ff, 0.1);
       color: #0062ff;
     }
   }
 }
+
+
+.user-menu {
+  width: 200px;
+}
 </style>
 <style lang="scss">
 .large-menu {
   font-size: 1rem !important;
   padding: 0.75rem 1rem !important;
+  cursor: pointer !important;
 
   .ant-dropdown-menu-submenu-title {
     font-size: 1rem !important;
     padding-left: 0 !important;
+  }
+
+
+  .ant-dropdown-menu-submenu-title{
+    padding-top:0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  &.ant-dropdown-menu-submenu-active {
+    background-color: rgba(0, 0, 0, 0.04);
+
+    .ant-dropdown-menu-submenu-title{
+      background: transparent !important;
+    }
   }
 }
 </style>

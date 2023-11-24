@@ -90,12 +90,10 @@ const columns = [
   {
     title: "species",
     dataIndex: "species",
-    align: "center",
   },
   {
     title: "species_ontology_label",
     dataIndex: "species_ontology_label",
-    align: "center",
   },
   // {
   //   title: "操作",

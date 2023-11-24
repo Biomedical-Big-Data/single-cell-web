@@ -212,7 +212,7 @@ const handleProjectDetailFetch = async () => {
 
     .left {
       display: flex;
-      height: 40rem;
+      min-height: 40rem;
       flex-direction: column;
       align-items: stretch;
     }

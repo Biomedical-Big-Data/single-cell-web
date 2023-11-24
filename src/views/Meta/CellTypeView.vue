@@ -115,7 +115,6 @@ const columns = [
     title: item,
     dataIndex: item,
     width: 150,
-    align: "center",
   })),
   // {
   //   title: "操作",
