@@ -164,7 +164,6 @@ const handleUserRegister = async function () {
     const { user_name, user_password, organization, email_address } =
       registerForm.value
     await register({ user_name, user_password, organization, email_address })
-    message.success("")
     Modal.success({
       title: "Registration successful",
       content: "please check email activation",
