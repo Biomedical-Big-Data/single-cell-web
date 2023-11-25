@@ -1009,6 +1009,12 @@ const handleListDownload = async () => {
             text-align: center;
             color: #ffffff;
           }
+
+          :deep(.ant-form-item-required){
+            &:before {
+              color: #ffffff;
+            }
+          }
         }
 
         .action {
