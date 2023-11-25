@@ -80,14 +80,13 @@
         </div>
       </div>
     </div>
-    <div class="footer-fixed">Single cell © 2023</div>
+    <div class="footer-fixed">©2023 Single cell. All rights reserved.</div>
   </div>
 </template>
 <script setup>
 import { Modal } from "ant-design-vue"
 import { ref } from "vue"
 import { register } from "@/api/user"
-import { message } from "ant-design-vue"
 import { useRouter } from "vue-router"
 
 const router = useRouter()

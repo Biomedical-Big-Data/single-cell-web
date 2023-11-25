@@ -118,7 +118,7 @@
       </div>
     </div>
   </div>
-  <div class="footer">Single cell © 2023</div>
+  <div class="footer">©2023 Single cell. All rights reserved.</div>
 </template>
 
 <script setup>
