@@ -4,7 +4,7 @@
     <div class="body-container">
       <div class="title-container">
         <div>Personal Project List</div>
-        <div v-if="showTip"  class="progress-container">
+        <div v-if="showTip" class="progress-container">
           <div>
             <a-progress
                 class="progress"
@@ -15,8 +15,8 @@
             />
           </div>
           <div class="progress-desc">
-            {{projectCount}} of {{projectLimit}} projects used
-            <ApplyForSuper />
+            {{ projectCount }} of {{ projectLimit }} projects used
+            <ApplyForSuper/>
           </div>
         </div>
       </div>
@@ -87,6 +87,12 @@
               </template>
               <template v-if="dataIndex === 'is_private'">
                 <span :class="`private-${text}`">{{ getPrivateState(text) }}</span>
+              </template>
+              <template v-if="dataIndex === 'project_project_user_meta'">
+                <div v-for="member in geProjectMembers(record)" :key="member.user_id" class="member-item">
+                  {{ member.project_user_user_meta.user_name }} ({{ member.project_user_user_meta.email_address }})
+                  <span v-if="member.isOwner" class="role owner">Owner</span>
+                </div>
               </template>
               <template v-if="dataIndex === 'tags'">
                 <a-tag
@@ -187,6 +193,10 @@ const columns = [
     align: 'center',
   },
   {
+    title: 'Members',
+    dataIndex: 'project_project_user_meta',
+  },
+  {
     title: 'Tags',
     dataIndex: 'tags',
   },
@@ -224,7 +234,6 @@ const {
   },
 })
 
-
 const percent = computed(() => {
   return (projectCount.value / projectLimit) * 100
 })
@@ -233,11 +242,18 @@ const showTip = computed(() => {
   return !userStore?.getUser.role
 })
 
-
 const list = computed(() => {
   return dataSource?.value?.project_list || []
 })
 
+const geProjectMembers = (record) => {
+  const temp = record.project_project_user_meta.map(item => ({
+    ...item,
+    isOwner: item.user_id === record.owner ? 1 : 0,
+  }))
+  temp.sort((a, b) => b.isOwner - a.isOwner)
+  return temp
+}
 onMounted(() => {
   handleGetUserSpace()
 })
@@ -302,7 +318,6 @@ const handleToProjectUpdate = (record) => {
   })
 }
 
-
 const handleToProjectRemove = (record) => {
   Modal.confirm({
     title: 'Remove confirm?',
@@ -321,10 +336,6 @@ const handleToProjectRemove = (record) => {
   })
 }
 
-
-
-
-
 const handleToProject = (record) => {
   const routeData = router.resolve({
     name: 'project_detail',
@@ -338,4 +349,13 @@ const handleToProject = (record) => {
 
 <style scoped lang="scss">
 @import "@/assets/styles/stable.scss";
+
+.member-item {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+
+
+}
 </style>
