@@ -4,7 +4,7 @@
   </video>
   <NavBar></NavBar>
   <div class="h-screen relative">
-    <div class="sologn">
+    <div class="slogan">
       <div>
         Welcome to the
         <br />
@@ -250,7 +250,7 @@ const handleScroll = () => {
   z-index: -1;
 }
 
-.sologn {
+.slogan {
   position: absolute;
   top: 50%;
   left: 50%;
