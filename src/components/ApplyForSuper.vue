@@ -2,21 +2,25 @@
   <a-popover placement="bottomRight">
     <template #content>
       <div class="user-tip">
-        Apply for unlimited files, projects and storage spaces
-        <a href="mailto:CasSF_aDM.siais@shanghaitech.edu.cn?subject=Apply to become a super user" target="_blank">Apply</a>
-
+        Apply for unlimited files, projects and storage spaces? Please contact
+        us by
+        <a
+          href="mailto:CasSF_aDM.siais@shanghaitech.edu.cn?subject=Apply to become a super user"
+          target="_blank"
+        >
+          cassf_adm.siais@shanghaitech.edu.cn
+        </a>
       </div>
     </template>
-    <ExclamationCircleOutlined class="ml-2"/>
+    <ExclamationCircleOutlined class="ml-2" />
   </a-popover>
 </template>
 <script>
-
-import { defineComponent } from 'vue'
-import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
+import { defineComponent } from "vue"
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue"
 
 export default defineComponent({
-  components: { ExclamationCircleOutlined }
+  components: { ExclamationCircleOutlined },
 })
 </script>
 <style scoped lang="scss">

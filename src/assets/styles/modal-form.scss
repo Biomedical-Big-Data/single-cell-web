@@ -1,8 +1,6 @@
-
 .condition-item {
   padding: 0.75rem;
   margin-bottom: 0;
-
 
   :deep(.ant-form-item-label) {
     display: flex;
@@ -14,7 +12,6 @@
       font-weight: 600;
       text-transform: capitalize;
     }
-
   }
 
   :deep(.ant-form-item-control-input) {
@@ -47,7 +44,6 @@
     }
   }
 }
-
 
 .search-condition-item {
   flex: 1;

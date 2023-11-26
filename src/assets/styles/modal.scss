@@ -7,7 +7,8 @@
 
     .ant-modal-close {
       top: 1.5rem;
-      filter: invert(97%) sepia(100%) saturate(0%) hue-rotate(110deg) brightness(108%) contrast(100%);
+      filter: invert(97%) sepia(100%) saturate(0%) hue-rotate(110deg)
+        brightness(108%) contrast(100%);
     }
 
     .ant-modal-header {
@@ -16,7 +17,7 @@
 
       .ant-modal-title {
         padding: 1.5rem;
-        color: #FFFFFF;
+        color: #ffffff;
         font-size: 1.25rem;
         font-weight: 400;
         line-height: 1.375rem;
@@ -24,18 +25,17 @@
     }
 
     .ant-modal-body {
-      border-bottom: 1px solid #D7D7D7;
+      border-bottom: 1px solid #d7d7d7;
     }
 
     .ant-modal-footer {
       margin-top: 0;
-      background: #FFFFFF;
+      background: #ffffff;
       padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: flex-end;
     }
-
   }
 
   .default-button {
@@ -50,24 +50,23 @@
     box-sizing: border-box;
   }
 
-
   .cancel-button {
     @extend .default-button;
-    background: #FFF;
-    color: #7E7E7E;
-    border: 1px solid #D2D2D2;
+    background: #fff;
+    color: #7e7e7e;
+    border: 1px solid #d2d2d2;
   }
 
   .ok-button {
     @extend .default-button;
-    background: #0062FF;
-    color: #FFF;
+    background: #0062ff;
+    color: #fff;
   }
 
   .search-button {
     @extend .default-button;
     background: #ff7555;
-    color: #FFF;
+    color: #fff;
 
     &:hover {
       background: rgba(#ff7555, 0.9);
@@ -75,13 +74,10 @@
   }
 }
 
-
 .uploading-modal {
-
   .ant-modal-title {
     font-size: 1.25rem !important;
   }
-
 
   .cancel-upload-button {
     display: flex;

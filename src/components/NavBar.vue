@@ -10,19 +10,21 @@
       </router-link>
     </div>
     <div v-else class="back-container" @click="handleGoHome()">
-      <img src="@/assets/icons/icon-back.svg" alt=""/>
+      <img src="@/assets/icons/icon-back.svg" alt="" />
       <span>Home</span>
     </div>
     <div v-if="userStore?.getIsAuthenticated" class="user-container">
       <a-button class="create-action" @click="handleGoProjectCreate()">
-        <PlusOutlined/>
+        <PlusOutlined />
         Create Project
       </a-button>
       <a-dropdown>
         <div class="cursor-pointer avatar">
-          <UserOutlined/>
+          <UserOutlined />
           {{ userStore.getUser?.user_name }}
-          <span v-if="showRoleLabel" class="role" :class="roleName">{{ roleName }}</span>
+          <span v-if="showRoleLabel" class="role" :class="roleName">
+            {{ roleName }}
+          </span>
         </div>
         <template #overlay>
           <a-menu class="user-menu">
@@ -36,9 +38,9 @@
               <RouterLink to="/files/manage">My files</RouterLink>
             </a-menu-item>
             <a-sub-menu
-                v-if="userStore.getUser.role === 1"
-                key="admin"
-                class="large-menu"
+              v-if="userStore.getUser.role === 1"
+              key="admin"
+              class="large-menu"
             >
               <template #title><span>System manage</span></template>
               <a-menu-item key="user_admin" class="large-menu">
@@ -63,8 +65,8 @@
     </div>
     <div v-else class="flex items-center">
       <router-link
-          class="login no-underline"
-          :to="{ name: 'login', query: { feedback: route.name } }"
+        class="login no-underline"
+        :to="{ name: 'login', query: { feedback: route.name } }"
       >
         <span>Login</span>
         <span class="button-desc">To manage projects</span>
@@ -78,37 +80,38 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user.js'
-import { UserOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import { USER_ROLE_DESC } from '@/constants/user.js'
-import { computed } from 'vue'
+import { useRoute, useRouter } from "vue-router"
+import { useUserStore } from "@/stores/user.js"
+import { UserOutlined, PlusOutlined } from "@ant-design/icons-vue"
+import { USER_ROLE_DESC } from "@/constants/user.js"
+import { computed } from "vue"
 
 const router = useRouter()
 const route = useRoute()
 
 const userStore = useUserStore()
 
-
 const showRoleLabel = computed(() => {
   return userStore?.getUser.role
 })
 
-
 const roleName = computed(() => {
-  return (USER_ROLE_DESC.find((item) => item.value === userStore?.getUser.role)?.label || 'Normal').toLocaleLowerCase()
+  return (
+    USER_ROLE_DESC.find((item) => item.value === userStore?.getUser.role)
+      ?.label || "Normal"
+  ).toLocaleLowerCase()
 })
 
 const handleGoHome = () => {
-  router.push({ name: 'home' })
+  router.push({ name: "home" })
 }
 const handleGoProjectCreate = () => {
-  router.push({ name: 'project_create' })
+  router.push({ name: "project_create" })
 }
 
 const logout = function () {
   userStore.setUser(null)
-  router.replace({ name: 'home' })
+  router.replace({ name: "home" })
 }
 </script>
 
@@ -229,7 +232,6 @@ const logout = function () {
   }
 }
 
-
 .user-menu {
   width: 200px;
 }
@@ -245,16 +247,15 @@ const logout = function () {
     padding-left: 0 !important;
   }
 
-
-  .ant-dropdown-menu-submenu-title{
-    padding-top:0 !important;
+  .ant-dropdown-menu-submenu-title {
+    padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
 
   &.ant-dropdown-menu-submenu-active {
     background-color: rgba(0, 0, 0, 0.04);
 
-    .ant-dropdown-menu-submenu-title{
+    .ant-dropdown-menu-submenu-title {
       background: transparent !important;
     }
   }

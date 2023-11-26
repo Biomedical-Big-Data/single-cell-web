@@ -7,61 +7,61 @@
         <div class="search-container">
           <a-form :model="conditions" layout="vertical" autocomplete="off">
             <a-form-item
-                label="User name"
-                name="user_name"
-                class="condition-item"
+              label="User name"
+              name="user_name"
+              class="condition-item"
             >
               <a-input
-                  v-model:value="conditions.user_name"
-                  class="w-full"
-                  size="large"
-                  placeholder="User name"
+                v-model:value="conditions.user_name"
+                class="w-full"
+                size="large"
+                placeholder="User name"
               ></a-input>
             </a-form-item>
             <a-form-item
-                label="Organization"
-                name="organization"
-                class="condition-item"
+              label="Organization"
+              name="organization"
+              class="condition-item"
             >
               <a-input
-                  v-model:value="conditions.organization"
-                  class="w-full"
-                  size="large"
-                  placeholder="Organization"
+                v-model:value="conditions.organization"
+                class="w-full"
+                size="large"
+                placeholder="Organization"
               ></a-input>
             </a-form-item>
             <a-form-item
-                label="Email"
-                name="email_address"
-                class="condition-item"
+              label="Email"
+              name="email_address"
+              class="condition-item"
             >
               <a-input
-                  v-model:value="conditions.email_address"
-                  class="w-full"
-                  size="large"
-                  placeholder="Email"
+                v-model:value="conditions.email_address"
+                class="w-full"
+                size="large"
+                placeholder="Email"
               ></a-input>
             </a-form-item>
             <a-form-item label="Status" name="state" class="condition-item">
               <a-select
-                  v-model:value="conditions.state"
-                  :options="USER_STATUS_DESC"
-                  placeholder="Status"
-                  class="w-full"
-                  size="large"
-                  allow-clear
+                v-model:value="conditions.state"
+                :options="USER_STATUS_DESC"
+                placeholder="Status"
+                class="w-full"
+                size="large"
+                allow-clear
               ></a-select>
             </a-form-item>
             <a-form-item
-                label="Create date"
-                name="create_at"
-                class="condition-item"
+              label="Create date"
+              name="create_at"
+              class="condition-item"
             >
               <a-date-picker
-                  v-model:value="conditions.create_at"
-                  placeholder="Create date"
-                  class="w-full"
-                  size="large"
+                v-model:value="conditions.create_at"
+                placeholder="Create date"
+                class="w-full"
+                size="large"
               />
             </a-form-item>
             <div class="action">
@@ -74,50 +74,54 @@
 
         <div class="table-container">
           <a-table
-              size="large"
-              :columns="columns"
-              bordered
-              :row-key="(record) => record.id"
-              :data-source="list"
-              :pagination="pagination"
-              :loading="loading"
-              @change="handleTableChange"
+            size="large"
+            :columns="columns"
+            bordered
+            :row-key="(record) => record.id"
+            :data-source="list"
+            :pagination="pagination"
+            :loading="loading"
+            @change="handleTableChange"
           >
             <template #bodyCell="{ column: { dataIndex }, text, record }">
               <template v-if="dataIndex === 'create_at'">
-                {{ dayjs(text).format('YYYY-MM-DD') }}
+                {{ dayjs(text).format("YYYY-MM-DD") }}
               </template>
               <template v-if="dataIndex === 'state'">
                 {{ getStateName(text) }}
               </template>
               <template v-if="dataIndex === 'role'">
                 <span
-                    class="role large cursor-pointer" :class="getRoleName(text).toLowerCase()"
-                    @click="handleUpdateUserRoleModalOpen(record)">{{ getRoleName(text) }}</span>
+                  class="role large cursor-pointer"
+                  :class="getRoleName(text).toLowerCase()"
+                  @click="handleUpdateUserRoleModalOpen(record)"
+                >
+                  {{ getRoleName(text) }}
+                </span>
               </template>
               <template v-if="dataIndex === 'operation'">
                 <a-button
-                    type="link"
-                    size="large"
-                    @click="handleUpdateUserPasswordModalOpen(record)"
+                  type="link"
+                  size="large"
+                  @click="handleUpdateUserPasswordModalOpen(record)"
                 >
                   Reset password
                 </a-button>
                 <a-button
-                    v-if="record.state === 1"
-                    type="link"
-                    danger
-                    size="large"
-                    @click="handleUpdateUserState(record, -1)"
+                  v-if="record.state === 1"
+                  type="link"
+                  danger
+                  size="large"
+                  @click="handleUpdateUserState(record, -1)"
                 >
                   Disable
                 </a-button>
                 <a-button
-                    v-if="record.state === -1"
-                    type="link"
-                    size="large"
-                    danger
-                    @click="handleUpdateUserState(record, 1)"
+                  v-if="record.state === -1"
+                  type="link"
+                  size="large"
+                  danger
+                  @click="handleUpdateUserState(record, 1)"
                 >
                   Enable
                 </a-button>
@@ -129,55 +133,54 @@
     </div>
   </div>
   <a-modal
-      v-model:open="open.reset"
-      title="Reset password"
-      @ok="handleUpdateUserPassword"
-      @cancel="handleClearCurrentUser"
+    v-model:open="open.reset"
+    title="Reset password"
+    @ok="handleUpdateUserPassword"
+    @cancel="handleClearCurrentUser"
   >
     <div class="py-4">
       <a-input-password
-          v-model:value="currentUser.password"
-          size="large"
-          placeholder="Enter reset password"
+        v-model:value="currentUser.password"
+        size="large"
+        placeholder="Enter reset password"
       ></a-input-password>
     </div>
   </a-modal>
 
   <a-modal
-      v-model:open="open.role"
-      title="Set user role"
-      @ok="handleUpdateUserRole"
-      @cancel="handleClearCurrentUser"
+    v-model:open="open.role"
+    title="Set user role"
+    @ok="handleUpdateUserRole"
+    @cancel="handleClearCurrentUser"
   >
     <div class="py-4">
       <a-select
-          v-model:value="currentUser.role"
-          :options="USER_ROLE_DESC"
-          class="w-full"
-          size="large"
-          placeholder="Select user role"
+        v-model:value="currentUser.role"
+        :options="USER_ROLE_DESC"
+        class="w-full"
+        size="large"
+        placeholder="Select user role"
       ></a-select>
     </div>
   </a-modal>
 </template>
 
-
 <script setup>
-import { computed, createVNode, ref } from 'vue'
-import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
-import { usePagination } from 'vue-request'
-import { updateUserState, getUserList, updateUserInfoByAdmin } from '@/api/user'
-import dayjs from 'dayjs'
-import { message, Modal } from 'ant-design-vue'
-import NavBar from '@/components/NavBar.vue'
-import { USER_ROLE_DESC, USER_STATUS_DESC } from '@/constants/user.js'
+import { computed, createVNode, ref } from "vue"
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue"
+import { usePagination } from "vue-request"
+import { updateUserState, getUserList, updateUserInfoByAdmin } from "@/api/user"
+import dayjs from "dayjs"
+import { message, Modal } from "ant-design-vue"
+import NavBar from "@/components/NavBar.vue"
+import { USER_ROLE_DESC, USER_STATUS_DESC } from "@/constants/user.js"
 
 const conditions = ref({
-  user_name: '',
-  organization: '',
-  email_address: '',
+  user_name: "",
+  organization: "",
+  email_address: "",
   state: undefined,
-  create_at: '',
+  create_at: "",
 })
 
 const open = ref({
@@ -191,41 +194,41 @@ const getStateName = function (state) {
 }
 
 const getRoleName = function (role) {
-  return USER_ROLE_DESC.find((item) => item.value === role)?.label || 'Normal'
+  return USER_ROLE_DESC.find((item) => item.value === role)?.label || "Normal"
 }
 
 const columns = [
   {
-    title: 'User name',
-    dataIndex: 'user_name',
+    title: "User name",
+    dataIndex: "user_name",
   },
   {
-    title: 'Email',
-    dataIndex: 'email_address',
+    title: "Email",
+    dataIndex: "email_address",
   },
   {
-    title: 'Organization',
-    dataIndex: 'organization',
+    title: "Organization",
+    dataIndex: "organization",
   },
   {
-    title: 'Role',
-    dataIndex: 'role',
-    width: '120px',
+    title: "Role",
+    dataIndex: "role",
+    width: "120px",
   },
   {
-    title: 'Status',
-    dataIndex: 'state',
-    width: '120px',
+    title: "Status",
+    dataIndex: "state",
+    width: "120px",
   },
   {
-    title: 'Created Date',
-    dataIndex: 'create_at',
-    width: '150px',
+    title: "Created Date",
+    dataIndex: "create_at",
+    width: "150px",
   },
   {
-    title: 'Operation',
-    dataIndex: 'operation',
-    width: '280px',
+    title: "Operation",
+    dataIndex: "operation",
+    width: "280px",
   },
 ]
 
@@ -243,8 +246,8 @@ const {
     },
   ],
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size',
+    currentKey: "page",
+    pageSizeKey: "page_size",
   },
 })
 
@@ -255,7 +258,7 @@ const list = computed(() => {
 const getConditions = function () {
   const result = {}
   const { user_name, organization, email_address, state, create_at } =
-      conditions.value
+    conditions.value
 
   if (user_name) {
     result.user_name = user_name
@@ -270,7 +273,7 @@ const getConditions = function () {
     result.state = state
   }
   if (create_at) {
-    result.create_at = dayjs(create_at).format('YYYY-MM-DD')
+    result.create_at = dayjs(create_at).format("YYYY-MM-DD")
   }
   return result
 }
@@ -321,9 +324,10 @@ const handleClearCurrentUser = async () => {
 
 const handleUpdateUserPassword = async () => {
   try {
-
-    await updateUserInfoByAdmin(currentUser.value.id, { user_password: currentUser.value.password })
-    message.success('Operation success')
+    await updateUserInfoByAdmin(currentUser.value.id, {
+      user_password: currentUser.value.password,
+    })
+    message.success("Operation success")
     return true
   } finally {
     open.value.reset = false
@@ -333,8 +337,10 @@ const handleUpdateUserPassword = async () => {
 
 const handleUpdateUserRole = async () => {
   try {
-    await updateUserInfoByAdmin(currentUser.value.id, { role: currentUser.value.role })
-    message.success('Operation success')
+    await updateUserInfoByAdmin(currentUser.value.id, {
+      role: currentUser.value.role,
+    })
+    message.success("Operation success")
     handleSearch()
     return true
   } finally {
@@ -346,20 +352,20 @@ const handleUpdateUserRole = async () => {
 const handleUpdateUserState = (record, nextState) => {
   Modal.confirm({
     title:
-        nextState === -1
-            ? `Confirm disable ${record.user_name}?`
-            : `Confirm enable${record.user_name}?`,
+      nextState === -1
+        ? `Confirm disable ${record.user_name}?`
+        : `Confirm enable${record.user_name}?`,
     icon: createVNode(ExclamationCircleOutlined),
     content:
-        nextState === -1
-            ? 'This operation will prohibit user login and project operations'
-            : 'This operation will allow user login and project operations',
+      nextState === -1
+        ? "This operation will prohibit user login and project operations"
+        : "This operation will allow user login and project operations",
     okButtonProps: {},
     cancelButtonProps: {},
     onOk: async () => {
       try {
         await updateUserState(record.id, nextState)
-        message.success('Operation success')
+        message.success("Operation success")
         return true
       } finally {
         run({
@@ -369,7 +375,7 @@ const handleUpdateUserState = (record, nextState) => {
         })
       }
     },
-    onCancel () {},
+    onCancel() {},
   })
 }
 </script>

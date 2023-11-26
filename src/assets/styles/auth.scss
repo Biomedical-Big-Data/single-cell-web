@@ -1,6 +1,6 @@
 .auth-container {
   min-height: 100vh;
-  background-color: #F3F7FE;
+  background-color: #f3f7fe;
   background-image: url("../images/auth/background.png");
   background-repeat: no-repeat;
   background-size: 100% auto;
@@ -8,7 +8,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
 
   .content-container {
     width: 100%;
@@ -21,12 +20,10 @@
 
     gap: 2rem;
     border-radius: 0.625rem;
-    background: #FFF;
+    background: #fff;
     backdrop-filter: blur(42px);
 
-
     .title-container {
-
       .title {
         font-size: 1.875rem;
         font-weight: 500;
@@ -39,7 +36,7 @@
 
       .sub-title {
         margin-top: 0.5rem;
-        color: #7E7E7E;
+        color: #7e7e7e;
         font-size: 1rem;
         font-weight: 400;
       }
@@ -55,8 +52,8 @@
 
       .simple-input {
         border-radius: 0.25rem;
-        border: 1px solid #D2D2D2;
-        background: #FFF;
+        border: 1px solid #d2d2d2;
+        background: #fff;
         height: 3rem;
         padding: 0 0.75rem;
         line-height: 3rem;
@@ -74,12 +71,11 @@
       gap: 0.75rem;
       align-self: stretch;
       border-radius: 2.0625rem;
-      background: #0062FF;
-      color: #FFF;
+      background: #0062ff;
+      color: #fff;
       font-size: 1rem;
       font-weight: 400;
       text-transform: capitalize;
     }
   }
-
 }

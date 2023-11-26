@@ -7,43 +7,43 @@
         <div class="search-container">
           <a-form :model="conditions" layout="vertical" autocomplete="off">
             <a-form-item
-                label="Project Name"
-                name="project_name"
-                class="condition-item"
+              label="Project Name"
+              name="project_name"
+              class="condition-item"
             >
               <a-input
-                  v-model:value="conditions.title"
-                  class="w-full"
-                  size="large"
-                  placeholder="Project Name"
+                v-model:value="conditions.title"
+                class="w-full"
+                size="large"
+                placeholder="Project Name"
               ></a-input>
             </a-form-item>
             <a-form-item
-                label="Project status"
-                name="is_publish"
-                class="condition-item"
+              label="Project status"
+              name="is_publish"
+              class="condition-item"
             >
               <a-select
-                  v-model:value="conditions.is_publish"
-                  :options="PROJECT_STATUS_DESC"
-                  placeholder="Project status"
-                  class="w-full"
-                  size="large"
-                  allow-clear
+                v-model:value="conditions.is_publish"
+                :options="PROJECT_STATUS_DESC"
+                placeholder="Project status"
+                class="w-full"
+                size="large"
+                allow-clear
               ></a-select>
             </a-form-item>
             <a-form-item
-                label="is Private"
-                name="is_private"
-                class="condition-item"
+              label="is Private"
+              name="is_private"
+              class="condition-item"
             >
               <a-select
-                  v-model:value="conditions.is_private"
-                  :options="IS_PRIVATE_DESC"
-                  placeholder="is Private"
-                  class="w-full"
-                  size="large"
-                  allow-clear
+                v-model:value="conditions.is_private"
+                :options="IS_PRIVATE_DESC"
+                placeholder="is Private"
+                class="w-full"
+                size="large"
+                allow-clear
               ></a-select>
             </a-form-item>
             <div class="action">
@@ -56,41 +56,45 @@
 
         <div class="table-container">
           <a-table
-              :columns="columns"
-              :row-key="(record) => record.id"
-              :data-source="list"
-              :pagination="pagination"
-              :loading="loading"
-              bordered
-              size="large"
-              @change="handleTableChange"
+            :columns="columns"
+            :row-key="(record) => record.id"
+            :data-source="list"
+            :pagination="pagination"
+            :loading="loading"
+            bordered
+            size="large"
+            @change="handleTableChange"
           >
             <template #bodyCell="{ column: { dataIndex }, text, record }">
               <template
-                  v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
+                v-if="dataIndex === 'create_at' || dataIndex === 'update_at'"
               >
-                {{ dayjs(text).format('YYYY-MM-DD') }}
+                {{ dayjs(text).format("YYYY-MM-DD") }}
               </template>
               <template v-if="dataIndex === 'is_publish'">
-                <span :class="`publish-${text}`"> {{ getPublishState(text) }}</span>
+                <span :class="`publish-${text}`">
+                  {{ getPublishState(text) }}
+                </span>
               </template>
               <template v-if="dataIndex === 'is_private'">
-                <span :class="`private-${text}`">{{ getPrivateState(text) }}</span>
+                <span :class="`private-${text}`">
+                  {{ getPrivateState(text) }}
+                </span>
               </template>
               <template v-if="dataIndex === 'tags'">
                 <a-tag
-                    v-for="item in (text || '').split(',').filter((a) => !!a)"
-                    :key="item"
-                    class="large-tag mb-1"
+                  v-for="item in (text || '').split(',').filter((a) => !!a)"
+                  :key="item"
+                  class="large-tag mb-1"
                 >
                   {{ item }}
                 </a-tag>
               </template>
               <template v-if="dataIndex === 'operation'">
                 <a-button
-                    type="link"
-                    size="large"
-                    @click="handleToAdminProject(record)"
+                  type="link"
+                  size="large"
+                  @click="handleToAdminProject(record)"
                 >
                   Edit
                 </a-button>
@@ -104,17 +108,17 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { usePagination } from 'vue-request'
-import dayjs from 'dayjs'
-import { getAdminProjectList } from '@/api/project'
-import { useRouter } from 'vue-router'
-import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from '@/constants/common.js'
-import NavBar from '@/components/NavBar.vue'
+import { computed, ref } from "vue"
+import { usePagination } from "vue-request"
+import dayjs from "dayjs"
+import { getAdminProjectList } from "@/api/project"
+import { useRouter } from "vue-router"
+import { IS_PRIVATE_DESC, PROJECT_STATUS_DESC } from "@/constants/common.js"
+import NavBar from "@/components/NavBar.vue"
 
 const router = useRouter()
 const conditions = ref({
-  title: '',
+  title: "",
   is_publish: undefined,
   is_private: undefined,
 })
@@ -129,54 +133,54 @@ const getPrivateState = function (state) {
 
 const columns = [
   {
-    title: 'Project Name',
-    dataIndex: 'title',
+    title: "Project Name",
+    dataIndex: "title",
   },
   {
-    title: 'Cell number',
-    dataIndex: 'cell_number',
+    title: "Cell number",
+    dataIndex: "cell_number",
   },
   {
-    title: 'External project accesstion',
-    dataIndex: 'external_project_accesstion',
+    title: "External project accesstion",
+    dataIndex: "external_project_accesstion",
   },
   {
-    title: 'Private',
-    dataIndex: 'is_private',
+    title: "Private",
+    dataIndex: "is_private",
     width: 100,
-    align: 'center',
+    align: "center",
   },
   {
-    title: 'Published',
-    dataIndex: 'is_publish',
+    title: "Published",
+    dataIndex: "is_publish",
     width: 100,
-    align: 'center',
+    align: "center",
   },
   {
-    title: 'Tags',
-    dataIndex: 'tags',
+    title: "Tags",
+    dataIndex: "tags",
     width: 200,
   },
   {
-    title: 'User',
-    dataIndex: ['project_user_meta', 'user_name'],
+    title: "User",
+    dataIndex: ["project_user_meta", "user_name"],
     width: 120,
   },
   {
-    title: 'Created Date',
-    dataIndex: 'create_at',
+    title: "Created Date",
+    dataIndex: "create_at",
     width: 120,
   },
   {
-    title: 'Updated Date',
-    dataIndex: 'update_at',
+    title: "Updated Date",
+    dataIndex: "update_at",
     width: 120,
   },
   {
-    title: 'Operation',
-    dataIndex: 'operation',
+    title: "Operation",
+    dataIndex: "operation",
     width: 40,
-    align: 'center',
+    align: "center",
   },
 ]
 
@@ -194,8 +198,8 @@ const {
     },
   ],
   pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'page_size',
+    currentKey: "page",
+    pageSizeKey: "page_size",
   },
 })
 
@@ -249,7 +253,7 @@ const handleSearch = () => {
 
 const handleToAdminProject = (record) => {
   router.push({
-    name: 'project_admin_detail_update',
+    name: "project_admin_detail_update",
     params: {
       id: record.id,
     },

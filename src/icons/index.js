@@ -39,7 +39,6 @@ import cell from "./cell.png"
 import sample from "./sample.png"
 import project from "./project.png"
 
-
 export default {
   species: {
     celegans,
@@ -50,7 +49,7 @@ export default {
     human,
     rabbit,
     rat,
-    zebrafish
+    zebrafish,
   },
   organ: {
     adipose,
@@ -78,12 +77,12 @@ export default {
     stomach,
     testis,
     thymus,
-    tonsil
+    tonsil,
   },
   statical: {
     project,
     sample,
     cell,
-    cell_type
-  }
+    cell_type,
+  },
 }

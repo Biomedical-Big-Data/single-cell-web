@@ -1,10 +1,10 @@
 <template>
   <div class="top">
     <div
-        v-for="item in analysis"
-        :key="item.id"
-        class="interactive"
-        @click="handleOpenCellxgene(item)"
+      v-for="item in analysis"
+      :key="item.id"
+      class="interactive"
+      @click="handleOpenCellxgene(item)"
     >
       <a-button class="action">Interactive Viewer</a-button>
     </div>
@@ -14,14 +14,14 @@
         <a-dropdown :trigger="['click']">
           <a class="type" @click.prevent>
             group by: {{ getTypeName(umapType) }}
-            <CaretDownOutlined/>
+            <CaretDownOutlined />
           </a>
           <template #overlay>
             <a-menu>
               <a-menu-item v-for="item in options.umapType" :key="item">
                 <a
-                    class="type selector-item"
-                    @click="handleUMapTypeChange(item)"
+                  class="type selector-item"
+                  @click="handleUMapTypeChange(item)"
                 >
                   {{ getTypeName(item) }}
                 </a>
@@ -36,10 +36,10 @@
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
-        <a-empty v-if="!umapUrl"/>
+        <a-empty v-if="!umapUrl" />
         <photo-provider v-else :download-method="handleDownloadUmap">
           <photo-consumer :src="umapUrl">
-            <img :src="umapUrl" class="w-full umap" alt=""/>
+            <img :src="umapUrl" class="w-full umap" alt="" />
           </photo-consumer>
         </photo-provider>
       </a-spin>
@@ -49,11 +49,11 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
-import { getUmap, getUmapColumn } from '@/api/file.js'
-import { CaretDownOutlined } from '@ant-design/icons-vue'
-import { titleCase, snakeCase } from 'text-case'
-import { saveAs } from 'file-saver'
+import { onMounted, reactive, ref } from "vue"
+import { getUmap, getUmapColumn } from "@/api/file.js"
+import { CaretDownOutlined } from "@ant-design/icons-vue"
+import { titleCase, snakeCase } from "text-case"
+import { saveAs } from "file-saver"
 
 const props = defineProps({
   fileId: {
@@ -67,14 +67,14 @@ const props = defineProps({
 })
 
 const loading = ref(false)
-const umapType = ref('')
-const umapUrl = ref('')
+const umapType = ref("")
+const umapUrl = ref("")
 const options = reactive({
   umapType: [],
 })
 
 const getTypeName = (type) => {
-  return titleCase((type || '').replace(/_+/, ' '))
+  return titleCase((type || "").replace(/_+/, " "))
 }
 
 onMounted(() => {
@@ -84,7 +84,7 @@ onMounted(() => {
 const handleFetchColumn = async () => {
   const data = await getUmapColumn(props.fileId)
   options.umapType = data.filter((item) => {
-    return !['UMAP_1', 'UMAP_2'].includes(item)
+    return !["UMAP_1", "UMAP_2"].includes(item)
   })
   if (options.umapType.length) {
     umapType.value = options.umapType[0]
@@ -104,7 +104,7 @@ const handleFileFetch = async () => {
     if (umapType.value) {
       const response = await getUmap(props.fileId, umapType.value)
       const arrayBufferView = new Uint8Array(response)
-      const blob = new Blob([arrayBufferView], { type: 'image/jpeg' })
+      const blob = new Blob([arrayBufferView], { type: "image/jpeg" })
       const urlCreator = window.URL || window.webkitURL
       umapUrl.value = urlCreator.createObjectURL(blob)
     }
@@ -115,8 +115,8 @@ const handleFileFetch = async () => {
 
 const handleOpenCellxgene = (record) => {
   window.open(
-      `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
-      '_blank',
+    `${import.meta.env.VITE_BASE_API_URL}/project/view/${record.id}`,
+    "_blank",
   )
 }
 

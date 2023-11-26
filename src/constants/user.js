@@ -5,36 +5,36 @@ export const USER_STATUS = {
 }
 export const USER_STATUS_DESC = [
   {
-    label: 'Enable',
+    label: "Enable",
     value: USER_STATUS.ENABLE,
   },
   {
-    label: 'Inactivated',
+    label: "Inactivated",
     value: USER_STATUS.INACTIVATED,
   },
   {
-    label: 'Disable',
-    value: USER_STATUS.DISABLE
+    label: "Disable",
+    value: USER_STATUS.DISABLE,
   },
 ]
 
 export const USER_ROLE = {
   NORMAL: 0,
   ADMIN: 1,
-  SUPER: 2
+  SUPER: 2,
 }
 
 export const USER_ROLE_DESC = [
   {
-    label: 'Normal',
+    label: "Normal",
     value: USER_ROLE.NORMAL,
   },
   {
-    label: 'Admin',
+    label: "Admin",
     value: USER_ROLE.ADMIN,
   },
   {
-    label: 'Super',
+    label: "Super",
     value: USER_ROLE.SUPER,
   },
 ]

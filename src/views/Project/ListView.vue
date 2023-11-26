@@ -1010,7 +1010,7 @@ const handleListDownload = async () => {
             color: #ffffff;
           }
 
-          :deep(.ant-form-item-required){
+          :deep(.ant-form-item-required) {
             &:before {
               color: #ffffff;
             }

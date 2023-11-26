@@ -9,20 +9,20 @@
     </div>
     <div v-else>
       <a-result
-          v-if="success"
-          status="success"
-          title="User activation successful"
-          sub-title="Please return to the login page to log in"
+        v-if="success"
+        status="success"
+        title="User activation successful"
+        sub-title="Please return to the login page to log in"
       >
         <template #extra>
-          <router-link :to="{name:'login'}" replace>Go to login</router-link>
+          <router-link :to="{ name: 'login' }" replace>Go to login</router-link>
         </template>
       </a-result>
       <a-result
-          v-else
-          status="error"
-          title="User activation failed"
-          sub-title="Please confirm if you have activated or contact the administrator for more information"
+        v-else
+        status="error"
+        title="User activation failed"
+        sub-title="Please confirm if you have activated or contact the administrator for more information"
       ></a-result>
     </div>
   </div>
