@@ -9,5 +9,7 @@ module.exports = {
   },
   rules: {
     "no-loss-of-precision": "off",
+    "prettier/prettier": "error",
   },
+  plugins: ["prettier"],
 }
