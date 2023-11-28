@@ -1,15 +1,28 @@
 <template>
-  <a-popover trigger="click" placement="bottom">
+  <a-popover
+    trigger="click"
+    placement="bottom"
+  >
     <template #content>
-      <div class="overflow-y-auto table-column-setting" style="width: 400px">
-        <a-collapse expand-icon-position="end" class="w-full">
+      <div
+        class="overflow-y-auto table-column-setting"
+        style="width: 400px"
+      >
+        <a-collapse
+          expand-icon-position="end"
+          class="w-full"
+        >
           <a-collapse-panel
             v-for="(v, k) in columnGroup"
             :key="k"
             :header="getTitleName(k)"
           >
             <div>
-              <div v-for="item in v" :key="item.title" class="p-2">
+              <div
+                v-for="item in v"
+                :key="item.title"
+                class="p-2"
+              >
                 <a-checkbox
                   :checked="getChecked(item)"
                   :name="item.title"
@@ -30,7 +43,11 @@
       </div>
     </template>
     <div class="column-setting">
-      <img class="icon" src="@/assets/icons/icon-setting.svg" alt="" />
+      <img
+        class="icon"
+        src="@/assets/icons/icon-setting.svg"
+        alt=""
+      />
       Customised columns
     </div>
   </a-popover>

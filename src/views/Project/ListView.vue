@@ -73,8 +73,16 @@
       <div class="bottom">
         <div class="left">
           <div v-if="filter === 'sample'">
-            <a-form ref="sampleFormRef" layout="vertical" :model="sample">
-              <a-form-item label="Organ" name="organ" class="condition-item">
+            <a-form
+              ref="sampleFormRef"
+              layout="vertical"
+              :model="sample"
+            >
+              <a-form-item
+                label="Organ"
+                name="organ"
+                class="condition-item"
+              >
                 <a-select
                   v-model:value="sample.organ"
                   size="large"
@@ -84,7 +92,10 @@
                   allow-clear
                   @search="handleOrganSearch"
                 >
-                  <template v-if="state.organFetching" #notFoundContent>
+                  <template
+                    v-if="state.organFetching"
+                    #notFoundContent
+                  >
                     <a-spin />
                   </template>
                 </a-select>
@@ -203,7 +214,10 @@
                     size="large"
                     @search="handleCellIDSearch"
                   >
-                    <template v-if="state.cellIDFetching" #notFoundContent>
+                    <template
+                      v-if="state.cellIDFetching"
+                      #notFoundContent
+                    >
                       <a-spin />
                     </template>
                   </a-select>
@@ -276,7 +290,10 @@
                   allow-clear
                   @search="handleGeneSymbolSearch"
                 >
-                  <template v-if="state.geneSymbolFetching" #notFoundContent>
+                  <template
+                    v-if="state.geneSymbolFetching"
+                    #notFoundContent
+                  >
                     <a-spin />
                   </template>
                 </a-select>
@@ -284,10 +301,17 @@
             </a-form>
           </div>
           <div class="action">
-            <a-button type="primary" class="search" @click="handleSearch">
+            <a-button
+              type="primary"
+              class="search"
+              @click="handleSearch"
+            >
               Search all
             </a-button>
-            <a-button class="reset" @click="resetForm">
+            <a-button
+              class="reset"
+              @click="resetForm"
+            >
               <span>Reset</span>
             </a-button>
           </div>
@@ -304,7 +328,10 @@
     </div>
   </div>
 
-  <CellNameModal ref="cellNameRef" @confirm="handleCellNameChange" />
+  <CellNameModal
+    ref="cellNameRef"
+    @confirm="handleCellNameChange"
+  />
   <GeneNameModal
     ref="geneNameRef"
     @confirm="handleGeneNameChange"

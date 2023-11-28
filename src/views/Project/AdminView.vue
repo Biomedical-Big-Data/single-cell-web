@@ -5,7 +5,11 @@
       <div class="title-container">Project Manage</div>
       <div class="content-container">
         <div class="search-container">
-          <a-form :model="conditions" layout="vertical" autocomplete="off">
+          <a-form
+            :model="conditions"
+            layout="vertical"
+            autocomplete="off"
+          >
             <a-form-item
               label="Project Name"
               name="project_name"
@@ -47,7 +51,11 @@
               ></a-select>
             </a-form-item>
             <div class="action">
-              <a-button type="primary" class="search" @click="handleSearch">
+              <a-button
+                type="primary"
+                class="search"
+                @click="handleSearch"
+              >
                 Search all
               </a-button>
             </div>

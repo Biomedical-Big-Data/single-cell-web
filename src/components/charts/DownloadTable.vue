@@ -1,8 +1,19 @@
 <template>
-  <div v-if="projectDetail" class="files h-full">
-    <div v-for="item in files" :key="item.id" class="file">
+  <div
+    v-if="projectDetail"
+    class="files h-full"
+  >
+    <div
+      v-for="item in files"
+      :key="item.id"
+      class="file"
+    >
       <div class="info">
-        <img class="icon" src="@/assets/icons/icon-file.svg" alt="" />
+        <img
+          class="icon"
+          src="@/assets/icons/icon-file.svg"
+          alt=""
+        />
         <div>
           <div class="title">
             {{ item.id }}
@@ -10,7 +21,10 @@
           <div class="type">{{ item.type }}</div>
         </div>
       </div>
-      <a-button class="download" @click="handleDownloadFile(item.id)">
+      <a-button
+        class="download"
+        @click="handleDownloadFile(item.id)"
+      >
         Download
       </a-button>
     </div>

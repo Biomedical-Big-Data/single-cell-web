@@ -11,28 +11,54 @@
       :rules="rules"
       :label-col="{ style: { width: '200px' } }"
     >
-      <a-form-item label="cell_type_id" name="cell_type_id" required>
+      <a-form-item
+        label="cell_type_id"
+        name="cell_type_id"
+        required
+      >
         <a-input v-model:value="form.cell_type_id"></a-input>
       </a-form-item>
-      <a-form-item label="species_id" name="species_id" required>
+      <a-form-item
+        label="species_id"
+        name="species_id"
+        required
+      >
         <a-input v-model:value="form.species_id"></a-input>
       </a-form-item>
-      <a-form-item label="marker_gene_symbol" name="marker_gene_symbol">
+      <a-form-item
+        label="marker_gene_symbol"
+        name="marker_gene_symbol"
+      >
         <a-textarea v-model:value="form.marker_gene_symbol"></a-textarea>
       </a-form-item>
-      <a-form-item label="cell_taxonomy_id" name="cell_taxonomy_id">
+      <a-form-item
+        label="cell_taxonomy_id"
+        name="cell_taxonomy_id"
+      >
         <a-input v-model:value="form.cell_taxonomy_id"></a-input>
       </a-form-item>
-      <a-form-item label="cell_taxonomy_url" name="cell_taxonomy_url">
+      <a-form-item
+        label="cell_taxonomy_url"
+        name="cell_taxonomy_url"
+      >
         <a-input v-model:value="form.cell_taxonomy_url"></a-input>
       </a-form-item>
-      <a-form-item label="cell_ontology_id" name="cell_ontology_id">
+      <a-form-item
+        label="cell_ontology_id"
+        name="cell_ontology_id"
+      >
         <a-input v-model:value="form.cell_ontology_id"></a-input>
       </a-form-item>
-      <a-form-item label="cell_type_name" name="cell_type_name">
+      <a-form-item
+        label="cell_type_name"
+        name="cell_type_name"
+      >
         <a-input v-model:value="form.cell_type_name"></a-input>
       </a-form-item>
-      <a-form-item label="cell_type_description" name="cell_type_description">
+      <a-form-item
+        label="cell_type_description"
+        name="cell_type_description"
+      >
         <a-input v-model:value="form.cell_type_description"></a-input>
       </a-form-item>
       <a-form-item
@@ -43,7 +69,12 @@
       </a-form-item>
     </a-form>
     <template #footer>
-      <a-button key="back" @click="handleCancel">Cancel</a-button>
+      <a-button
+        key="back"
+        @click="handleCancel"
+      >
+        Cancel
+      </a-button>
       <a-button
         key="submit"
         type="primary"

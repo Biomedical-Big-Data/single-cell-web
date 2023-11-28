@@ -16,7 +16,10 @@
           >
             <template #bodyCell="{ column, record }">
               <template v-if="column.dataIndex === 'entry_list'">
-                <div v-for="(item, index) in record.entry_list" :key="index">
+                <div
+                  v-for="(item, index) in record.entry_list"
+                  :key="index"
+                >
                   {{ item.dataset }}
                   <a-button @click="handleTerminateProcess(item)">
                     Terminate

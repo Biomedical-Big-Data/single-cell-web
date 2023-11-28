@@ -8,8 +8,14 @@
     :footer="null"
   >
     <div class="bg-white p-6">
-      <a-tabs v-model:activeKey="geneChartType" type="card">
-        <a-tab-pane key="percent" tab="Cell Number Percentage">
+      <a-tabs
+        v-model:activeKey="geneChartType"
+        type="card"
+      >
+        <a-tab-pane
+          key="percent"
+          tab="Cell Number Percentage"
+        >
           <a-spin :spinning="loading">
             <GeneExpressionLevelChart
               :data="geneChartData"
@@ -18,7 +24,10 @@
             ></GeneExpressionLevelChart>
           </a-spin>
         </a-tab-pane>
-        <a-tab-pane key="expression" tab="Gene Expression Level">
+        <a-tab-pane
+          key="expression"
+          tab="Gene Expression Level"
+        >
           <a-spin :spinning="loading">
             <GeneExpressionLevelChart
               :data="geneChartData"

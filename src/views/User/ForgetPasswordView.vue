@@ -4,8 +4,15 @@
       <div class="title-container">
         <div class="title-sm text-center">Reset your password</div>
       </div>
-      <a-form ref="formRef" :model="formState" :rules="rules">
-        <a-form-item class="w-full form-item" name="mail">
+      <a-form
+        ref="formRef"
+        :model="formState"
+        :rules="rules"
+      >
+        <a-form-item
+          class="w-full form-item"
+          name="mail"
+        >
           <div class="label">
             Enter your user account‘s verified email address and we will send
             you a password reset link.

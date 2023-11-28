@@ -19,7 +19,12 @@
       >
         A{{ _.padStart(text, 6, "0") }}
         <br />
-        <span class="link" @click="handleToProject(record)">view</span>
+        <span
+          class="link"
+          @click="handleToProject(record)"
+        >
+          view
+        </span>
       </template>
     </template>
   </a-table>

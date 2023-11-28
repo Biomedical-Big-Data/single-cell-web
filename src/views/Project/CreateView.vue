@@ -35,7 +35,11 @@
             autocomplete="off"
             :label-col="{ style: { width: '8.75rem' } }"
           >
-            <a-form-item label="Project Name" name="title" required>
+            <a-form-item
+              label="Project Name"
+              name="title"
+              required
+            >
               <a-input
                 v-model:value="formState.title"
                 placeholder="Project Name"
@@ -43,7 +47,10 @@
               />
             </a-form-item>
 
-            <a-form-item label="Access rights" name="public">
+            <a-form-item
+              label="Access rights"
+              name="public"
+            >
               <div class="flex items-center">
                 <a-switch
                   v-model:checked="formState.isPrivate"
@@ -51,7 +58,10 @@
                   checked-children="Private"
                   un-checked-children="Public"
                 />
-                <a-tooltip placement="right" class="ml-2">
+                <a-tooltip
+                  placement="right"
+                  class="ml-2"
+                >
                   <template #title>
                     <span>
                       Private projects, only invitees can see, public projects
@@ -95,7 +105,10 @@
               />
             </a-form-item>
 
-            <a-form-item label="Tags" name="tags">
+            <a-form-item
+              label="Tags"
+              name="tags"
+            >
               <a-select
                 v-model:value="formState.tags"
                 mode="tags"
@@ -119,7 +132,11 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="H5AD file" name="h5ad_id" required>
+            <a-form-item
+              label="H5AD file"
+              name="h5ad_id"
+              required
+            >
               <a-button
                 v-if="!formState.h5ad_id"
                 size="large"
@@ -147,7 +164,10 @@
               </a-button>
             </a-form-item>
 
-            <a-form-item label="UMap file" name="umap_id">
+            <a-form-item
+              label="UMap file"
+              name="umap_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.umap_id"
@@ -181,7 +201,10 @@
               </div>
             </a-form-item>
 
-            <a-form-item label="CellMarker file" name="cell_marker_id">
+            <a-form-item
+              label="CellMarker file"
+              name="cell_marker_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.cell_marker_id"
@@ -253,7 +276,10 @@
               </div>
             </a-form-item>
 
-            <a-form-item label="Other file" name="other_file_ids">
+            <a-form-item
+              label="Other file"
+              name="other_file_ids"
+            >
               <div>
                 <a-button
                   v-for="(item, index) in formState.other_file_ids"
@@ -285,7 +311,11 @@
               <div class="mt-2">Up to 5 files can be uploaded</div>
             </a-form-item>
 
-            <a-form-item label="Description" name="description" required>
+            <a-form-item
+              label="Description"
+              name="description"
+              required
+            >
               <a-textarea
                 v-model:value="formState.description"
                 show-count

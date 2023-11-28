@@ -4,7 +4,10 @@
     <div class="body-container">
       <div class="title-container">
         <div>Personal Project List</div>
-        <div v-if="showTip" class="progress-container">
+        <div
+          v-if="showTip"
+          class="progress-container"
+        >
           <div>
             <a-progress
               class="progress"
@@ -22,7 +25,11 @@
       </div>
       <div class="content-container">
         <div class="search-container">
-          <a-form :model="conditions" autocomplete="off" layout="vertical">
+          <a-form
+            :model="conditions"
+            autocomplete="off"
+            layout="vertical"
+          >
             <a-form-item
               label="Project Name"
               name="project_name"
@@ -49,7 +56,11 @@
                 allow-clear
               ></a-select>
             </a-form-item>
-            <a-form-item label="Tags" name="tag" class="condition-item">
+            <a-form-item
+              label="Tags"
+              name="tag"
+              class="condition-item"
+            >
               <a-input
                 v-model:value="conditions.tag"
                 class="w-full"
@@ -58,7 +69,11 @@
               ></a-input>
             </a-form-item>
             <div class="action">
-              <a-button type="primary" class="search" @click="handleSearch">
+              <a-button
+                type="primary"
+                class="search"
+                @click="handleSearch"
+              >
                 Search all
               </a-button>
             </div>
@@ -101,7 +116,12 @@
                   {{ member.project_user_user_meta.user_name }} ({{
                     member.project_user_user_meta.email_address
                   }})
-                  <span v-if="member.isOwner" class="role owner">Owner</span>
+                  <span
+                    v-if="member.isOwner"
+                    class="role owner"
+                  >
+                    Owner
+                  </span>
                 </div>
               </template>
               <template v-if="dataIndex === 'tags'">

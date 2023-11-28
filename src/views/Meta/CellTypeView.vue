@@ -1,7 +1,11 @@
 <template>
   <div class="content-container">
     <div class="search-container">
-      <a-form :model="conditions" layout="vertical" autocomplete="off">
+      <a-form
+        :model="conditions"
+        layout="vertical"
+        autocomplete="off"
+      >
         <a-form-item
           label="Cell Type Name"
           name="cell_type_name"
@@ -38,10 +42,18 @@
           >
             Upload update file
           </a-button>
-          <input ref="fileInputRef" type="file" hidden @change="handleUpdate" />
+          <input
+            ref="fileInputRef"
+            type="file"
+            hidden
+            @change="handleUpdate"
+          />
           <div class="example">
             Example file:
-            <a href="./cell_type_meta.xlsx" target="_blank">
+            <a
+              href="./cell_type_meta.xlsx"
+              target="_blank"
+            >
               cell_type_meta.xlsx
             </a>
           </div>

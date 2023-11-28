@@ -4,7 +4,11 @@
       <div class="title-container">
         <div class="title">Sign up</div>
       </div>
-      <a-form ref="formRef" :model="registerForm" :rules="rules">
+      <a-form
+        ref="formRef"
+        :model="registerForm"
+        :rules="rules"
+      >
         <a-form-item
           ref="formRef"
           class="w-full form-item"
@@ -19,7 +23,10 @@
             ></a-input>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="user_name">
+        <a-form-item
+          class="w-full form-item"
+          name="user_name"
+        >
           <div class="label">User name</div>
           <div>
             <a-input
@@ -29,7 +36,10 @@
             ></a-input>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="organization">
+        <a-form-item
+          class="w-full form-item"
+          name="organization"
+        >
           <div class="label">Organization</div>
           <div>
             <a-input
@@ -39,7 +49,10 @@
             ></a-input>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="user_password">
+        <a-form-item
+          class="w-full form-item"
+          name="user_password"
+        >
           <div class="label">Password</div>
           <div>
             <a-input-password
@@ -49,7 +62,10 @@
             ></a-input-password>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="user_verify_password">
+        <a-form-item
+          class="w-full form-item"
+          name="user_verify_password"
+        >
           <div class="label">Confirm password</div>
           <div>
             <a-input-password
@@ -74,7 +90,10 @@
 
         <div class="flex items-center justify-center w-full mt-6">
           <div>Already have an account?</div>
-          <router-link :to="{ name: 'login' }" class="ml-2.5">
+          <router-link
+            :to="{ name: 'login' }"
+            class="ml-2.5"
+          >
             Sign in
           </router-link>
         </div>

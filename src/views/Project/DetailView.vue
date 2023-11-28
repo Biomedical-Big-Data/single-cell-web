@@ -1,8 +1,14 @@
 <template>
   <div class="detail-page">
     <NavBar></NavBar>
-    <a-spin :spinning="loading" class="min-w-full">
-      <div v-if="projectDetail" class="content-container">
+    <a-spin
+      :spinning="loading"
+      class="min-w-full"
+    >
+      <div
+        v-if="projectDetail"
+        class="content-container"
+      >
         <div class="project-header">
           <div class="title">
             {{ projectDetail.title }}
@@ -68,7 +74,10 @@
               >
                 <PathWayChart :project="projectDetail"></PathWayChart>
               </a-tab-pane>
-              <a-tab-pane key="download" tab="Download">
+              <a-tab-pane
+                key="download"
+                tab="Download"
+              >
                 <DownloadTable :project-detail="projectDetail"></DownloadTable>
               </a-tab-pane>
             </a-tabs>
@@ -84,7 +93,10 @@
             <span v-if="projectDetail.is_private">
               {{ projectDetail.project_user_meta.email_address }}
             </span>
-            <a v-else href="mailto:CasSF_aDM.siais@shanghaitech.edu.cn">
+            <a
+              v-else
+              href="mailto:CasSF_aDM.siais@shanghaitech.edu.cn"
+            >
               CasSF_aDM.siais@shanghaitech.edu.cn
             </a>
           </div>

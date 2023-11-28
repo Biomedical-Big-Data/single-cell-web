@@ -1,6 +1,14 @@
 <template>
-  <video autoplay loop muted class="background">
-    <source src="/background.mp4" type="video/mp4" />
+  <video
+    autoplay
+    loop
+    muted
+    class="background"
+  >
+    <source
+      src="/background.mp4"
+      type="video/mp4"
+    />
   </video>
   <NavBar></NavBar>
   <div class="h-screen relative">
@@ -11,8 +19,14 @@
         Single cell !
       </div>
       <div class="flex items-center justify-center">
-        <div class="more animate-bounce" @click="handleScroll">
-          <img src="@/assets/images/home/icon_more.svg" alt="" />
+        <div
+          class="more animate-bounce"
+          @click="handleScroll"
+        >
+          <img
+            src="@/assets/images/home/icon_more.svg"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -31,11 +45,19 @@
             @click="toSpecies(item)"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
+              <img
+                :src="item.icon"
+                alt=""
+              />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
-              <span v-else class="coming">coming</span>
+              <span
+                v-else
+                class="coming"
+              >
+                coming
+              </span>
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -47,7 +69,10 @@
     <div class="section">
       <div class="title">Organ</div>
       <div class="items">
-        <a-row justify="center" :gutter="[0, 48]">
+        <a-row
+          justify="center"
+          :gutter="[0, 48]"
+        >
           <a-col
             v-for="item in organs"
             :key="item.id"
@@ -56,11 +81,19 @@
             @click="toOrgan(item)"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
+              <img
+                :src="item.icon"
+                alt=""
+              />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
-              <span v-else class="coming">coming</span>
+              <span
+                v-else
+                class="coming"
+              >
+                coming
+              </span>
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -72,7 +105,10 @@
     <div class="section">
       <div class="title">Statistics</div>
       <div class="items">
-        <a-row justify="center" :gutter="[0, 48]">
+        <a-row
+          justify="center"
+          :gutter="[0, 48]"
+        >
           <a-col
             v-for="item in statical"
             :key="item.id"
@@ -80,11 +116,19 @@
             class="item none"
           >
             <div class="icon flex justify-center">
-              <img :src="item.icon" alt="" />
+              <img
+                :src="item.icon"
+                alt=""
+              />
             </div>
             <div class="count text-center">
               <span v-if="item.count">{{ item.count }}</span>
-              <span v-else class="coming">coming</span>
+              <span
+                v-else
+                class="coming"
+              >
+                coming
+              </span>
             </div>
             <div class="name text-center">
               {{ item.name }}
@@ -96,7 +140,10 @@
     <div class="section">
       <div class="title">New projects</div>
       <div class="items">
-        <a-row justify="center" class="flex-nowrap">
+        <a-row
+          justify="center"
+          class="flex-nowrap"
+        >
           <a-col
             v-for="item in projects"
             :key="item.id"

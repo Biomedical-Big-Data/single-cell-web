@@ -1,8 +1,16 @@
 <template>
   <div class="content-container">
     <div class="search-container">
-      <a-form :model="conditions" layout="vertical" autocomplete="off">
-        <a-form-item label="Species Name" name="name" class="condition-item">
+      <a-form
+        :model="conditions"
+        layout="vertical"
+        autocomplete="off"
+      >
+        <a-form-item
+          label="Species Name"
+          name="name"
+          class="condition-item"
+        >
           <a-input
             v-model:value="conditions.name"
             class="w-full"
@@ -27,10 +35,20 @@
           >
             Upload update file
           </a-button>
-          <input ref="fileInputRef" type="file" hidden @change="handleUpdate" />
+          <input
+            ref="fileInputRef"
+            type="file"
+            hidden
+            @change="handleUpdate"
+          />
           <div class="example">
             Example file:
-            <a href="./species_meta.xlsx" target="_blank">species_meta.xlsx</a>
+            <a
+              href="./species_meta.xlsx"
+              target="_blank"
+            >
+              species_meta.xlsx
+            </a>
           </div>
         </div>
       </a-form>

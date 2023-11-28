@@ -14,7 +14,10 @@
     @ok="confirm"
   >
     <div class="py-6">
-      <a-form layout="inline" class="items-center px-4">
+      <a-form
+        layout="inline"
+        class="items-center px-4"
+      >
         <a-form-item
           label="Positive"
           name="positive"
@@ -65,7 +68,10 @@
           {{ item.cell_type_name }}
         </a-tag>
       </div>
-      <div v-else class="text-center">
+      <div
+        v-else
+        class="text-center"
+      >
         <a-empty
           :image="Empty.PRESENTED_IMAGE_SIMPLE"
           description="No selection"
@@ -116,13 +122,20 @@
             </span>
           </template>
           <template v-if="column.dataIndex === 'cell_type_name'">
-            <a class="underline" @click="handleOpenInCellTree(record)">
+            <a
+              class="underline"
+              @click="handleOpenInCellTree(record)"
+            >
               {{ text }}
             </a>
           </template>
           <template v-if="column.dataIndex === 'marker_gene_symbol'">
             <div class="gene_symbol">
-              <span v-for="item in text.split(',')" :key="item" class="symbol">
+              <span
+                v-for="item in text.split(',')"
+                :key="item"
+                class="symbol"
+              >
                 <span
                   :class="{
                     highlighted: record['intersection_list'].includes(item),

@@ -24,10 +24,16 @@
         @search="handleSearch({ keyword: $event })"
       />
     </div>
-    <div v-if="!treeData.length" class="content py-4">
+    <div
+      v-if="!treeData.length"
+      class="content py-4"
+    >
       <a-empty />
     </div>
-    <div v-else class="flex content">
+    <div
+      v-else
+      class="flex content"
+    >
       <div class="flex-2 flex flex-col">
         <div class="p-4 overflow-y-auto">
           <a-tree
@@ -62,9 +68,16 @@
       </div>
       <div class="flex-1 content overflow-y-auto">
         <a-spin :spinning="markLoading">
-          <div v-if="current" class="flex relative p-4">
+          <div
+            v-if="current"
+            class="flex relative p-4"
+          >
             <div v-if="relations.length">
-              <a-tag v-for="item in relations" :key="item.id" class="mr-2 mb-2">
+              <a-tag
+                v-for="item in relations"
+                :key="item.id"
+                class="mr-2 mb-2"
+              >
                 <a
                   target="_blank"
                   :href="getLink(item.cell_marker)"
@@ -74,7 +87,10 @@
                 </a>
               </a-tag>
             </div>
-            <div v-else class="flex justify-center w-full pt-8">
+            <div
+              v-else
+              class="flex justify-center w-full pt-8"
+            >
               <a-empty />
             </div>
           </div>

@@ -4,8 +4,15 @@
       <div class="title-container">
         <div class="title-sm text-center">Change password</div>
       </div>
-      <a-form ref="formRef" :model="formState" :rules="rules">
-        <a-form-item class="w-full form-item" name="password">
+      <a-form
+        ref="formRef"
+        :model="formState"
+        :rules="rules"
+      >
+        <a-form-item
+          class="w-full form-item"
+          name="password"
+        >
           <div class="label">Password</div>
           <div>
             <a-input-password
@@ -15,7 +22,10 @@
             ></a-input-password>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="confirm_password">
+        <a-form-item
+          class="w-full form-item"
+          name="confirm_password"
+        >
           <div class="label">Confirm password</div>
           <div>
             <a-input-password

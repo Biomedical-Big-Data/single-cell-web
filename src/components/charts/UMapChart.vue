@@ -8,17 +8,26 @@
     >
       <a-button class="action">Interactive Viewer</a-button>
     </div>
-    <div v-if="umapType.length" class="group-desc">
+    <div
+      v-if="umapType.length"
+      class="group-desc"
+    >
       <div class="desc">Static UMAP</div>
       <div>
         <a-dropdown :trigger="['click']">
-          <a class="type" @click.prevent>
+          <a
+            class="type"
+            @click.prevent
+          >
             group by: {{ getTypeName(umapType) }}
             <CaretDownOutlined />
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item v-for="item in options.umapType" :key="item">
+              <a-menu-item
+                v-for="item in options.umapType"
+                :key="item"
+              >
                 <a
                   class="type selector-item"
                   @click="handleUMapTypeChange(item)"
@@ -31,15 +40,25 @@
         </a-dropdown>
       </div>
     </div>
-    <div v-else class="group-desc"></div>
+    <div
+      v-else
+      class="group-desc"
+    ></div>
   </div>
   <div class="bottom">
     <div class="umap">
       <a-spin :spinning="loading">
         <a-empty v-if="!umapUrl" />
-        <photo-provider v-else :download-method="handleDownloadUmap">
+        <photo-provider
+          v-else
+          :download-method="handleDownloadUmap"
+        >
           <photo-consumer :src="umapUrl">
-            <img :src="umapUrl" class="w-full umap" alt="" />
+            <img
+              :src="umapUrl"
+              class="w-full umap"
+              alt=""
+            />
           </photo-consumer>
         </photo-provider>
       </a-spin>

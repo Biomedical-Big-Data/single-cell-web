@@ -5,7 +5,11 @@
       <div class="title-container">User Manage</div>
       <div class="content-container">
         <div class="search-container">
-          <a-form :model="conditions" layout="vertical" autocomplete="off">
+          <a-form
+            :model="conditions"
+            layout="vertical"
+            autocomplete="off"
+          >
             <a-form-item
               label="User name"
               name="user_name"
@@ -42,7 +46,11 @@
                 placeholder="Email"
               ></a-input>
             </a-form-item>
-            <a-form-item label="Status" name="state" class="condition-item">
+            <a-form-item
+              label="Status"
+              name="state"
+              class="condition-item"
+            >
               <a-select
                 v-model:value="conditions.state"
                 :options="USER_STATUS_DESC"
@@ -65,7 +73,11 @@
               />
             </a-form-item>
             <div class="action">
-              <a-button type="primary" class="search" @click="handleSearch">
+              <a-button
+                type="primary"
+                class="search"
+                @click="handleSearch"
+              >
                 Search all
               </a-button>
             </div>

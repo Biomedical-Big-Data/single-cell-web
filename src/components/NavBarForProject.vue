@@ -1,8 +1,14 @@
 <template>
   <div class="nav">
     <slot name="back">
-      <div class="back-container" @click="handleGoBack()">
-        <img src="@/assets/icons/icon-back.svg" alt="" />
+      <div
+        class="back-container"
+        @click="handleGoBack()"
+      >
+        <img
+          src="@/assets/icons/icon-back.svg"
+          alt=""
+        />
         <span>Cancel</span>
       </div>
     </slot>

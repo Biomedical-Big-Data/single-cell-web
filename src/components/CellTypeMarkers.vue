@@ -1,17 +1,30 @@
 <template>
   <a-spin :spinning="loading">
     <div class="flex justify-end action-container">
-      <a-popover trigger="click" placement="bottom">
+      <a-popover
+        trigger="click"
+        placement="bottom"
+      >
         <template #content>
-          <a-checkbox-group v-model:value="columnSettings" class="flex-col">
-            <div v-for="item in columns" :key="item.title" class="p-2">
+          <a-checkbox-group
+            v-model:value="columnSettings"
+            class="flex-col"
+          >
+            <div
+              v-for="item in columns"
+              :key="item.title"
+              class="p-2"
+            >
               <a-checkbox :value="item.title">
                 {{ item.title }}
               </a-checkbox>
             </div>
           </a-checkbox-group>
         </template>
-        <a-button class="columns-setting" size="large">
+        <a-button
+          class="columns-setting"
+          size="large"
+        >
           <template #icon>
             <SettingOutlined />
           </template>

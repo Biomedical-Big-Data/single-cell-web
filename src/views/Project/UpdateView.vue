@@ -2,8 +2,14 @@
   <div class="create-container">
     <NavBarForProject>
       <template #back>
-        <div class="back-container" @click="handleGoPrivateProject()">
-          <img src="@/assets/icons/icon-back.svg" alt="" />
+        <div
+          class="back-container"
+          @click="handleGoPrivateProject()"
+        >
+          <img
+            src="@/assets/icons/icon-back.svg"
+            alt=""
+          />
           <span>Back to my personal projects</span>
         </div>
       </template>
@@ -68,7 +74,11 @@
             autocomplete="off"
             :label-col="{ style: { width: '8.75rem' } }"
           >
-            <a-form-item label="Project name" name="title" required>
+            <a-form-item
+              label="Project name"
+              name="title"
+              required
+            >
               <a-input
                 v-model:value="formState.title"
                 placeholder="Project name"
@@ -103,7 +113,10 @@
               />
             </a-form-item>
 
-            <a-form-item label="Tags" name="tags">
+            <a-form-item
+              label="Tags"
+              name="tags"
+            >
               <a-select
                 v-model:value="formState.tags"
                 mode="tags"
@@ -127,7 +140,11 @@
               ></a-select>
             </a-form-item>
 
-            <a-form-item label="H5AD file" name="h5ad_id" required>
+            <a-form-item
+              label="H5AD file"
+              name="h5ad_id"
+              required
+            >
               <a-button
                 v-if="!formState.h5ad_id"
                 size="large"
@@ -154,7 +171,10 @@
                 {{ formState.h5ad_id }}
               </a-button>
             </a-form-item>
-            <a-form-item label="UMap file" name="umap_id">
+            <a-form-item
+              label="UMap file"
+              name="umap_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.umap_id"
@@ -188,7 +208,10 @@
               </div>
             </a-form-item>
 
-            <a-form-item label="CellMarker file" name="cell_marker_id">
+            <a-form-item
+              label="CellMarker file"
+              name="cell_marker_id"
+            >
               <div>
                 <a-button
                   v-if="!formState.cell_marker_id"
@@ -260,7 +283,10 @@
               </div>
             </a-form-item>
 
-            <a-form-item label="Other file" name="other_file_ids">
+            <a-form-item
+              label="Other file"
+              name="other_file_ids"
+            >
               <div>
                 <a-button
                   v-for="(item, index) in formState.other_file_ids"
@@ -292,7 +318,11 @@
               <div class="mt-2">Up to 5 files can be uploaded</div>
             </a-form-item>
 
-            <a-form-item label="Description" name="description" required>
+            <a-form-item
+              label="Description"
+              name="description"
+              required
+            >
               <a-textarea
                 v-model:value="formState.description"
                 show-count

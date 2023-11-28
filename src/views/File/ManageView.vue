@@ -4,7 +4,10 @@
     <div class="body-container">
       <div class="title-container">
         <div>File List</div>
-        <div v-if="showTip" class="progress-container">
+        <div
+          v-if="showTip"
+          class="progress-container"
+        >
           <div>
             <a-progress
               class="progress"
@@ -24,7 +27,11 @@
       </div>
       <div class="content-container">
         <div class="search-container">
-          <a-form :model="conditions" layout="vertical" autocomplete="off">
+          <a-form
+            :model="conditions"
+            layout="vertical"
+            autocomplete="off"
+          >
             <a-form-item
               label="File Name"
               name="file_name"
@@ -54,7 +61,12 @@
               >
                 Upload
               </a-button>
-              <input ref="fileRef" type="file" hidden @change="handleUpload" />
+              <input
+                ref="fileRef"
+                type="file"
+                hidden
+                @change="handleUpload"
+              />
             </div>
           </a-form>
         </div>
@@ -103,7 +115,10 @@
     <div class="p-2">
       <div>{{ uploadFileName }}</div>
       <div class="mt-2">
-        <a-progress class="w-full" :percent="uploadProgress" />
+        <a-progress
+          class="w-full"
+          :percent="uploadProgress"
+        />
       </div>
       <div class="flex justify-center mt-4">
         <a-button

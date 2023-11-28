@@ -18,13 +18,19 @@
         </div>
         <div>
           <div>
-            <a-popover trigger="click" placement="bottom">
+            <a-popover
+              trigger="click"
+              placement="bottom"
+            >
               <template #content>
                 <div
                   class="overflow-y-auto table-column-setting"
                   style="width: 400px"
                 >
-                  <a-collapse expand-icon-position="end" class="w-full">
+                  <a-collapse
+                    expand-icon-position="end"
+                    class="w-full"
+                  >
                     <a-collapse-panel
                       v-for="(v, k) in columnGroup"
                       :key="k"
@@ -35,7 +41,11 @@
                           v-model:value="columnSettings[k]"
                           class="w-full"
                         >
-                          <div v-for="item in v" :key="item.title" class="p-2">
+                          <div
+                            v-for="item in v"
+                            :key="item.title"
+                            class="p-2"
+                          >
                             <a-checkbox :value="item.title">
                               {{ item.title }}
                             </a-checkbox>
@@ -82,7 +92,12 @@
       >
         A{{ _.padStart(text, 6, "0") }}
         <br />
-        <span class="link" @click="handleToProject(record)">view</span>
+        <span
+          class="link"
+          @click="handleToProject(record)"
+        >
+          view
+        </span>
       </template>
       <template
         v-else-if="joinTableIndex(column.dataIndex) === 'biosample_meta.id'"

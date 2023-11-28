@@ -29,20 +29,29 @@
                 size="large"
               />
             </a-form-item>
-            <a-form-item label="Organization" name="organization">
+            <a-form-item
+              label="Organization"
+              name="organization"
+            >
               <a-input
                 v-model:value="userInfo.organization"
                 size="large"
                 class="simple-input"
               />
             </a-form-item>
-            <a-form-item label="New password" name="password">
+            <a-form-item
+              label="New password"
+              name="password"
+            >
               <a-input-password
                 v-model:value="userInfo.password"
                 size="large"
               />
             </a-form-item>
-            <a-form-item label="Confirm password" name="confirm_password">
+            <a-form-item
+              label="Confirm password"
+              name="confirm_password"
+            >
               <a-input-password
                 v-model:value="userInfo.confirm_password"
                 size="large"

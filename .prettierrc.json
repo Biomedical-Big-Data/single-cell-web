@@ -16,5 +16,6 @@
   "htmlWhitespaceSensitivity": "ignore",
   "vueIndentScriptAndStyle": false,
   "endOfLine": "lf",
+  "singleAttributePerLine": true,
   "embeddedLanguageFormatting": "auto"
 }

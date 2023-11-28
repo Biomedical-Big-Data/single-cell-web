@@ -10,8 +10,14 @@
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item v-for="item in options" :key="item">
-                <a class="selector-item" @click="handleToRouter(item)">
+              <a-menu-item
+                v-for="item in options"
+                :key="item"
+              >
+                <a
+                  class="selector-item"
+                  @click="handleToRouter(item)"
+                >
                   {{ item.name }}
                 </a>
               </a-menu-item>

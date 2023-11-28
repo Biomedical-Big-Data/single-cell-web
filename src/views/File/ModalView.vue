@@ -49,7 +49,12 @@
         >
           Upload
         </a-button>
-        <input ref="fileRef" type="file" hidden @change="handleUpload" />
+        <input
+          ref="fileRef"
+          type="file"
+          hidden
+          @change="handleUpload"
+        />
       </a-form>
     </div>
 
@@ -68,7 +73,10 @@
             {{ dayjs(text).format("YYYY-MM-DD") }}
           </template>
           <template v-if="dataIndex === 'action'">
-            <a-button class="button-select" @click="handleFileSelected(record)">
+            <a-button
+              class="button-select"
+              @click="handleFileSelected(record)"
+            >
               Select
             </a-button>
           </template>
@@ -88,7 +96,10 @@
       <div class="p-2">
         <div>{{ uploadFileName }}</div>
         <div class="mt-2">
-          <a-progress class="w-full" :percent="uploadProgress" />
+          <a-progress
+            class="w-full"
+            :percent="uploadProgress"
+          />
         </div>
         <div class="flex justify-center mt-4">
           <a-button

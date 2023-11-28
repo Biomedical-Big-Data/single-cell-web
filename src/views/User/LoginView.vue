@@ -5,8 +5,15 @@
         <div class="title">Login</div>
         <div class="sub-title">Welcome to the Single cell</div>
       </div>
-      <a-form ref="formRef" :model="loginForm" :rules="rules">
-        <a-form-item class="w-full form-item" name="email_address">
+      <a-form
+        ref="formRef"
+        :model="loginForm"
+        :rules="rules"
+      >
+        <a-form-item
+          class="w-full form-item"
+          name="email_address"
+        >
           <div class="label">Email address</div>
           <div>
             <a-input
@@ -16,7 +23,10 @@
             ></a-input>
           </div>
         </a-form-item>
-        <a-form-item class="w-full form-item" name="user_password">
+        <a-form-item
+          class="w-full form-item"
+          name="user_password"
+        >
           <div class="label">Password</div>
           <div>
             <a-input-password
@@ -43,14 +53,21 @@
 
       <div>
         <div class="w-full justify-center flex">
-          <a-button class="login" :loading="loading" @click="handleUserLogin">
+          <a-button
+            class="login"
+            :loading="loading"
+            @click="handleUserLogin"
+          >
             login
           </a-button>
         </div>
 
         <div class="flex items-center justify-center w-full mt-6">
           <div>Don’t have an account?</div>
-          <router-link :to="{ name: 'register' }" class="ml-2.5">
+          <router-link
+            :to="{ name: 'register' }"
+            class="ml-2.5"
+          >
             Sign up
           </router-link>
         </div>

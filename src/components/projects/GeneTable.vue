@@ -18,19 +18,29 @@
         </div>
         <div>
           <div>
-            <a-button v-if="list.length" @click="handleChartModalOpen">
+            <a-button
+              v-if="list.length"
+              @click="handleChartModalOpen"
+            >
               <template #icon>
                 <DotChartOutlined />
               </template>
               Chart
             </a-button>
-            <a-popover trigger="click" placement="bottom" class="ml-4">
+            <a-popover
+              trigger="click"
+              placement="bottom"
+              class="ml-4"
+            >
               <template #content>
                 <div
                   class="overflow-y-auto table-column-setting"
                   style="width: 400px"
                 >
-                  <a-collapse expand-icon-position="end" class="w-full">
+                  <a-collapse
+                    expand-icon-position="end"
+                    class="w-full"
+                  >
                     <a-collapse-panel
                       v-for="(v, k) in columnGroup"
                       :key="k"
@@ -41,7 +51,11 @@
                           v-model:value="columnSettings[k]"
                           class="w-full"
                         >
-                          <div v-for="item in v" :key="item.title" class="p-2">
+                          <div
+                            v-for="item in v"
+                            :key="item.title"
+                            class="p-2"
+                          >
                             <a-checkbox :value="item.title">
                               {{ item.title }}
                             </a-checkbox>
@@ -88,7 +102,12 @@
       >
         A{{ _.padStart(text, 6, "0") }}
         <br />
-        <span class="link" @click="handleToProject(record)">view</span>
+        <span
+          class="link"
+          @click="handleToProject(record)"
+        >
+          view
+        </span>
       </template>
       <template
         v-else-if="joinTableIndex(column.dataIndex) === 'biosample_meta.id'"
@@ -105,14 +124,20 @@
     :footer="null"
   >
     <a-tabs v-model:activeKey="geneChartType">
-      <a-tab-pane key="percent" tab="Cell Number Percentage">
+      <a-tab-pane
+        key="percent"
+        tab="Cell Number Percentage"
+      >
         <GeneExpressionLevelChart
           :data="geneChartData"
           title="Cell Number Percentage"
           value-key="cell_proportion_expression_the_gene"
         ></GeneExpressionLevelChart>
       </a-tab-pane>
-      <a-tab-pane key="expression" tab="Gene Expression Level">
+      <a-tab-pane
+        key="expression"
+        tab="Gene Expression Level"
+      >
         <GeneExpressionLevelChart
           :data="geneChartData"
           title="Gene Expression Level"

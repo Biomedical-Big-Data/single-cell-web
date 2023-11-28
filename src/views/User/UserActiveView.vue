@@ -1,7 +1,10 @@
 <template>
   <div class="h-screen w-screen flex items-center justify-center">
     <div v-if="loading">
-      <a-result title="Activating user" sub-title="please wait...">
+      <a-result
+        title="Activating user"
+        sub-title="please wait..."
+      >
         <template #icon>
           <LoadingOutlined />
         </template>
@@ -15,7 +18,12 @@
         sub-title="Please return to the login page to log in"
       >
         <template #extra>
-          <router-link :to="{ name: 'login' }" replace>Go to login</router-link>
+          <router-link
+            :to="{ name: 'login' }"
+            replace
+          >
+            Go to login
+          </router-link>
         </template>
       </a-result>
       <a-result
