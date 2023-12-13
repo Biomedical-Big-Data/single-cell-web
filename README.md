@@ -1,7 +1,34 @@
-# Vue 3 + Vite
+# Single cell
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project is web ui for single cell service, for more information, please visit [singlecell.siais.shanghaitech.edu.cn](https://singlecell.siais.shanghaitech.edu.cn) 
 
-## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Environment
+
+Change  VITE_BASE_API_URL value in  ```.env.production``` file for your custom api service
+
+## Development Setup
+
+### Clone the repo
+
+```bash
+git clone https://github.com/Biomedical-Big-Data/single-cell-web.git
+# change directory to the project root
+cd single-cell-web
+```
+
+### Install Dependence
+
+```bash
+pnpm install
+```
+
+### Start Frontend
+```bash
+# run from the project root
+pnpm run dev
+# runs on port 5173
+```
+
+
+Any changes made to frontend and backend will be automatically reflected in the browser.
