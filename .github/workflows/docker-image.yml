@@ -24,7 +24,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=today::$(date +'%Y-%m-%d_%H-%M')"
+        run: echo "::set-output name=${{ vars.DOCKERHUB_TARGET }}:${{ github.ref_name }}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -53,5 +53,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/single-cell-web:${{ github.ref_name }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/single-cell-web:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_TARGET }}:${{ github.ref_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_TARGET }}:latest
