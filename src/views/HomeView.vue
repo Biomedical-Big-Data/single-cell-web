@@ -16,7 +16,7 @@
       <div>
         Welcome to the
         <br />
-        Single cell !
+        single cell interactive deshboard (singlecell-IVD)
       </div>
       <div class="flex items-center justify-center">
         <div
@@ -165,7 +165,10 @@
       </div>
     </div>
   </div>
-  <div class="footer">©2023 Single cell. All rights reserved.</div>
+  <div class="footer">
+    ©2024 single cell interactive deshboard (singlecell-IVD). All rights
+    reserved.
+  </div>
 </template>
 
 <script setup>

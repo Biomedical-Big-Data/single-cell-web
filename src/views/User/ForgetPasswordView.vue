@@ -39,7 +39,10 @@
         </div>
       </div>
     </div>
-    <div class="footer-fixed">©2023 Single cell. All rights reserved.</div>
+    <div class="footer-fixed">
+      ©2024 single cell interactive deshboard (singlecell-IVD). All rights
+      reserved.
+    </div>
   </div>
 </template>
 <script setup>
