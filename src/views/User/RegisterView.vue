@@ -100,7 +100,7 @@
       </div>
     </div>
     <div class="footer-fixed">
-      ©2024 single cell interactive deshboard (singlecell-IVD). All rights
+      ©2024 single cell interactive dashboard (singlecell-IVD). All rights
       reserved.
     </div>
   </div>
