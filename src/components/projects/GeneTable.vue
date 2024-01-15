@@ -238,9 +238,9 @@ const columns = ref(
     {
       title: "Average Gene Expression",
       dataIndex: ["gene_expression_meta", "average_gene_expression"],
-      customRender: ({ text }) => {
-        return text ? `${(text * 100).toFixed(2)}%` : ""
-      },
+      // customRender: ({ text }) => {
+      //   return text ? `${(text * 100).toFixed(2)}%` : ""
+      // },
       group: "gene_expression",
     },
     ...GENE_COLUMNS,
